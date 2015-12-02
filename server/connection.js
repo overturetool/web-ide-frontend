@@ -5,14 +5,20 @@ var Debugger = require('./debugger');
 class Connection {
     constructor(socket) {
         this.socket = socket;
-        this.debugger = new Debugger("bom.vdmsl");
-        this.debugger.start()
-            .then(init => socket.emit('debugger/init', init));
+        this.debugger = new Debugger();
+        this.debugger.start("bom.vdmsl")
+            .then(init => this.socket.emit('log', init));
 
-        socket.on('breakpoints/list', () => {
+        this.socket.on('breakpoints/list', () => {
             this.debugger
                 .listBreakpoints()
-                .then(bps => socket.emit('breakpoints/list', bps));
+                .then(bps => this.socket.emit('log', bps));
+        });
+
+        this.socket.on('breakpoints/set', line => {
+            this.debugger
+                .setBreakpoint(line)
+                .then(bps => this.socket.emit('log', bps));
         });
     }
 }

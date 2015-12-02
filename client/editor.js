@@ -14,15 +14,21 @@ function makeMarker() {
 
 editor.on("gutterClick", function(cm, n) {
     var info = cm.lineInfo(n);
-    cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
+
+    if (info.gutterMarkers) {
+        socket.emit('breakpoints/remove', n+1);
+        cm.setGutterMarker(n, "breakpoints", null);
+    } else {
+        socket.emit('breakpoints/set', n+1);
+        cm.setGutterMarker(n, "breakpoints", makeMarker());
+    }
 });
 
-socket.on('debugger/init', function (init) {
-    console.log(init)
+
+var terminal = document.getElementById('terminal');
+
+socket.on('log', function (bps) {
+    terminal.innerHTML += bps;
 });
 
-socket.on('breakpoints/list', function (bps) {
-    console.log(bps)
-});
-
-socket.emit('breakpoints/list');
+socket.emit('breakpoints/set', 23);

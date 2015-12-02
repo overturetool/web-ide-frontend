@@ -27,3 +27,8 @@ body {
 .breakpoint {
     color: #822;
 }
+
+#terminal {
+    height: 20vh;
+    white-space: pre;
+}

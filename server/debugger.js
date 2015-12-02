@@ -3,11 +3,11 @@
 var CLI = require('./cli');
 
 class Debugger {
-    constructor(file) {
+    constructor() {
         this.cli = new CLI();
     }
 
-    start() {
+    start(file) {
         return new Promise(resolve => {
             this.cli.run('overture -vdmsl -i workspace/' + file, response => resolve(response));
         });
@@ -18,7 +18,7 @@ class Debugger {
     }
 
     setBreakpoint(line, file) {
-        this.cli.exec("break " + line);
+        return this.cli.exec("break " + line);
     }
 
     stepInto() {
@@ -38,7 +38,7 @@ class Debugger {
     }
 
     stop() {
-        this.cli.exec("stop");
+        return this.cli.exec("stop");
     }
 
     getEnvironment() {
@@ -61,7 +61,7 @@ class Debugger {
     }
 
     quit() {
-
+        return this.cli.exec("quit");
     }
 }
 
