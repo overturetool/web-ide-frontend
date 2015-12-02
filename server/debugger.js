@@ -4,14 +4,20 @@ var CLI = require('./cli');
 
 class Debugger {
     constructor(file) {
-        this.cli = new CLI('overture -vdmsl -i workspace/' + file);
+        this.cli = new CLI();
+    }
+
+    start() {
+        return new Promise(resolve => {
+            this.cli.run('overture -vdmsl -i workspace/' + file, response => resolve(response));
+        });
     }
 
     listBreakpoints() {
         return this.cli.exec("list");
     }
 
-    setBreakpoint(line, file = "") {
+    setBreakpoint(line, file) {
         this.cli.exec("break " + line);
     }
 

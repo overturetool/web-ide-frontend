@@ -3,11 +3,15 @@
 var exec = require('child_process').exec;
 
 class CLI {
-    constructor(command, initCallback) {
+    constructor() {
         this.queue = [];
         this.current = null;
         this.busy = true;
         this.response = [];
+
+    }
+
+    run(command, cb) {
         this.process = exec(command);
 
         this.process.stdout.on('data', data => {
@@ -19,7 +23,7 @@ class CLI {
                     this.current = null;
                     resolve(this.response);
                 } else {
-                    initCallback(this.response);
+                    cb(this.response);
                 }
 
                 this.handleNext();

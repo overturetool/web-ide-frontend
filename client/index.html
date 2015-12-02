@@ -10,7 +10,6 @@
 
 <div class="view">
     <div class="main" >
-        <h1>Edit</h1>
         <textarea id="editor">
 \begin{vdm_al}
 types
@@ -88,6 +87,7 @@ pre (p1 in set dom bom) and (p2 in set dom bom) and
     (p2 in set bom(p1))
 \end{vdm_al}
         </textarea>
+        <div id="terminal"></div>
     </div>
     <div id="debug-panel" class="panel">
         <h1>Debug</h1>
@@ -98,6 +98,5 @@ pre (p1 in set dom bom) and (p2 in set dom bom) and
 <script src="lib/codemirror.js"></script>
 <script src="lib/vdm-mode.js"></script>
 <script src="editor.js"></script>
-<script src="debug.js"></script>
 </body>
 </html>
