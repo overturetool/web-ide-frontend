@@ -32,6 +32,23 @@ class CLI {
                 this.response += data;
             }
         });
+
+        this.process.on("SIGHUP", () => {
+            console.log("Received SIGHUP");
+            this.process.exit();
+        });
+
+        this.process.on("exit", () => console.log("quitting!"));
+        this.process.on('SIGINT', () => console.log("SIGINT"));
+
+        this.process.on("uncaughtException", e => {
+            console.log("uncaught exception (" + e + ")");
+            this.process.exit();
+        });
+    }
+
+    stop() {
+        this.process.disconnect();
     }
 
     handle(command, resolve) {

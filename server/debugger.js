@@ -13,48 +13,98 @@ class Debugger {
         });
     }
 
-    evaluate(expression) {
-        return this.cli.exec("p " + expression);
+    attach(runner, breakpoints) {
+
     }
 
-    listBreakpoints() {
-        return this.cli.exec("list");
+    detach() {
+        this.cli.stop();
     }
 
-    setBreakpoint(line, file) {
-        return this.cli.exec("break " + line);
+    getSources(callback) {
+
     }
 
-    stepInto() {
-        return this.cli.exec("step");
-    }
+    getSource(callback) {
 
-    stepOver() {
-        return this.cli.exec("next");
-    }
-
-    out() {
-        return this.cli.exec("out");
-    }
-
-    continue() {
-        return this.cli.exec("continue");
-    }
-
-    stop() {
-        return this.cli.exec("stop");
     }
 
     getEnvironment() {
-        return this.cli.exec("env");
+        this.cli.exec("env");
     }
 
-    getStackFrames(depth) {
-        return this.cli.exec("stack");
+    getFrames(callback) {
+        this.cli
+            .exec("stack")
+            .then(frames => callback(frames));
     }
 
-    quit() {
-        return this.cli.exec("quit");
+    getScope(frame, scope, callback) {
+
+    }
+
+    getProperties(variable, callback) {
+
+    }
+
+    stepInto() { // done
+        this.cli.exec("step");
+    }
+
+    stepOver() { // done
+        this.cli.exec("next");
+    }
+
+    stepOut() { // done
+        this.cli.exec("out");
+    }
+
+    resume() { // done
+        this.cli.exec("continue");
+    }
+
+    suspend() { // done
+        this.cli.exec("stop");
+    }
+
+    evaluate(expression, frame, global, disableBreak, callback) {
+        this.cli.exec("p " + expression);
+    }
+
+    setScriptSource(source, value, previewOnly, callback) {
+
+    }
+
+    setBreakpoint(breakpoint, callback) {
+        this.cli.exec("break ");
+    }
+
+    changeBreakpoint(breakpoint, callback) {
+        this.cli.exec("");
+    }
+
+    clearBreakpoint(breakpoint, callback) {
+        this.cli.exec("remove ");
+    }
+
+    listBreakpoints(callback) {
+        this.cli.exec("list");
+    }
+
+    setBreakBehavior(type, enabled, callback) {
+
+    }
+
+    setVariable(variable, parents, value, frame, callback) {
+
+    }
+
+    restartFrame() {
+
+    }
+
+    serializeVariable() {
+
     }
 }
 
