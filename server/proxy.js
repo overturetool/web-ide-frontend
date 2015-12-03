@@ -102,113 +102,29 @@ class Client {
 
 // Issues commands to Overture CLI
 class Debugger {
+    constructor() {
+        this.cli = new CLI();
+    }
 
-    spawn() {
-        console.error(["gdb.spawn"]);
-
-        this.proc = spawn('gdb', ['-q', '--interpreter=mi2', executable], {
-            detached: true,
-            cwd: dirname
+    load() {
+        return new Promise(resolve => {
+            this.cli.run('overture -vdmsl -i workspace/' + file, response => resolve(response));
         });
+    }
 
-        var self = this;
+    suspend() {
+        this.cli.exec("stop");
+    }
 
-        // handle gdb output
-        var stdout_buff = buffers();
-        this.proc.stdout.on("data", function(stdout_data) {
-            stdout_buff(stdout_data, self._handleLine.bind(self));
-        });
+    cleanup() {
+        this.cli.stop();
+    }
 
-        // handle gdb stderr
-        var stderr_buff = buffers();
-        this.proc.stderr.on("data", function(stderr_data) {
-            stderr_buff(stderr_data, function(line) {
-                log("GDB STDERR: " + line);
-            });
-        });
-
-        this.proc.on("end", function() {
-            log("gdb proc ended");
-            server.close();
-        });
-
-        this.proc.on("close", function(code, signal) {
-            self.proc.stdin.end();
-            log("GDB terminated with code " + code + " and signal " + signal);
-            client.send({ err:"killed", code:code, signal:signal });
-            process.exit();
-        });
+    exec(cmd, args) {
+        return this.cli.get(cmd, args);
     };
 
-    this.connect = function(callback) {
-        console.error(["gdb.connect"]);
-
-        // ask GDB to retry connections to server with a given timeout
-        this.issue("set tcp connect-timeout", MAX_RETRY, function() {
-            // now connect
-            this.issue("-target-select", "remote localhost:"+gdb_port, function(reply) {
-                if (reply.state != "connected")
-                    return callback(reply, "Cannot connect to gdbserver");
-
-                // connected! set eval of conditional breakpoints on server
-                this.issue("set breakpoint", "condition-evaluation host", callback);
-
-            }.bind(this));
-        }.bind(this));
-    };
-
-    // spawn GDB client only after gdbserver is ready
-    this.waitConnect = function(callback) {
-        console.error(["gdb.waitConnect"]);
-        setTimeout(function() {callback()}, 10);
-
-        function wait(retries, callback) {
-            if (retries < 0) return;
-
-            // determine if gdbserver has opened the port yet
-            exec("lsof -i :"+gdb_port+" -sTCP:LISTEN|grep -q gdbserver", function(err) {
-                // if we get an error code back, gdbserver is not yet running
-                if (err !== null)
-                    return setTimeout(wait.bind(this, --retries, callback), 1000);
-
-                // success! load gdb and connect to server
-                this.spawn();
-                this.connect(callback);
-            }.bind(this));
-        }
-
-        wait.call(this, MAX_RETRY, callback);
-    };
-
-    // Suspend program operation by sending sigint and prepare for state update
-    this.suspend = function() {
-        console.error(["gdb.suspend"]);
-    };
-
-    this.cleanup = function() {
-        console.error(["gdb.cleanup"]);
-    };
-
-    // issue a command to GDB
-    this.issue = function(cmd, args, callback) {
-        console.error(["gdb.issue", cmd, args]);
-        setTimeout(function() {callback()}, 10);
-    };
-
-    this.post = function(client_seq, command, args) {
-        console.error(["gdb.post", client_seq, command, args]);
-    };
-
-    /////
-    // Incoming command handling
-    /////
-
-    this.handle = function(command) {
-        console.error(["gdb.handleCommands", this.command_queue]);
-
-        var id = (typeof command._id === "number") ? command._id : "";
-
-        // fix some condition syntax
+    handle(command) {
         if (command.condition)
             command.condition = command.condition.replace(/=(["|{|\[])/g, "= $1");
 
@@ -298,17 +214,11 @@ class Debugger {
                     process.exit();
                 });
                 break;
-
-            default:
-                log("PROXY: received unknown request: " + command.command);
         }
     };
 }
 
-// End GDB class
-////////////////////////////////////////////////////////////////////////////////
-// Proxy initialization
-
+// Connects client and debugger
 class Proxy {
     constructor() {
         this.server = net.createServer(connection => {
@@ -340,7 +250,11 @@ class Proxy {
 
     // From client
     clientCommands(commands) {
-
+        commands.forEach(command => {
+            this.debug
+                .handle(command)
+                .then(response => this.client.send(response));
+        })
     }
 }
 
