@@ -7,15 +7,16 @@ class CLI {
         this.queue = [];
         this.current = null;
         this.busy = true;
-        this.response = [];
-
+        this.response = "";
     }
 
-    run(command, cb) {
-        this.process = exec(command);
+    run(cliPath, cb) {
+        this.process = exec(cliPath);
 
         this.process.stdout.on('data', data => {
-            if (data === "> ") {
+            if (data.slice(data.length-2, data.length) === "> ") {
+                this.response += data.slice(0, data.length-2);
+
                 this.busy = false;
 
                 if (this.current) {
@@ -28,7 +29,7 @@ class CLI {
 
                 this.handleNext();
             } else {
-                this.response.push(data);
+                this.response += data;
             }
         });
     }
@@ -46,7 +47,7 @@ class CLI {
         if (this.busy || this.queue.length === 0) return;
 
         this.busy = true;
-        this.response = [];
+        this.response = "";
         this.current = this.queue.shift();
         this.process.stdin.write(this.current.command + "\n");
     }

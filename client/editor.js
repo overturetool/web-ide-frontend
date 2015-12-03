@@ -24,7 +24,6 @@ editor.on("gutterClick", function(cm, n) {
     }
 });
 
-
 var terminal = document.getElementById('terminal');
 
 socket.on('log', function (bps) {

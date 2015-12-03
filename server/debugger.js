@@ -7,10 +7,14 @@ class Debugger {
         this.cli = new CLI();
     }
 
-    start(file) {
+    load(file) {
         return new Promise(resolve => {
             this.cli.run('overture -vdmsl -i workspace/' + file, response => resolve(response));
         });
+    }
+
+    evaluate(expression) {
+        return this.cli.exec("p " + expression);
     }
 
     listBreakpoints() {
@@ -46,18 +50,7 @@ class Debugger {
     }
 
     getStackFrames(depth) {
-        var stack = [];
-
-        return this.cli.exec("stack")
-            .then(frame => {
-                stack.push(frame);
-                return this.cli.exec("up");
-            })
-            .then(() => this.cli.exec("stack"))
-            .then(frame => {
-                stack.push(frame);
-                return stack;
-            });
+        return this.cli.exec("stack");
     }
 
     quit() {

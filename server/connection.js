@@ -6,7 +6,7 @@ class Connection {
     constructor(socket) {
         this.socket = socket;
         this.debugger = new Debugger();
-        this.debugger.start("bom.vdmsl")
+        this.debugger.load("bom.vdmsl")
             .then(init => this.socket.emit('log', init));
 
         this.socket.on('breakpoints/list', () => {
