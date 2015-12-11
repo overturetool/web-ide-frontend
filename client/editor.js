@@ -1,8 +1,14 @@
+var terminal = document.getElementById('terminal');
 var socket = io.connect(location.origin);
 
 var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
     lineNumbers: true,
-    gutters: ["CodeMirror-linenumbers", "breakpoints"]
+    gutters: ["CodeMirror-linenumbers", "breakpoints"],
+    lintWith: {
+        "getAnnotations": CodeMirror.linter,
+        "async": true,
+        "checker": lint
+    }
 });
 
 function makeMarker() {
@@ -10,6 +16,10 @@ function makeMarker() {
     marker.style.color = "#822";
     marker.innerHTML = "●";
     return marker;
+}
+
+function lint(text, callback) {
+    request('lint', text)
 }
 
 editor.on("gutterClick", function(cm, n) {
@@ -24,10 +34,6 @@ editor.on("gutterClick", function(cm, n) {
     }
 });
 
-var terminal = document.getElementById('terminal');
-
 socket.on('log', function (bps) {
     terminal.innerHTML += bps;
 });
-
-socket.emit('breakpoints/set', 23);
