@@ -1,37 +1,31 @@
 "use strict";
 
-var net = require('net');
+var DbgpDebugger = require('./dbgp/dpgpDebugger');
 var cp = require('child_process');
 
 class Debugger {
-    constructor(app) {
-        app.get('debug/list-breakpoints', (req, res) => {
-
-        });
+    constructor(socket) {
+        this.dbg = new DbgpDebugger();
     }
 
-    attach(file, entry) {
-        var cmd = `mvn exec:java -Dexec.mainClass="org.overture.interpreter.debug.DBGPReaderV2" -Dexec.args="-vdmsl -h localhost -p 9000 -k testKey -e \\\"${entry}\\\" ${file}"`;
-        var options = {cwd: "/home/rsreimer/projects/Speciale/overture-dev/core/interpreter"};
+    bindToClient(socket) {
+        socket.on('debug/start', options => this.start(options.file, options.entry));
 
-        if (!this.server) {
-            this.server = net.createServer(client => {
-                client.on('data', this.parse);
-                client.on('end', this.detach);
-            });
-
-            this.server.listen(9000, "localhost", () => this.debug = cp.exec(cmd, options));
-        } else {
-            this.debug = cp.exec(cmd, options);
-        }
+        socket.
     }
 
-    parse(stream) {
-        console.log(stream.toString());
+    start(file, entry) {
+        this.dbg.start()
+            .then(() => {
+                this.dbEngine = cp.exec(
+                    `mvn exec:java -Dexec.mainClass="org.overture.interpreter.debug.DBGPReaderV2" -Dexec.args="-vdmsl -h localhost -p 9000 -k testKey -e \\\"${entry}\\\" ${file}"`,
+                    {cwd: "/home/rsreimer/projects/Speciale/overture-dev/core/interpreter"}
+                );
+            })
     }
 
     detach() {
-        this.debug.disconnect();
+        this.dbEngine.disconnect();
     }
 
     getEnvironment() {

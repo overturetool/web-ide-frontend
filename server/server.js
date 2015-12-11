@@ -11,31 +11,14 @@ server.listen(8080);
 
 var Debugger = require('./debugger'), Linter = require('./linter');
 
-var debug = new Debugger(app);
+var debug = new Debugger();
 var linter = new Linter();
 
 io.on('connection', function(socket) {
-    debug.attach(
+    debug.bindToClient(socket);
+
+    debug.start(
         "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
         "Parts(1, bom)"
     );
-
-    socket.on('debug/load', () => {
-        debug.attach("bom.vdmsl").then(init => socket.emit('log', init));
-    });
-
-    socket.on('breakpoints/list', () => {
-        debug.listBreakpoints()
-            .then(bps => socket.emit('log', bps));
-    });
-
-    socket.on('breakpoints/set', line => {
-        debug.setBreakpoint(line)
-            .then(bps => socket.emit('log', bps));
-    });
-
-    socket.on('lint', path => {
-        linter.lint(path)
-            .then(markers => socket.emit('markers', markers));
-    });
 });
