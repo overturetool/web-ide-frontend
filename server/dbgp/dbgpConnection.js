@@ -39,7 +39,7 @@ class DbgpConnection {
 
     onIncomingData(data) {
         data = data.toString();
-
+        console.log(data);
         // If this is not the last part of the data, buffer it
         if (data.charCodeAt(data.length - 1) !== 0)
             return this.dataBuffer += data;
@@ -83,7 +83,7 @@ class DbgpConnection {
         if (parameters)
             command.command += ' ' + parameters;
 
-        var responded = new Promise(function(resolve, reject) {
+        var responded = new Promise(function (resolve, reject) {
             command.resolve = resolve;
             command.reject = reject;
 
@@ -95,7 +95,7 @@ class DbgpConnection {
             }
         });
 
-        responded.then(function(response) {
+        responded.then(function (response) {
             that.checkCommandQueue(response.transactionId);
         });
 
@@ -127,13 +127,13 @@ class DbgpConnection {
     }
 
     listen(port) {
-        var that = this;
-
-        this.server = net.createServer(function (connection) {
-            that.onIncomingConnection(connection);
-        });
-
         return new Promise(resolve => {
+            if (this.server) {
+                resolve();
+                return;
+            }
+
+            this.server = net.createServer(connection => this.onIncomingConnection(connection));
             this.server.listen(port, resolve);
         });
     }

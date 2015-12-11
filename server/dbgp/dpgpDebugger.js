@@ -32,7 +32,7 @@ class DbgpDebugger extends EventEmitter {
 
         this.on('stopped', info => {
             socket.emit('debug/stopped', info);
-            this.detach();
+            this.stop();
         });
 
         this.on('breakpoint', info => {
@@ -49,11 +49,11 @@ class DbgpDebugger extends EventEmitter {
             maxChildren: 32,
             maxData: 1024,
             maxDepth: 3,
-            breakOnStart: false,
+            breakOnStart: true,
             includeContextOnBreak: true,
             includeSourceOnBreak: false,
             sourceOnBreakLines: 2, // lines before and after breakpoint
-            includeGlobals: false
+            includeGlobals: true
         };
     }
 
@@ -66,10 +66,14 @@ class DbgpDebugger extends EventEmitter {
     start(file, entry) {
         this.connection.listen(this.options.port)
             .then(() => {
+                if (this.dbEngine) this.stop();
+
                 this.dbEngine = cp.exec(
                     `mvn exec:java -Dexec.mainClass="org.overture.interpreter.debug.DBGPReaderV2" -Dexec.args="-vdmsl -h localhost -p 9000 -k testKey -e \\\"${entry}\\\" ${file}"`,
                     {cwd: "/home/rsreimer/projects/Speciale/overture-dev/core/interpreter"}
                 );
+                this.dbEngine.stdout.on('data', data => console.log(data));
+                this.dbEngine.stderr.on('data', data => console.log(data));
             })
     }
 
@@ -78,7 +82,7 @@ class DbgpDebugger extends EventEmitter {
     }
 
     break() {
-        this.connection.sendCommand('break');
+        this.connection.sendCommand('status').then(console.log);
     }
 
     stepInto() {
@@ -94,11 +98,15 @@ class DbgpDebugger extends EventEmitter {
     }
 
     stop() {
-        return this.connection.sendCommand('stop').then(() => this.dbEngine.disconnect());
+        this.dbEngine.disconnect();
     }
 
     setBreakpoint(line) {
-        return this.connection.sendCommand('breakpoint_set', `-t line -n ${line}`);
+        return this.connection.sendCommand('breakpoint_set', `-t line -f file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl -n ${line}`);
+    }
+
+    removeBreakpoint(line) {
+        console.warn("dpbgDebugger.removeBreakpoint not implemented");
     }
 
     getContext() {
