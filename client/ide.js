@@ -16,14 +16,19 @@ angular.module('ide')
 angular.module('ide')
     .directive('debug', function() {
         return {
-            templateUrl: 'debug.html'
+            templateUrl: 'debug.html',
+            bindToController: true,
+            controllerAs: 'debug',
+            controller: function () {
+
+            }
         }
     });
 
 angular.module('ide')
     .directive('editor', function (Server) {
         return {
-            template: '<textarea></textarea>',
+            templateUrl: 'editor.html',
             scope: {},
             replace: true,
             controllerAs: "editor",
