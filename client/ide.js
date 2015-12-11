@@ -14,6 +14,13 @@ angular.module('ide')
     });
 
 angular.module('ide')
+    .directive('debug', function() {
+        return {
+            templateUrl: 'debug.html'
+        }
+    });
+
+angular.module('ide')
     .directive('editor', function (Server) {
         return {
             template: '<textarea></textarea>',

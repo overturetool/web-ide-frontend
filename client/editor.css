@@ -26,10 +26,9 @@ body {
 .panel-menu {
     height: 100vh;
     width: 40px;
-    border-left: 1px solid #aaa;
+    border: solid #aaa;
+    border-width: 0 1px;
     background-color: #ddd;
-    position: relative;
-    z-index: 3;
 }
 
 .panel > .name {
@@ -40,8 +39,6 @@ body {
     line-height: 40px;
     text-align: center;
     display: inline-block;
-    position: relative;
-    z-index: 2;
 }
 
 .panel {
@@ -59,16 +56,63 @@ body {
 }
 
 .pane {
-    border-left: 1px solid #aaa;
+    border: solid #aaa;
+    border-width: 0 1px;
     height: 100vh;
     width: 300px;
     position: fixed;
-    z-index: 1;
     top: 0;
-    transform: translateX(40px);
     background-color: #ddd;
+    z-index: 10;
 }
 
-.panel.active .pane {
-    transform: translateX(-300px);
+.right .pane {
+    transform: translateX(40px);
+}
+
+.right .panel.active .pane {
+    transform: translateX(-302px);
+}
+
+.left .pane {
+    transform: translateX(-302px);
+}
+
+.left .panel.active .pane {
+    transform: translateX(40px);
+}
+
+.glyph.restart {
+    background-position: 0 0;
+}
+
+.glyph.start {
+    background-position: -64px -48px;
+}
+
+.glyph.pause {
+    background-position: -32px -72px;
+}
+
+.glyph.step-over {
+    background-position: -128px -72px;
+}
+
+.glyph.step-into {
+    background-position: -64px -72px;
+}
+
+.glyph.step-out {
+    background-position: -96px -72px;
+}
+
+.glyph.stop {
+    background-position: -96px -48px;
+}
+
+.glyph {
+    background-image: url(img/toolbarButtonGlyphs.png);
+    width: 32px;
+    height: 24px;
+    padding: 8px;
 }
