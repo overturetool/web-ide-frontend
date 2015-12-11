@@ -5,6 +5,7 @@ var EventEmitter = require('events'),
 
 class DbgpDebugger extends EventEmitter {
     constructor(options) {
+        super();
         // Initialize default options and override with options passed
         this.setDefaults();
         this.setOptions(options);

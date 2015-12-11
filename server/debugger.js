@@ -10,8 +10,6 @@ class Debugger {
 
     bindToClient(socket) {
         socket.on('debug/start', options => this.start(options.file, options.entry));
-
-        socket.
     }
 
     start(file, entry) {

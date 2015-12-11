@@ -8,7 +8,7 @@ var app = express(),
 
 app.use(express.static('client'));
 server.listen(8080);
-
+/*
 var Debugger = require('./debugger'), Linter = require('./linter');
 
 var debug = new Debugger();
@@ -22,3 +22,4 @@ io.on('connection', function(socket) {
         "Parts(1, bom)"
     );
 });
+*/
