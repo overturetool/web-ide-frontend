@@ -86,11 +86,11 @@ body {
     background-position: 0 0;
 }
 
-.glyph.start {
+.glyph.run {
     background-position: -64px -48px;
 }
 
-.glyph.pause {
+.glyph.break {
     background-position: -32px -72px;
 }
 

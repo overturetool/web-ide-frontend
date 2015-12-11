@@ -17,7 +17,8 @@ class DbgpDebugger extends EventEmitter {
 
     bindToClient(socket) {
         socket.on('debug/start', options => this.start(options.file, options.entry));
-        socket.on('debug/run', () => this.run().then(info => socket.emit('debug/status', info)));
+        socket.on('debug/run', () => this.run());
+        socket.on('debug/break', () => this.break());
         socket.on('debug/stop', () => this.stop());
         socket.on('debug/step-into', () => this.stepInto());
         socket.on('debug/step-out', () => this.stepOut());
@@ -69,13 +70,15 @@ class DbgpDebugger extends EventEmitter {
                     `mvn exec:java -Dexec.mainClass="org.overture.interpreter.debug.DBGPReaderV2" -Dexec.args="-vdmsl -h localhost -p 9000 -k testKey -e \\\"${entry}\\\" ${file}"`,
                     {cwd: "/home/rsreimer/projects/Speciale/overture-dev/core/interpreter"}
                 );
-                this.dbEngine.stdout.on('data', data => console.log(['dbEngine out', data]))
-                this.dbEngine.stderr.on('data', data => console.log(['dbEngine err', data]))
             })
     }
 
     run() {
-        return this.connection.sendCommand('run');
+        this.connection.sendCommand('run');
+    }
+
+    break() {
+        this.connection.sendCommand('break');
     }
 
     stepInto() {

@@ -18,8 +18,12 @@ angular.module('ide')
                     Server.emit('debug/run');
                 };
 
+                this.break = function() {
+                    Server.emit('debug/break');
+                };
+
                 this.stop = function() {
-                     Server.emit('debug/run');
+                     Server.emit('debug/stop');
                 };
             }
         }
