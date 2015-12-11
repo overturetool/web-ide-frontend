@@ -1,6 +1,31 @@
 angular.module('ide', []);
 
 angular.module('ide')
+    .directive('debug', function () {
+        return {
+            templateUrl: 'debug.html',
+            bindToController: true,
+            controllerAs: 'debug',
+            controller: function (Server) {
+                this.start = function () {
+                    Server.emit('debug/start', {
+                        file: "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
+                        entry: "Parts(1, bom)"
+                    });
+                };
+
+                this.run = function() {
+                    Server.emit('debug/run');
+                };
+
+                this.stop = function() {
+                     Server.emit('debug/run');
+                };
+            }
+        }
+    });
+
+angular.module('ide')
     .service('Server', function () {
         var socket = io.connect(location.origin);
 
@@ -14,26 +39,14 @@ angular.module('ide')
     });
 
 angular.module('ide')
-    .directive('debug', function() {
-        return {
-            templateUrl: 'debug.html',
-            bindToController: true,
-            controllerAs: 'debug',
-            controller: function () {
-
-            }
-        }
-    });
-
-angular.module('ide')
-    .directive('editor', function (Server) {
+    .directive('editor', function () {
         return {
             templateUrl: 'editor.html',
             scope: {},
             replace: true,
             controllerAs: "editor",
             bindToController: true,
-            controller: function ($element) {
+            controller: function ($element, Server) {
                 var editor = CodeMirror.fromTextArea($element[0], {
                     lineNumbers: true,
                     gutters: ["CodeMirror-linenumbers", "breakpoints"]
@@ -50,10 +63,10 @@ angular.module('ide')
                     var info = cm.lineInfo(n);
 
                     if (info.gutterMarkers) {
-                        Server.emit('breakpoints/remove', n + 1);
+                        Server.emit('debug/remove-breakpoint', n + 1);
                         cm.setGutterMarker(n, "breakpoints", null);
                     } else {
-                        Server.emit('breakpoints/set', n + 1);
+                        Server.emit('debug/set-breakpoint', n + 1);
                         cm.setGutterMarker(n, "breakpoints", makeMarker());
                     }
                 });
@@ -62,8 +75,8 @@ angular.module('ide')
     });
 
 angular.module('ide')
-    .directive('panelMenu', function() {
-         return {
+    .directive('panelMenu', function () {
+        return {
             replace: true,
             scope: {},
             transclude: true,

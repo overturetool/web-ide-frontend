@@ -8,18 +8,12 @@ var app = express(),
 
 app.use(express.static('client'));
 server.listen(8080);
-/*
-var Debugger = require('./debugger'), Linter = require('./linter');
 
-var debug = new Debugger();
+var DbgpDebugger = require('./dbgp/dpgpDebugger'), Linter = require('./linter');
+
+var debug = new DbgpDebugger();
 var linter = new Linter();
 
 io.on('connection', function(socket) {
     debug.bindToClient(socket);
-
-    debug.start(
-        "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
-        "Parts(1, bom)"
-    );
 });
-*/
