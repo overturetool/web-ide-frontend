@@ -1,8 +1,13 @@
 var terminal = document.getElementById('terminal');
 var socket = io.connect(location.origin);
 
+CodeMirror.commands.autocomplete = function(cm) {
+    cm.showHint({hint: CodeMirror.hint.vdm});
+};
+
 var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
     lineNumbers: true,
+    extraKeys: {"Ctrl-Space": "autocomplete"},
     gutters: ["CodeMirror-linenumbers", "breakpoints"],
     lintWith: {
         "getAnnotations": CodeMirror.linter,

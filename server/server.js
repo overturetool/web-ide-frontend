@@ -9,15 +9,22 @@ var app = express(),
 app.use(express.static('client'));
 server.listen(8080);
 
-var Debugger = require('./debugger'), Linter = require('./linter');
+var Debugger = require('./debugger'),
+    Linter = require('./linter'),
+    CodeCompletion = require('./codecompletion');
 
 var debug = new Debugger(app);
 var linter = new Linter();
+var codeCompletion = new CodeCompletion();
 
 io.on('connection', function(socket) {
     debug.attach(
         "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
         "Parts(1, bom)"
+    );
+
+    codeCompletion.attach(
+        "file", null
     );
 
     socket.on('debug/load', () => {
@@ -37,5 +44,10 @@ io.on('connection', function(socket) {
     socket.on('lint', path => {
         linter.lint(path)
             .then(markers => socket.emit('markers', markers));
+    });
+
+    socket.on('codecomplete', data => {
+        codeCompletion.calc(data)
+            .then(res => socket.emit('proposals', res));
     });
 });
