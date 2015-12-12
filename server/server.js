@@ -13,12 +13,14 @@ var Debugger = require('./debugger'),
     Linter = require('./linter'),
     CodeCompletion = require('./codecompletion');
 
-var debug = new Debugger(app);
+var debug = new Debugger();
 var linter = new Linter();
 var codeCompletion = new CodeCompletion();
 
 io.on('connection', function(socket) {
-    debug.attach(
+    debug.bindToClient(socket);
+
+    debug.start(
         "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
         "Parts(1, bom)"
     );
