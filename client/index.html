@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>Webide</title>
     <link rel="stylesheet" href="lib/codemirror.css">
+    <link rel="stylesheet" href="lib/lint/lint.css">
     <link rel="stylesheet" href="editor.css">
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="lib/codemirror.js"></script>
+    <script src="lib/lint/lint.js"></script>
     <script src="lib/vdm-mode.js"></script>
     <script src="ide.js"></script>
 </head>
@@ -22,7 +24,7 @@
     <editor></editor>
     <panel-menu class="right">
         <panel class="active" name="Debugger">
-            <debug></debug>
+            <debug-view></debug-view>
         </panel>
         <panel name="Outline">
             <h3>Stuff</h3>

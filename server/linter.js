@@ -18,12 +18,16 @@ class Linter {
             if (!match) return;
 
             markers.push({
-                pos: {
-                    sl: parseInt(match[3], 10) - 1, // Line number
-                    sc: parseInt(match[4], 10) // Column number
+                from: {
+                    line: parseInt(match[3], 10) - 1, // Line number
+                    ch: parseInt(match[4], 10) - 1 // Column number
+                },
+                to: {
+                    line: parseInt(match[3], 10) - 1, // Line number
+                    ch: parseInt(match[4], 10) // Column number
                 },
                 message: match[2],  // Message to display in editor
-                level: match[1] == "Error" ? "error" : "warning" // Marker type (error or warning)
+                severity: match[1] == "Error" ? "error" : "warning" // Marker type (error or warning)
             });
         });
 

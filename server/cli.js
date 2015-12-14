@@ -3,14 +3,12 @@
 var exec = require('child_process').exec;
 
 class CLI {
-    constructor() {
+    run(cliPath, options) {
         this.queue = [];
         this.current = null;
-        this.busy = true;
         this.response = "";
-    }
+        this.busy = true;
 
-    run(cliPath, options) {
         this.process = exec(cliPath, options);
 
         this.process.stdout.on('data', data => {

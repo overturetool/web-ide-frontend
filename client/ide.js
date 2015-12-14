@@ -1,32 +1,25 @@
 angular.module('ide', []);
 
 angular.module('ide')
-    .directive('debug', function () {
-        return {
-            templateUrl: 'debug.html',
-            bindToController: true,
-            controllerAs: 'debug',
-            controller: function (Server) {
-                this.start = function () {
-                    Server.emit('debug/start', {
-                        file: "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
-                        entry: "Parts(1, bom)"
-                    });
-                };
+    .service('Debugger', function (Server) {
+        this.start = function () {
+            Server.emit('debug/start', {
+                file: "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
+                entry: "Parts(1, bom)"
+            });
+        };
 
-                this.run = function() {
-                    Server.emit('debug/run');
-                };
+        this.run = function () {
+            Server.emit('debug/run');
+        };
 
-                this.break = function() {
-                    Server.emit('debug/break');
-                };
+        this.break = function () {
+            Server.emit('debug/break');
+        };
 
-                this.stop = function() {
-                     Server.emit('debug/stop');
-                };
-            }
-        }
+        this.stop = function () {
+            Server.emit('debug/stop');
+        };
     });
 
 angular.module('ide')
@@ -40,8 +33,22 @@ angular.module('ide')
         this.on = function (event, listener) {
             socket.on(event, listener);
         };
+
+        this.once = function(event, listener) {
+            socket.once(event, listener);
+        }
     });
 
+angular.module('ide')
+    .service('Linter', function (Server) {
+        this.lint = function (doc, callback) {
+            Server.emit('linter/lint');
+
+            Server.once('linter/linted', function (markers) {
+                callback(markers);
+            })
+        };
+    });
 
 angular.module('ide')
     .directive('editor', function () {
@@ -51,10 +58,11 @@ angular.module('ide')
             replace: true,
             controllerAs: "editor",
             bindToController: true,
-            controller: function ($element, Server) {
+            controller: function ($element, Server, Linter) {
                 var editor = CodeMirror.fromTextArea($element[0], {
                     lineNumbers: true,
-                    gutters: ["CodeMirror-linenumbers", "breakpoints"]
+                    'lint': {'getAnnotations': Linter.lint, 'async': true},
+                    gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
                 });
 
                 function makeMarker() {
@@ -67,18 +75,27 @@ angular.module('ide')
                 editor.on("gutterClick", function (cm, n) {
                     var info = cm.lineInfo(n);
 
-                    if (info.gutterMarkers) {
+                    if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints']) {
                         Server.emit('debug/remove-breakpoint', n + 1);
-                        cm.setGutterMarker(n, "breakpoints", null);
+                        cm.setGutterMarker(n, "CodeMirror-breakpoints", null);
                     } else {
                         Server.emit('debug/set-breakpoint', n + 1);
-                        cm.setGutterMarker(n, "breakpoints", makeMarker());
+                        cm.setGutterMarker(n, "CodeMirror-breakpoints", makeMarker());
                     }
                 });
+            }
+        }
+    });
 
-                editor.on('change', function(cm, change) {
-                    Server.emit('linter/lint');
-                });
+angular.module('ide')
+    .directive('debugView', function () {
+        return {
+            scope: {},
+            templateUrl: 'debug.html',
+            controllerAs: 'debug',
+            bindToController: true,
+            controller: function (Debugger) {
+                this.api = Debugger;
             }
         }
     });
