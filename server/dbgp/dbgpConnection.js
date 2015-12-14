@@ -26,20 +26,13 @@ class DbgpConnection {
         this.dataBuffer = '';
         this.commandQueue = [];
 
-        let parent = this;
-
-        this.connection.on('end', function () {
-            parent.connection = false;
-        });
-
-        this.connection.on('data', function (data) {
-            parent.onIncomingData(data);
-        });
+        this.connection.on('end', () => this.connection = false);
+        this.connection.on('data', data => this.onIncomingData(data));
     }
 
     onIncomingData(data) {
         data = data.toString();
-        console.log(data);
+
         // If this is not the last part of the data, buffer it
         if (data.charCodeAt(data.length - 1) !== 0)
             return this.dataBuffer += data;
@@ -72,7 +65,6 @@ class DbgpConnection {
     }
 
     sendCommand(command, parameters) {
-        let that = this;
         let transactionId = this.getTransactionId();
 
         command = {
@@ -83,23 +75,17 @@ class DbgpConnection {
         if (parameters)
             command.command += ' ' + parameters;
 
-        var responded = new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             command.resolve = resolve;
             command.reject = reject;
 
-            that.commandQueue[transactionId] = command;
+            this.commandQueue[transactionId] = command;
 
             // Check if we can send the command right away
-            if (!that.isCommandPending(transactionId - 1)) {
-                that.sendCommandToServer(transactionId);
+            if (!this.isCommandPending(transactionId - 1)) {
+                this.sendCommandToServer(transactionId);
             }
-        });
-
-        responded.then(function (response) {
-            that.checkCommandQueue(response.transactionId);
-        });
-
-        return responded;
+        }).then(response => this.checkCommandQueue(response.transactionId));
     }
 
     sendCommandToServer(transactionId) {

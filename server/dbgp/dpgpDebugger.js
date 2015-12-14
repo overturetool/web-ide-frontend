@@ -32,7 +32,6 @@ class DbgpDebugger extends EventEmitter {
 
         this.on('stopped', info => {
             socket.emit('debug/stopped', info);
-            this.stop();
         });
 
         this.on('breakpoint', info => {
@@ -82,7 +81,7 @@ class DbgpDebugger extends EventEmitter {
     }
 
     break() {
-        this.connection.sendCommand('status').then(console.log);
+        this.connection.sendCommand('status');
     }
 
     stepInto() {
@@ -98,7 +97,7 @@ class DbgpDebugger extends EventEmitter {
     }
 
     stop() {
-        this.dbEngine.disconnect();
+        this.connection.close();
     }
 
     setBreakpoint(line) {
