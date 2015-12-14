@@ -42,6 +42,7 @@ angular.module('ide')
         };
     });
 
+
 angular.module('ide')
     .directive('editor', function () {
         return {
@@ -73,6 +74,10 @@ angular.module('ide')
                         Server.emit('debug/set-breakpoint', n + 1);
                         cm.setGutterMarker(n, "breakpoints", makeMarker());
                     }
+                });
+
+                editor.on('change', function(cm, change) {
+                    Server.emit('linter/lint');
                 });
             }
         }

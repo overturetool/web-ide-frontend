@@ -10,7 +10,7 @@ class CLI {
         this.response = "";
     }
 
-    run(cliPath, options, cb) {
+    run(cliPath, options) {
         this.process = exec(cliPath, options);
 
         this.process.stdout.on('data', data => {
@@ -23,8 +23,6 @@ class CLI {
                     var resolve = this.current.resolve;
                     this.current = null;
                     resolve(this.response);
-                } else {
-                    cb(this.response);
                 }
 
                 this.handleNext();
@@ -34,6 +32,11 @@ class CLI {
         });
 
         this.process.stderr.on('data', data => console.error(data));
+
+        return new Promise(resolve => {
+            var cli = this;
+            return this.process.on('exit', () => resolve(cli.response));
+        });
    }
 
     stop() {

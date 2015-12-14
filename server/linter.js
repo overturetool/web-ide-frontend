@@ -8,11 +8,38 @@ class Linter {
         this.cli = new CLI();
     }
 
-    lint(file) {
-        return new Promise(resolve => {
-            this.cli.run(`overture -${this.type} workspace/${file}`, response => {
-                resolve(response)
+    parse(data) {
+        var markers = [];
+
+        data.split("\n")
+            .forEach(line => {
+            var match = line.match(/^(Error|Warning) [0-9]+: (.*?) at line ([0-9]+):([0-9]+)/);
+
+            if (!match) return;
+
+            markers.push({
+                pos: {
+                    sl: parseInt(match[3], 10) - 1, // Line number
+                    sc: parseInt(match[4], 10) // Column number
+                },
+                message: match[2],  // Message to display in editor
+                level: match[1] == "Error" ? "error" : "warning" // Marker type (error or warning)
             });
+        });
+
+        return markers;
+    }
+
+    lint(file) {
+        return this.cli
+            .run(`overture -${this.type} workspace/${file}`)
+            .then(data => this.parse(data));
+    }
+
+    bindToClient(socket) {
+        socket.on('linter/lint', () => {
+            this.lint("bom.vdmsl")
+                .then(markers => socket.emit('linter/linted', markers))
         });
     }
 }

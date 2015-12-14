@@ -18,4 +18,5 @@ var linter = new Linter();
 
 io.on('connection', function(socket) {
     debug.bindToClient(socket);
+    linter.bindToClient(socket);
 });
