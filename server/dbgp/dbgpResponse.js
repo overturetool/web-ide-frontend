@@ -30,6 +30,8 @@ class DbgpResponse {
         parser.parseString(data, (err, result) => {
             if (err) return;
 
+            console.log(result);
+
             if (result.init)
                 return this.processInitResponse(result);
 
@@ -57,6 +59,14 @@ class DbgpResponse {
 
                 case 'stop':
                     this.processStopResponse(result);
+                    break;
+
+                case 'breakpoint_set':
+                    this.processBreakpointResponse(result);
+                    break;
+
+                default:
+                    this.processDefault(result);
                     break;
             }
         });
@@ -97,7 +107,7 @@ class DbgpResponse {
         // Run command returns a status
         switch (response.response.attributes.status) {
             case 'break':
-                this.onBreakpoint(response);
+                this.debug.emit('info', "break");
                 break;
 
             case 'stopping':
@@ -107,46 +117,18 @@ class DbgpResponse {
         }
     }
 
-    onBreakpoint(response) {
-        var breakpoint = {
-            file: this.replaceFileUri(response.response.children['xdebug:message'].attributes.filename),
-            line: parseInt(response.response.children['xdebug:message'].attributes.lineno)
-        };
+    processBreakpointResponse(response) {
+        this.debug.emit('info', {id: response.response.attributes.id});
 
-        if (!this.debug.options.includeContextOnBreak && !this.debug.options.includeSourceOnBreak)
-            return this.debug.emit('breakpoint', breakpoint);
+        var transactionId = this.getTransactionId(response);
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
+    }
 
-        var breakpointPromises = [];
+    processDefault(response) {
+        console.warn(`No custom response handler for command ${response.response.attributes.command}`);
 
-        if (this.debug.options.includeContextOnBreak) {
-            breakpointPromises.push(this.debug.getContext());
-        }
-
-        if (this.debug.options.includeSourceOnBreak) {
-            // Calculate what lines to request
-            var filename = response.response.children['xdebug:message'].attributes.filename;
-            var startLine = false;
-            var endLine = false;
-
-            if (this.debug.options.sourceOnBreakLines > 0) {
-                startLine = breakpoint.line - this.debug.options.sourceOnBreakLines;
-                endLine = breakpoint.line + this.debug.options.sourceOnBreakLines;
-            }
-
-            breakpointPromises.push(this.debug.getSource(filename, startLine, endLine));
-        }
-
-        Promise.all(breakpointPromises).then(results => {
-            for (let i in results) {
-                if (results[i].context)
-                    breakpoint.context = results[i].context;
-
-                if (results[i].source)
-                    breakpoint.source = results[i].source;
-            }
-
-            this.debug.emit('breakpoint', breakpoint);
-        });
+        var transactionId = this.getTransactionId(response);
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
     }
 
     processContextResponse(response) {

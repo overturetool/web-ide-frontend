@@ -26,19 +26,10 @@ class DbgpDebugger extends EventEmitter {
         socket.on('debug/set-breakpoint', line => this.setBreakpoint(line));
         socket.on('debug/remove-breakpoint', line => this.removeBreakpoint(line));
 
-        this.on('started', info => {
-            socket.emit('debug/started', info);
-        });
-
-        this.on('stopped', info => {
-            socket.emit('debug/stopped', info);
-        });
-
-        this.on('breakpoint', info => {
-            socket.emit('debug/suspended', info);
-        });
-
-        // this.dbg.getContext().then(context => socket.emit('debug/context', context));
+        this.on('started', info => socket.emit('debug/started', info));
+        this.on('stopped', info => socket.emit('debug/stopped', info));
+        this.on('breakpoint', info => socket.emit('debug/suspended', info));
+        this.on('info', info => socket.emit('debug/info', info));
     }
 
     setDefaults() {
