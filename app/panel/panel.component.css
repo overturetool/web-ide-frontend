@@ -1,0 +1,42 @@
+:host.right .content {
+    transform: translateX(40px);
+}
+
+:host.right .content.active {
+    transform: translateX(-302px);
+}
+
+:host.left .content {
+    transform: translateX(-302px);
+}
+
+:host.left .content.active {
+    transform: translateX(40px);
+}
+
+.content {
+    border: solid #aaa;
+    border-width: 0 1px;
+    height: 100vh;
+    width: 300px;
+    position: fixed;
+    top: 0;
+    background-color: #ddd;
+    z-index: 10;
+}
+
+button {
+    margin-bottom: 60px;
+    transform: rotate(90deg);
+    transform-origin: 20px 20px;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    display: block;
+}
+
+button:hover,
+:host.active > button {
+    background-color: #bbb;
+}
