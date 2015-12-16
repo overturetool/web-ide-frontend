@@ -1,4 +1,4 @@
-import {ServerService} from "../server/ServerService";
+import {ServerService} from "../server/ServerService"
 
 declare type Marker = {
     from: {

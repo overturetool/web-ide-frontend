@@ -26,6 +26,7 @@ ide editor {
 panel-menu {
     height: 100vh;
     width: 40px;
+    overflow-x: hidden;
     border: solid #aaa;
     border-width: 0 1px;
     background-color: #ddd;

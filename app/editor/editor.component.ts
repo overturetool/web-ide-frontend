@@ -1,6 +1,6 @@
 import {Component, ElementRef} from "angular2/core"
-import {LintService} from "../lint/LintService";
-import {ServerService} from "../server/ServerService";
+import {LintService} from "../lint/LintService"
+import {ServerService} from "../server/ServerService"
 
 declare var CodeMirror;
 

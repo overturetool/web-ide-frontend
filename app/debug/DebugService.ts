@@ -1,4 +1,4 @@
-import {ServerService} from "../server/ServerService";
+import {ServerService} from "../server/ServerService"
 
 export class DebugService {
     private server;
