@@ -1,3 +1,5 @@
+process.env.DEBUG = "engine:ws";
+
 var express = require('express');
 var http  = require('http');
 var socketio = require('socket.io');
@@ -9,16 +11,15 @@ var app = express(),
 app.use(express.static('client'));
 server.listen(8080);
 
-var Debugger = require('./debugger'), Linter = require('./linter');
+var DbgpDebugger = require('./dbgp/dpgpDebugger'),
+    Linter = require('./linter'),
+    CodeCompletion = require('./codecompletion');
 
-var debug = new Debugger();
+var debug = new DbgpDebugger();
 var linter = new Linter();
+var codeCompletion = new CodeCompletion();
 
 io.on('connection', function(socket) {
     debug.bindToClient(socket);
-
-    debug.start(
-        "file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl",
-        "Parts(1, bom)"
-    );
+    linter.bindToClient(socket);
 });

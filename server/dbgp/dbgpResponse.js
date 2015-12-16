@@ -11,8 +11,6 @@ class DbgpResponse {
     }
 
     process() {
-        var that = this;
-
         var data = this.response;
 
         // Strip everything before the xml tag
@@ -29,43 +27,47 @@ class DbgpResponse {
             explicitArray: false
         });
 
-        parser.parseString(data, function (err, result) {
-            if (err)
-                return;
+        parser.parseString(data, (err, result) => {
+            if (err) return;
+
+            console.log(result);
 
             if (result.init)
-                return that.processInitResponse(result);
+                return this.processInitResponse(result);
 
-            if (result.response) {
-                if (result.response.attributes.command) {
-                    switch (result.response.attributes.command) {
-                        case 'feature_set':
-                            that.processFeatureSetResponse(result);
-                            break;
+            if (!result.response || !result.response.attributes.command) return;
 
-                        case 'run':
-                        case 'step_into':
-                        case 'step_over':
-                        case 'step_out':
-                            that.processRunResponse(result);
-                            break;
+            switch (result.response.attributes.command) {
+                case 'feature_set':
+                    this.processFeatureSetResponse(result);
+                    break;
 
-                        case 'context_get':
-                            that.processContextResponse(result);
-                            break;
+                case 'run':
+                case 'step_into':
+                case 'step_over':
+                case 'step_out':
+                    this.processRunResponse(result);
+                    break;
 
-                        case 'source':
-                            that.processSourceResponse(result);
-                            break;
+                case 'context_get':
+                    this.processContextResponse(result);
+                    break;
 
-                        case 'stop':
-                            that.processStopResponse(result);
-                            break;
+                case 'source':
+                    this.processSourceResponse(result);
+                    break;
 
-                        default:
-                            break;
-                    }
-                }
+                case 'stop':
+                    this.processStopResponse(result);
+                    break;
+
+                case 'breakpoint_set':
+                    this.processBreakpointResponse(result);
+                    break;
+
+                default:
+                    this.processDefault(result);
+                    break;
             }
         });
     }
@@ -85,7 +87,7 @@ class DbgpResponse {
 
     processFeatureSetResponse(response) {
         var transactionId = this.getTransactionId(response);
-        this.resolveCommandPromise(transactionId, { transactionId: transactionId });
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
     }
 
     processStopResponse(response) {
@@ -93,73 +95,40 @@ class DbgpResponse {
             return;
 
         var transactionId = this.getTransactionId(response);
-        this.resolveCommandPromise(transactionId, { transactionId: transactionId });
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
 
         this.connection.close();
     }
 
     processRunResponse(response) {
         var transactionId = this.getTransactionId(response);
-        this.resolveCommandPromise(transactionId, { transactionId: transactionId });
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
 
         // Run command returns a status
         switch (response.response.attributes.status) {
             case 'break':
-                this.onBreakpoint(response);
+                this.debug.emit('context', this.debug.getContext());
                 break;
 
             case 'stopping':
             case 'stopped':
                 this.connection.close();
                 break;
-
-            default:
-                break;
         }
     }
 
-    onBreakpoint(response) {
-        var that = this;
+    processBreakpointResponse(response) {
+        this.debug.emit('info', {id: response.response.attributes.id});
 
-        var breakpoint = {
-            file: this.replaceFileUri(response.response.children['xdebug:message'].attributes.filename),
-            line: parseInt(response.response.children['xdebug:message'].attributes.lineno)
-        };
+        var transactionId = this.getTransactionId(response);
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
+    }
 
-        if (!this.debug.options.includeContextOnBreak && !this.debug.options.includeSourceOnBreak)
-            return this.debug.emit('breakpoint', breakpoint);
+    processDefault(response) {
+        console.warn(`No custom response handler for command ${response.response.attributes.command}`);
 
-        var breakpointPromises = [];
-
-        if (this.debug.options.includeContextOnBreak) {
-            breakpointPromises.push(that.debug.getContext());
-        }
-
-        if (this.debug.options.includeSourceOnBreak) {
-            // Calculate what lines to request
-            var filename = response.response.children['xdebug:message'].attributes.filename;
-            var startLine = false;
-            var endLine = false;
-
-            if (that.debug.options.sourceOnBreakLines > 0) {
-                startLine = breakpoint.line - that.debug.options.sourceOnBreakLines;
-                endLine = breakpoint.line + that.debug.options.sourceOnBreakLines;
-            }
-
-            breakpointPromises.push(that.debug.getSource(filename, startLine, endLine));
-        }
-
-        Promise.all(breakpointPromises).then(function(results) {
-            for (let i in results) {
-                if (results[i].context)
-                    breakpoint.context = results[i].context;
-
-                if (results[i].source)
-                    breakpoint.source = results[i].source;
-            }
-
-            that.debug.emit('breakpoint', breakpoint);
-        });
+        var transactionId = this.getTransactionId(response);
+        this.resolveCommandPromise(transactionId, {transactionId: transactionId});
     }
 
     processContextResponse(response) {
@@ -173,8 +142,7 @@ class DbgpResponse {
                 let currentVar = response.response.children.property[i];
                 context[currentVar.attributes.name] = this.formatContextVariable(currentVar);
             }
-        } else
-        {
+        } else {
             let currentVar = response.response.children.property;
             context[currentVar.attributes.name] = this.formatContextVariable(currentVar);
         }
@@ -196,8 +164,7 @@ class DbgpResponse {
         if (variable.content) {
             if (variable.attributes.encoding == 'base64') {
                 formattedVariable.value = this.base64decode(variable.content);
-            } else
-            {
+            } else {
                 formattedVariable.value = variable.content;
             }
         }
@@ -213,8 +180,7 @@ class DbgpResponse {
                 for (let i in variable.children.property) {
                     formattedVariable.children.push(this.formatContextVariable(variable.children.property[i]));
                 }
-            } else
-            {
+            } else {
                 formattedVariable.children.push(this.formatContextVariable(variable.children.property));
             }
         }

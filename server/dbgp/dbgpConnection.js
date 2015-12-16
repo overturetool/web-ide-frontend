@@ -26,15 +26,8 @@ class DbgpConnection {
         this.dataBuffer = '';
         this.commandQueue = [];
 
-        let parent = this;
-
-        this.connection.on('end', function () {
-            parent.connection = false;
-        });
-
-        this.connection.on('data', function (data) {
-            parent.onIncomingData(data);
-        });
+        this.connection.on('end', () => this.connection = false);
+        this.connection.on('data', data => this.onIncomingData(data));
     }
 
     onIncomingData(data) {
@@ -72,7 +65,6 @@ class DbgpConnection {
     }
 
     sendCommand(command, parameters) {
-        let that = this;
         let transactionId = this.getTransactionId();
 
         command = {
@@ -83,23 +75,17 @@ class DbgpConnection {
         if (parameters)
             command.command += ' ' + parameters;
 
-        var responded = new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             command.resolve = resolve;
             command.reject = reject;
 
-            that.commandQueue[transactionId] = command;
+            this.commandQueue[transactionId] = command;
 
             // Check if we can send the command right away
-            if (!that.isCommandPending(transactionId - 1)) {
-                that.sendCommandToServer(transactionId);
+            if (!this.isCommandPending(transactionId - 1)) {
+                this.sendCommandToServer(transactionId);
             }
-        });
-
-        responded.then(function(response) {
-            that.checkCommandQueue(response.transactionId);
-        });
-
-        return responded;
+        }).then(response => this.checkCommandQueue(response.transactionId));
     }
 
     sendCommandToServer(transactionId) {
@@ -127,13 +113,13 @@ class DbgpConnection {
     }
 
     listen(port) {
-        var that = this;
-
-        this.server = net.createServer(function (connection) {
-            that.onIncomingConnection(connection);
-        });
-
         return new Promise(resolve => {
+            if (this.server) {
+                resolve();
+                return;
+            }
+
+            this.server = net.createServer(connection => this.onIncomingConnection(connection));
             this.server.listen(port, resolve);
         });
     }
