@@ -173,3 +173,15 @@ li.CodeMirror-hint-active {
     font-size: 20px;
     line-height: 10px;
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #4c4c4c;
+    border-radius: 2px;
+}
