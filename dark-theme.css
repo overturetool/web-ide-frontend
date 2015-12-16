@@ -110,9 +110,12 @@ span.cm-error {
     color: #eaeaea;
 }
 
-.panel-menu > button:hover,
-.panel-menu > button.active {
+.panel-menu > button:hover {
     background-color: #353739;
+}
+
+.panel-menu > button.active {
+    background-color: #2d2f30;
 }
 
 .panel-menu.left {
