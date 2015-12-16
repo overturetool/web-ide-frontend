@@ -16,10 +16,10 @@ var socket = io.connect(location.origin);
     var WORD = /[\w$]+/, RANGE = 500;
 
     CodeMirror.registerHelper("hint", "vdm", function(editor, options) {
-        socket.emit('codecomplete', 'Argument!');
-        socket.on('proposals', function (args) {
-            console.log(args);
-        });
+        //socket.emit('codecomplete', 'Argument!');
+        //socket.on('proposals', function (args) {
+        //    console.log(args);
+        //});
 
         var word = options && options.word || WORD;
         var range = options && options.range || RANGE;

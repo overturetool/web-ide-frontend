@@ -11,10 +11,13 @@ var app = express(),
 app.use(express.static('client'));
 server.listen(8080);
 
-var DbgpDebugger = require('./dbgp/dpgpDebugger'), Linter = require('./linter');
+var DbgpDebugger = require('./dbgp/dpgpDebugger'),
+    Linter = require('./linter'),
+    CodeCompletion = require('./codecompletion');
 
 var debug = new DbgpDebugger();
 var linter = new Linter();
+var codeCompletion = new CodeCompletion();
 
 io.on('connection', function(socket) {
     debug.bindToClient(socket);

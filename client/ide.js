@@ -59,8 +59,13 @@ angular.module('ide')
             controllerAs: "editor",
             bindToController: true,
             controller: function ($element, Server, Linter) {
+                CodeMirror.commands.autocomplete = function(cm) {
+                    cm.showHint({hint: CodeMirror.hint.vdm});
+                };
+
                 var editor = CodeMirror.fromTextArea($element[0], {
                     lineNumbers: true,
+                    extraKeys: {"Ctrl-Space": "autocomplete"},
                     'lint': {'getAnnotations': Linter.lint, 'async': true},
                     gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
                 });
