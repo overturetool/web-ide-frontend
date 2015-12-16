@@ -25,7 +25,7 @@ export class EditorComponent {
 
         function makeMarker() {
             var marker = document.createElement("div");
-            marker.style.color = "#822";
+            marker.classList.add("CodeMirror-breakpoint");
             marker.innerHTML = "●";
             return marker;
         }
