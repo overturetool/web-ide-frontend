@@ -1,3 +1,4 @@
+import {Injectable} from "angular2/core"
 declare type Listener = (data:any)=>void
 
 export class ServerService {

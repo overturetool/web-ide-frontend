@@ -15,7 +15,7 @@ export class EditorComponent {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             extraKeys: {"Ctrl-Space": "autocomplete"},
-            'lint': {'getAnnotations': linter.lint, 'async': true},
+            'lint': {'getAnnotations': (text, callback) => linter.lint(text, callback), 'async': true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
 

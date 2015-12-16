@@ -62,3 +62,21 @@ span.cm-error { background: #f92672; color: #f8f8f0; }
     background-color: #3c3f41;
     border-left: 1px solid #555555;
 }
+
+.CodeMirror-hints {
+    min-width: 145px;
+    background-color: #3c3f41;
+    border: 1px solid #c0c0c0;
+    border-radius: 0;
+    padding: 0;
+}
+
+.CodeMirror-hint {
+    color: #bbbbbb;
+    padding: 2px;
+    border-radius: 0;
+}
+
+li.CodeMirror-hint-active {
+    background: #0052a4;
+}
