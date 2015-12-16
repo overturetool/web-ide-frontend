@@ -6,7 +6,6 @@ declare var CodeMirror;
 
 @Component({
     selector: "editor",
-    styleUrls: ['app/editor/editor.component.css'],
     template: ''
 })
 export class EditorComponent {

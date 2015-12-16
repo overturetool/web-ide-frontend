@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+}
+
+.CodeMirror {
+    height: 100vh;
+    width: 100%;
+}
+
+ide {
+    display: flex;
+}
+
+ide editor {
+    flex: auto;
+}
+
+.breakpoints {
+    width: .8em;
+}
+
+.breakpoint {
+    color: #822;
+}
+
+panel-menu {
+    height: 100vh;
+    width: 40px;
+    border: solid #aaa;
+    border-width: 0 1px;
+    background-color: #ddd;
+}
+
+panel > button {
+    margin-bottom: 60px;
+    transform: rotate(90deg);
+    transform-origin: 20px 20px;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    display: inline-block;
+}
+
+.panel > .name:hover,
+.panel.active .name {
+    background-color: #bbb;
+    cursor: pointer;
+}
+
+panel .content {
+    border: solid #aaa;
+    border-width: 0 1px;
+    height: 100vh;
+    width: 300px;
+    position: fixed;
+    top: 0;
+    background-color: #ddd;
+    z-index: 10;
+}
+
+panel-menu.right .content {
+    transform: translateX(40px);
+}
+
+panel-menu.right .content.active {
+    transform: translateX(-302px);
+}
+
+panel-menu.left .content {
+    transform: translateX(-302px);
+}
+
+panel-menu.left .content.active {
+    transform: translateX(40px);
+}
+
+.glyph.restart {
+    background-position: 0 0;
+}
+
+.glyph.run {
+    background-position: -64px -48px;
+}
+
+.glyph.break {
+    background-position: -32px -72px;
+}
+
+.glyph.step-over {
+    background-position: -128px -72px;
+}
+
+.glyph.step-into {
+    background-position: -64px -72px;
+}
+
+.glyph.step-out {
+    background-position: -96px -72px;
+}
+
+.glyph.stop {
+    background-position: -96px -48px;
+}
+
+.glyph {
+    background-image: url(img/toolbarButtonGlyphs.png);
+    width: 32px;
+    height: 24px;
+    padding: 8px;
+}
