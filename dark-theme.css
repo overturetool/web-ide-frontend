@@ -1,3 +1,8 @@
+body {
+    font-family: sans-serif;
+    color: #bbbbbb;
+}
+
 .CodeMirror {
     background: #2b2b2b;
     color: #f8f8f2;
