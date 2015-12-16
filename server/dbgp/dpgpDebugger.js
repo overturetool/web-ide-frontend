@@ -75,6 +75,10 @@ class DbgpDebugger extends EventEmitter {
         this.connection.sendCommand('status');
     }
 
+    stop() {
+        this.connection.close();
+    }
+
     stepInto() {
         return this.connection.sendCommand('step_into');
     }
@@ -87,10 +91,6 @@ class DbgpDebugger extends EventEmitter {
         return this.connection.sendCommand('step_out');
     }
 
-    stop() {
-        this.connection.close();
-    }
-
     setBreakpoint(line) {
         return this.connection.sendCommand('breakpoint_set', `-t line -f file:/home/rsreimer/projects/Speciale/webide/workspace/bom.vdmsl -n ${line}`);
     }
@@ -100,18 +100,16 @@ class DbgpDebugger extends EventEmitter {
     }
 
     getContext() {
-        var that = this;
-
-        return new Promise(function (resolve, reject) {
-            if (!that.options.includeGlobals) {
-                that.connection.sendCommand('context_get').then(function (response) {
-                    resolve(response);
-                });
+        return new Promise(resolve => {
+            if (!this.options.includeGlobals) {
+                this.connection
+                    .sendCommand('context_get')
+                    .then(response => resolve(response));
             } else {
                 Promise.all([
-                    that.connection.sendCommand('context_get'),
-                    that.connection.sendCommand('context_get', '-c 1')
-                ]).then(function (results) {
+                    this.connection.sendCommand('context_get'),
+                    this.connection.sendCommand('context_get', '-c 1')
+                ]).then(results => {
                     var combinedContext = {context: {}};
 
                     for (let i in results) {

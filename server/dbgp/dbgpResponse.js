@@ -107,7 +107,7 @@ class DbgpResponse {
         // Run command returns a status
         switch (response.response.attributes.status) {
             case 'break':
-                this.debug.emit('info', "break");
+                this.debug.emit('context', this.debug.getContext());
                 break;
 
             case 'stopping':
