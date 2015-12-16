@@ -3,14 +3,12 @@
 var exec = require('child_process').exec;
 
 class CLI {
-    constructor() {
+    run(cliPath, options) {
         this.queue = [];
         this.current = null;
-        this.busy = true;
         this.response = "";
-    }
+        this.busy = true;
 
-    run(cliPath, options, cb) {
         this.process = exec(cliPath, options);
 
         this.process.stdout.on('data', data => {
@@ -23,8 +21,6 @@ class CLI {
                     var resolve = this.current.resolve;
                     this.current = null;
                     resolve(this.response);
-                } else {
-                    cb(this.response);
                 }
 
                 this.handleNext();
@@ -34,6 +30,11 @@ class CLI {
         });
 
         this.process.stderr.on('data', data => console.error(data));
+
+        return new Promise(resolve => {
+            var cli = this;
+            return this.process.on('exit', () => resolve(cli.response));
+        });
    }
 
     stop() {

@@ -3,8 +3,8 @@ body {
 }
 
 .CodeMirror {
+    height: 100vh;
     width: 100%;
-    height: 80vh;
 }
 
 .view {
@@ -15,11 +15,6 @@ body {
     flex: auto;
 }
 
-.view > .panel {
-    width: 300px;
-    border-left: 1px solid #aaa;
-}
-
 .breakpoints {
     width: .8em;
 }
@@ -28,7 +23,96 @@ body {
     color: #822;
 }
 
-#terminal {
-    height: 20vh;
-    white-space: pre;
+.panel-menu {
+    height: 100vh;
+    width: 40px;
+    border: solid #aaa;
+    border-width: 0 1px;
+    background-color: #ddd;
+}
+
+.panel > .name {
+    transform: rotate(90deg);
+    transform-origin: 20px 20px;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    display: inline-block;
+}
+
+.panel {
+    margin-top: 60px;
+}
+
+.panel-menu .panel:nth-child(1) {
+    margin-top: 0;
+}
+
+.panel > .name:hover,
+.panel.active .name {
+    background-color: #bbb;
+    cursor: pointer;
+}
+
+.pane {
+    border: solid #aaa;
+    border-width: 0 1px;
+    height: 100vh;
+    width: 300px;
+    position: fixed;
+    top: 0;
+    background-color: #ddd;
+    z-index: 10;
+}
+
+.right .pane {
+    transform: translateX(40px);
+}
+
+.right .panel.active .pane {
+    transform: translateX(-302px);
+}
+
+.left .pane {
+    transform: translateX(-302px);
+}
+
+.left .panel.active .pane {
+    transform: translateX(40px);
+}
+
+.glyph.restart {
+    background-position: 0 0;
+}
+
+.glyph.run {
+    background-position: -64px -48px;
+}
+
+.glyph.break {
+    background-position: -32px -72px;
+}
+
+.glyph.step-over {
+    background-position: -128px -72px;
+}
+
+.glyph.step-into {
+    background-position: -64px -72px;
+}
+
+.glyph.step-out {
+    background-position: -96px -72px;
+}
+
+.glyph.stop {
+    background-position: -96px -48px;
+}
+
+.glyph {
+    background-image: url(img/toolbarButtonGlyphs.png);
+    width: 32px;
+    height: 24px;
+    padding: 8px;
 }
