@@ -8,6 +8,7 @@ body {
 }
 
 ide {
+    position: relative;
     display: flex;
 }
 
@@ -17,13 +18,14 @@ ide editor {
 
 .breakpoints {
     width: .8em;
+    position: absolute;
 }
 
 .breakpoint {
     color: #822;
 }
 
-panel-menu {
+.panel-menu {
     height: 100vh;
     width: 40px;
     overflow-x: hidden;
@@ -32,7 +34,7 @@ panel-menu {
     background-color: #ddd;
 }
 
-panel > button {
+.panel-menu > button {
     margin-bottom: 60px;
     transform: rotate(90deg);
     transform-origin: 20px 20px;
@@ -43,37 +45,27 @@ panel > button {
     display: inline-block;
 }
 
-.panel > .name:hover,
-.panel.active .name {
+.panel-menu > button:hover,
+.panel-menu > button.active {
+
     background-color: #bbb;
     cursor: pointer;
 }
 
-panel .content {
+.panel {
     border: solid #aaa;
     border-width: 0 1px;
     height: 100vh;
     width: 300px;
-    position: fixed;
-    top: 0;
     background-color: #ddd;
-    z-index: 10;
+    display: none;
 }
 
-panel-menu.right .content {
-    transform: translateX(40px);
+.panel.active {
+    display: block;
 }
 
-panel-menu.right .content.active {
-    transform: translateX(-302px);
-}
-
-panel-menu.left .content {
-    transform: translateX(-302px);
-}
-
-panel-menu.left .content.active {
-    transform: translateX(40px);
+.panel .content {
 }
 
 .glyph.restart {
