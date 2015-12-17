@@ -2,18 +2,18 @@
    <button [class.active]="left == 'project'" (click)="toggleLeft('project')">Project</button>
 </div>
 
-<div class="panel left" [class.active]="left == 'project'">
+<panel class="left" [class.active]="left == 'project'">
    <files></files>
-</div>
+</panel>
 
 <editor></editor>
 
-<div class="panel right" [class.active]="right == 'debug'">
+<panel class="right" [class.active]="right == 'debug'">
    <debug></debug>
-</div>
+</panel>
 
-<div class="panel right" [class.active]="right == 'outline'">
-</div>
+<panel class="right" [class.active]="right == 'outline'">
+</panel>
 
 <div class="panel-menu right">
    <button [class.active]="right == 'debug'" (click)="toggleRight('debug')">Debug</button>
