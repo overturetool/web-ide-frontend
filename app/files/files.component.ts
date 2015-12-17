@@ -1,6 +1,7 @@
 declare var $;
 
 import {ElementRef, Component} from "angular2/core"
+import {FilesService} from "./FilesService"
 
 @Component({
     selector: 'files',
@@ -9,7 +10,7 @@ import {ElementRef, Component} from "angular2/core"
 export class FilesComponent {
     private $container;
 
-    constructor(el: ElementRef) {
+    constructor(el: ElementRef, files: FilesService) {
         this.$container = $(el.nativeElement).find(".container").first();
 
         this.$container.jstree({
@@ -28,5 +29,9 @@ export class FilesComponent {
     search(event) {
         this.$container.jstree(true)
             .search(event.target.value);
+    }
+
+    open() {
+
     }
 }
