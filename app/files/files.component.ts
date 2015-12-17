@@ -4,7 +4,7 @@ import {ElementRef, Component} from "angular2/core"
 
 @Component({
     selector: 'files',
-    template: `<input type="search" (input)="search($event)" placeholder="find file"><div class="container"></div>`
+    template: `<input type="search" (input)="search($event)" placeholder="Search"><div class="container"></div>`
 })
 export class FilesComponent {
     private $container;
@@ -14,7 +14,7 @@ export class FilesComponent {
 
         this.$container.jstree({
             "state" : { "key" : "files" },
-            "plugins" : ["contextmenu", "dnd", "search", "sort", "state"],
+            "plugins" : ["contextmenu", "dnd", "search", "sort", "state", "wholerow"],
             "core" : {
                 "animation": false,
                 "check_callback": true,
