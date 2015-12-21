@@ -27,7 +27,7 @@ export class FilesComponent {
             .forEach(response => {
                 this.$container.jstree(true).settings.core.data = this.dirToJsTree(response.json());
                 this.$container.jstree(true).refresh();
-            });
+            }, this);
     }
 
     dirToJsTree(dir) {

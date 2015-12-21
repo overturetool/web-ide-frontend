@@ -81,7 +81,7 @@ panel.active {
 }
 
 .glyph {
-    background-image: url(img/toolbarButtonGlyphs.png);
+    background-image: url(../../img/toolbarButtonGlyphs.png);
     width: 32px;
     height: 24px;
     padding: 8px;
