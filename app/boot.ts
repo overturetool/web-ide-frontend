@@ -3,7 +3,7 @@ import {IdeComponent} from './ide/ide.component'
 import {LintService} from "./lint/LintService"
 import {DebugService} from "./debug/DebugService"
 import {ServerService} from "./server/ServerService"
-import {FilesService} from "./files/FilesService"
+import {SessionService} from "./auth/SessionService"
 import {HTTP_PROVIDERS} from "angular2/http"
 
-bootstrap(IdeComponent, [HTTP_PROVIDERS, FilesService, LintService, DebugService, ServerService]);
+bootstrap(IdeComponent, [HTTP_PROVIDERS, LintService, DebugService, ServerService, SessionService]);

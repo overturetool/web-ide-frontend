@@ -5,6 +5,7 @@ import {FilesService} from "./FilesService"
 
 @Component({
     selector: 'files',
+    providers: [FilesService],
     template: `<input type="search" (input)="search($event)" placeholder="Search"><div class="container"></div>`
 })
 export class FilesComponent {
@@ -18,10 +19,23 @@ export class FilesComponent {
             "plugins" : ["contextmenu", "dnd", "search", "sort", "state", "wholerow"],
             "core" : {
                 "animation": false,
-                "check_callback": true,
-                "data": [
-                    { "text" : "Root node", "children" : [ { "text" : "Child node 1" }, { "text" : "Child node 2" } ] }
-                ]
+                "check_callback": true
+            }
+        });
+
+        files.readDir("", 10)
+            .forEach(response => {
+                this.$container.jstree(true).settings.core.data = this.dirToJsTree(response.json());
+                this.$container.jstree(true).refresh();
+            });
+    }
+
+    dirToJsTree(dir) {
+        return dir.map(f => {
+            return {
+                text: f.name,
+                children: this.dirToJsTree(f.children),
+                icon: f.type
             }
         });
     }
