@@ -11,13 +11,13 @@ import {FilesService} from "./FilesService"
 export class FilesComponent {
     private $container;
 
-    constructor(el: ElementRef, files: FilesService) {
+    constructor(el:ElementRef, files:FilesService) {
         this.$container = $(el.nativeElement).find(".container").first();
 
         this.$container.jstree({
-            "state" : { "key" : "files" },
-            "plugins" : ["contextmenu", "dnd", "search", "sort", "state", "wholerow"],
-            "core" : {
+            "state": {"key": "files"},
+            "plugins": ["contextmenu", "dnd", "search", "sort", "state", "wholerow"],
+            "core": {
                 "animation": false,
                 "check_callback": true
             }
@@ -31,12 +31,16 @@ export class FilesComponent {
     }
 
     dirToJsTree(dir) {
-        return dir.map(f => {
-            return {
-                text: f.name,
-                children: this.dirToJsTree(f.children),
-                icon: f.type
-            }
+        return dir.map(file => {
+            var node = {
+                text: file.name,
+                icon: file.type === "directory" ? "jstree-folder" : "jstree-file"
+            };
+
+            if (file.children)
+                node.children = this.dirToJsTree(file.children);
+
+            return node;
         });
     }
 
