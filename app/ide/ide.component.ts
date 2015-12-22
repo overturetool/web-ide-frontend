@@ -5,6 +5,7 @@ import {FilesComponent} from "../files/files.component";
 import {PanelComponent} from "../panel/panel.component";
 import {PanelMenuComponent} from "../panel/panel-menu.component";
 import {OutlineComponent} from "../outline/outline.component";
+import {IdeService} from "./IdeService";
 
 @Component({
     selector: 'ide',
@@ -12,4 +13,9 @@ import {OutlineComponent} from "../outline/outline.component";
     directives: [EditorComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent]
 })
 export class IdeComponent {
+    public file:string;
+
+    constructor(private ideService: IdeService) {
+
+    }
 }

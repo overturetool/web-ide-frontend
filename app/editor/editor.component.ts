@@ -1,7 +1,7 @@
-import {Component, ElementRef} from "angular2/core"
+import {Component, ElementRef, Input} from "angular2/core"
 import {LintService} from "../lint/LintService"
-import {ServerService} from "../server/ServerService"
 import {FilesService} from "../files/FilesService";
+import {DebugService} from "../debug/DebugService";
 
 declare var CodeMirror;
 
@@ -11,8 +11,22 @@ declare var CodeMirror;
 })
 export class EditorComponent {
     private codeMirror;
+    private _file:string;
 
-    constructor(el:ElementRef, linter:LintService, server:ServerService, public files:FilesService) {
+    @Input() set file(file:string) {
+        this._file = file;
+
+        if (!file) return;
+
+        this.filesService
+            .readFile(file)
+            .then(content => this.codeMirror.getDoc().setValue(content));
+    }
+    get file():string {
+        return this._file;
+    }
+
+    constructor(el:ElementRef, linter:LintService, debug:DebugService, public filesService:FilesService) {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             extraKeys: {"Ctrl-Space": "autocomplete"},
@@ -35,18 +49,12 @@ export class EditorComponent {
             var info = cm.lineInfo(n);
 
             if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints']) {
-                server.emit('debug/remove-breakpoint', n + 1);
+                debug.removeBreakpoint(n + 1);
                 cm.setGutterMarker(n, "CodeMirror-breakpoints", null);
             } else {
-                server.emit('debug/set-breakpoint', n + 1);
+                debug.setBreakpoint(n + 1);
                 cm.setGutterMarker(n, "CodeMirror-breakpoints", makeMarker());
             }
         });
-    }
-
-    open(path:string) {
-        this.files.readFile(path)
-            .then(file =>
-                this.codeMirror.getDoc().setValue(file));
     }
 }

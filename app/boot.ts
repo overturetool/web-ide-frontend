@@ -8,5 +8,6 @@ import {ServerService} from "./server/ServerService"
 import {SessionService} from "./auth/SessionService"
 import {FilesService} from "./files/FilesService";
 import {OutlineService} from "./outline/OutlineService";
+import {IdeService} from "./ide/IdeService";
 
-bootstrap(IdeComponent, [HTTP_PROVIDERS, LintService, DebugService, ServerService, SessionService, FilesService, OutlineService]);
+bootstrap(IdeComponent, [HTTP_PROVIDERS, IdeService, LintService, DebugService, ServerService, SessionService, FilesService, OutlineService]);

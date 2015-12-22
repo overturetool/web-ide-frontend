@@ -20,7 +20,6 @@ export class LintService {
     }
 
     lint(text:string, callback:(data:[Marker])=>void):void {
-        this.server.emit('linter/lint');
-        this.server.once('linter/linted', markers => callback(markers));
+        //this.server.get('lint').then(markers => callback(markers));
     }
 }

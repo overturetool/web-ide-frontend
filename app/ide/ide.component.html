@@ -1,14 +1,16 @@
 <panel-menu class="left">
     <panel title="Project" active="true">
-        <files (select)="editor.open($event); outline.update($event)"></files>
+        <files (select)="file = $event"></files>
     </panel>
 </panel-menu>
 
-<editor #editor></editor>
+<editor [file]="file"></editor>
 
 <panel-menu class="right">
-    <panel title="Debugging"><debug></debug></panel>
-    <panel title="Outline" active="true">
-        <outline #outline></outline>
+    <panel title="Debug" active="true">
+        <debug></debug>
+    </panel>
+    <panel title="Outline">
+        <outline [file]="file"></outline>
     </panel>
 </panel-menu>

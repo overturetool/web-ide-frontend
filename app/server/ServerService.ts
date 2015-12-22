@@ -4,27 +4,20 @@ declare type Listener = (data:any)=>void
 
 @Injectable()
 export class ServerService {
-    private root:string = "http://localhost:9000";
+    private root:string = "localhost:9000";
 
     constructor(private http: Http) {
-    }
-
-    emit(event:string, data?:any):void {
 
     }
 
-    on(event:string, listener:Listener):void {
-
-    }
-
-    once(event:string, listener:Listener):void {
-
+    connect(path) {
+        return new WebSocket(`ws://${this.root}/${path}`);
     }
 
     get(path) {
         return new Promise(resolve =>
             this.http
-                .get(`${this.root}/${path}`)
+                .get(`http://${this.root}/${path}`)
                 .subscribe(response => resolve(response))
         )
     }
