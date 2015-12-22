@@ -24,6 +24,10 @@ export class FilesComponent {
                 "core": {
                     "animation": false,
                     "check_callback": true
+                },
+                "search": {
+                    "case_insensitive": true,
+                    "show_only_matches" : true
                 }
             });
 
