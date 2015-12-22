@@ -1,22 +1,24 @@
 declare var $;
 
-import {ElementRef, Component} from "angular2/core"
+import {ElementRef, Component, EventEmitter, Output} from "angular2/core"
 import {FilesService} from "./FilesService"
 
 @Component({
     selector: 'files',
-    providers: [FilesService],
     template: `<input type="search" (input)="search($event)" placeholder="Search"><div class="container"></div>`
 })
 export class FilesComponent {
     private $container;
 
+    @Output() select = new EventEmitter();
+
     constructor(el:ElementRef, files:FilesService) {
         this.$container = $(el.nativeElement).find(".container").first();
 
         this.$container
-            .on('activate_node.jstree', function (e, data) {
-                //editor.open(data.node.original.path);
+            .on('activate_node.jstree', (e, data) => {
+                if (data.node.original.type == "file")
+                    this.select.emit(data.node.original.path);
             })
             .jstree({
                 "state": {"key": "files"},
@@ -32,17 +34,18 @@ export class FilesComponent {
             });
 
         files.readDir("", 10)
-            .forEach(response => {
-                this.$container.jstree(true).settings.core.data = this.dirToJsTree(response.json());
+            .then(dir => {
+                this.$container.jstree(true).settings.core.data = this.dirToJsTree(dir);
                 this.$container.jstree(true).refresh();
-            }, this);
+            });
     }
 
     dirToJsTree(dir) {
         return dir.map(file => {
             var node:any = {
                 text: file.name,
-                path: file.url,
+                path: file.path,
+                type: file.type,
                 icon: file.type === "directory" ? "jstree-folder" : "jstree-file"
             };
 
@@ -54,11 +57,6 @@ export class FilesComponent {
     }
 
     search(event) {
-        this.$container.jstree(true)
-            .search(event.target.value);
-    }
-
-    open() {
-
+        this.$container.jstree(true).search(event.target.value);
     }
 }

@@ -1,6 +1,7 @@
 import {Component, ElementRef} from "angular2/core"
 import {LintService} from "../lint/LintService"
 import {ServerService} from "../server/ServerService"
+import {FilesService} from "../files/FilesService";
 
 declare var CodeMirror;
 
@@ -11,7 +12,7 @@ declare var CodeMirror;
 export class EditorComponent {
     private codeMirror;
 
-    constructor(el:ElementRef, linter:LintService, server:ServerService) {
+    constructor(el:ElementRef, linter:LintService, server:ServerService, public files:FilesService) {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             extraKeys: {"Ctrl-Space": "autocomplete"},
@@ -41,5 +42,11 @@ export class EditorComponent {
                 cm.setGutterMarker(n, "CodeMirror-breakpoints", makeMarker());
             }
         });
+    }
+
+    open(path:string) {
+        this.files.readFile(path)
+            .then(file =>
+                this.codeMirror.getDoc().setValue(file));
     }
 }

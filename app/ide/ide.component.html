@@ -1,8 +1,10 @@
 <panel-menu class="left">
-    <panel title="Project" active="true"><files></files></panel>
+    <panel title="Project" active="true">
+        <files (select)="editor.open($event)"></files>
+    </panel>
 </panel-menu>
 
-<editor></editor>
+<editor #editor></editor>
 
 <panel-menu class="right">
     <panel title="Debugging"><debug></debug></panel>

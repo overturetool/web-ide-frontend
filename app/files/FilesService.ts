@@ -10,12 +10,22 @@ export class FilesService {
 
     }
 
+    private get(path) {
+        return new Promise(resolve =>
+            this.http
+                .get(`${this.root}/${this.session.account}/${path}`)
+                .subscribe(response =>
+                    resolve(response))
+        )
+    }
+
     readDir(path:string = "", depth:number = 0) {
-        var basePath = `${this.root}/${this.session.account}`;
+        if (depth > 1) path += `?depth=${depth}`;
 
-        if (path !== "") basePath += `/${path}`;
-        if (depth > 1) basePath += `?depth=${depth}`;
+        return this.get(path).then(res => res.json());
+    }
 
-        return this.http.get(basePath);
+    readFile(path:string) {
+        return this.get(path).then(res => res.text());
     }
 }
