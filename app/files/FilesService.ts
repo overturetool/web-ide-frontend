@@ -1,31 +1,28 @@
 import {Injectable} from "angular2/core"
-import {Http, HTTP_PROVIDERS} from "angular2/http"
-import {SessionService} from "../auth/SessionService"
+import {ServerService} from "../server/ServerService";
+import {SessionService} from "../auth/SessionService";
 
 @Injectable()
 export class FilesService {
-    private root:string = "http://localhost:9000/vfs";
+    private root:string = "vfs";
 
-    constructor(private http: Http, private session: SessionService) {
-
-    }
-
-    private get(path) {
-        return new Promise(resolve =>
-            this.http
-                .get(`${this.root}/${this.session.account}/${path}`)
-                .subscribe(response =>
-                    resolve(response))
-        )
+    constructor(private server: ServerService, private session: SessionService) {
     }
 
     readDir(path:string = "", depth:number = 0) {
-        if (depth > 1) path += `?depth=${depth}`;
+        var fullPath = `${this.root}/${this.session.account}`;
 
-        return this.get(path).then(res => res.json());
+        if (path !== "") fullPath += `/${path}`;
+        if (depth > 1) fullPath += `?depth=${depth}`;
+
+        return this.server
+            .get(fullPath)
+            .then(res => res.json());
     }
 
     readFile(path:string) {
-        return this.get(path).then(res => res.text());
+        return this.server
+            .get(`${this.root}/${path}`)
+            .then(res => res.text());
     }
 }
