@@ -11,14 +11,4 @@ import {PanelMenuComponent} from "../panel/panel-menu.component";
     directives: [EditorComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent]
 })
 export class IdeComponent {
-    private left = "project";
-    private right = "outline";
-
-    toggleLeft(name) {
-       this.left = this.left !== name ? name : '';
-    }
-
-    toggleRight(name) {
-        this.right = this.right !== name ? name : '';
-    }
 }
