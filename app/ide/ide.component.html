@@ -1,6 +1,6 @@
 <panel-menu class="left">
     <panel title="Project" active="true">
-        <files (select)="editor.open($event)"></files>
+        <files (select)="editor.open($event); outline.update($event)"></files>
     </panel>
 </panel-menu>
 
@@ -8,5 +8,7 @@
 
 <panel-menu class="right">
     <panel title="Debugging"><debug></debug></panel>
-    <panel title="Outline"></panel>
+    <panel title="Outline" active="true">
+        <outline #outline></outline>
+    </panel>
 </panel-menu>

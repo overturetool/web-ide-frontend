@@ -7,6 +7,6 @@ import {DebugService} from "./debug/DebugService"
 import {ServerService} from "./server/ServerService"
 import {SessionService} from "./auth/SessionService"
 import {FilesService} from "./files/FilesService";
+import {OutlineService} from "./outline/OutlineService";
 
-
-bootstrap(IdeComponent, [HTTP_PROVIDERS, LintService, DebugService, ServerService, SessionService, FilesService]);
+bootstrap(IdeComponent, [HTTP_PROVIDERS, LintService, DebugService, ServerService, SessionService, FilesService, OutlineService]);
