@@ -1,8 +1,12 @@
-import {Component, ElementRef} from "angular2/core"
+import {Component, Input} from "angular2/core"
+import {NgIf} from "angular2/common";
 
 @Component({
     selector: "panel",
-    template: `<ng-content></ng-content>`
+    template: '<div *ngIf="active" class="content"><ng-content></ng-content></div>',
+    directives: [NgIf]
 })
 export class PanelComponent {
+    @Input() title: string;
+    @Input() active:boolean = false;
 }

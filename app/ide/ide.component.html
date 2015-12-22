@@ -1,21 +1,10 @@
-<div class="panel-menu left">
-   <button [class.active]="left == 'project'" (click)="toggleLeft('project')">Project</button>
-</div>
-
-<panel class="left" [class.active]="left == 'project'">
-   <files></files>
-</panel>
+<panel-menu class="left">
+    <panel title="Project" active="true"><files></files></panel>
+</panel-menu>
 
 <editor></editor>
 
-<panel class="right" [class.active]="right == 'debug'">
-   <debug></debug>
-</panel>
-
-<panel class="right" [class.active]="right == 'outline'">
-</panel>
-
-<div class="panel-menu right">
-   <button [class.active]="right == 'debug'" (click)="toggleRight('debug')">Debug</button>
-   <button [class.active]="right == 'outline'" (click)="toggleRight('outline')">Outline</button>
-</div>
+<panel-menu class="right">
+    <panel title="Debugging"><debug></debug></panel>
+    <panel title="Outline"></panel>
+</panel-menu>

@@ -112,37 +112,37 @@ body {
     color: white !important;
 }
 
-.panel-menu > button {
+panel-menu .menu button {
     color: #eaeaea;
 }
 
-.panel-menu > button:hover {
+panel-menu .menu button:hover {
     background-color: #353739;
 }
 
-.panel-menu > button.active {
+panel-menu .menu button.active {
     background-color: #2d2f30;
 }
 
-.panel-menu.left {
+panel-menu.left .menu {
     border-right: 1px solid #282828;
 }
 
-.panel-menu.right {
+panel-menu.right .menu {
     border-left: 1px solid #555555;
 }
 
-.panel-menu,
-panel {
+panel-menu .menu,
+panel .content {
     background-color: #3c3f41;
 }
 
-panel.left {
+panel-menu.left panel .content {
     border-right: 1px solid #282828;
     border-left: 1px solid #555555;
 }
 
-panel.right {
+panel-menu.right panel .content {
     border-left: 1px solid #282828;
     border-right: 1px solid #282828;
 }
