@@ -1,5 +1,6 @@
-import {Injectable, Input} from "angular2/core"
+import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService"
+import {EventEmitter} from "angular2/core";
 
 @Injectable()
 export class DebugService {
@@ -7,7 +8,6 @@ export class DebugService {
     private socket: WebSocket;
 
     constructor(private server:ServerService) {
-
     }
 
     start(path:string, entry: string):void {
@@ -29,7 +29,7 @@ export class DebugService {
     }
 
     run():void {
-
+        this.socket.send("run");
     }
 
     suspend():void {

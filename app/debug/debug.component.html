@@ -1,13 +1,13 @@
-<button (click)="debug.start()">START</button>
-<div>
-    <button (click)="debug.run()" class="glyph run"></button>
-    <button (click)="debug.break()" class="glyph break"></button>
-    <button (click)="debug.stepOver()" class="glyph step-over"></button>
-    <button (click)="debug.stepInto()" class="glyph step-into"></button>
-    <button (click)="debug.stepOut()" class="glyph step-out"></button>
-    <button (click)="debug.stop()" class="glyph stop"></button>
-    <button (click)="debug.restart()" class="glyph restart"></button>
-</div>
+<label>Entry: <input [(ngModel)]="entry"></label>
+<button (click)="start()">Start</button>
+
+<button (click)="debug.run()" class="glyph run"></button>
+<button (click)="debug.break()" class="glyph break"></button>
+<button (click)="debug.stepOver()" class="glyph step-over"></button>
+<button (click)="debug.stepInto()" class="glyph step-into"></button>
+<button (click)="debug.stepOut()" class="glyph step-out"></button>
+<button (click)="debug.stop()" class="glyph stop"></button>
+<button (click)="debug.restart()" class="glyph restart"></button>
 
 <h2>Call stack</h2>
 <h2>Variables</h2>
