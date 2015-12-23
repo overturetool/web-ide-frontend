@@ -26,11 +26,11 @@ export class EditorComponent {
         return this._file;
     }
 
-    constructor(el:ElementRef, linter:LintService, debug:DebugService, public filesService:FilesService) {
+    constructor(el:ElementRef, lintService:LintService, debug:DebugService, public filesService:FilesService) {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             extraKeys: {"Ctrl-Space": "autocomplete"},
-            'lint': {'getAnnotations': (text, callback) => linter.lint(text, callback), 'async': true},
+            'lint': {'getAnnotations': (text, callback) => lintService.lint(this.file, callback), 'async': true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
 
