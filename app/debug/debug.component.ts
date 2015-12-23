@@ -11,7 +11,9 @@ export class DebugComponent {
     @Input() file:string;
 
     constructor(private debug: DebugService) {
-
+        this.debug.response.subscribe(response => {
+            console.log(response);
+        })
     }
 
     start() {

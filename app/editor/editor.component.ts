@@ -49,10 +49,10 @@ export class EditorComponent {
             var info = cm.lineInfo(n);
 
             if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints']) {
-                debug.removeBreakpoint(n + 1);
+                debug.removeBreakpoint(this.file, n + 1);
                 cm.setGutterMarker(n, "CodeMirror-breakpoints", null);
             } else {
-                debug.setBreakpoint(n + 1);
+                debug.setBreakpoint(this.file, n + 1);
                 cm.setGutterMarker(n, "CodeMirror-breakpoints", makeMarker());
             }
         });
