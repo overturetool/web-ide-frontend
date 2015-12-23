@@ -23,7 +23,7 @@ export class DbgpResponse {
             vResult = {};
             for (nLength; nLength < oXMLParent.attributes.length; nLength++) {
                 oAttrib = oXMLParent.attributes.item(nLength);
-                vResult["@" + oAttrib.name.toLowerCase()] = this.parseText(oAttrib.value.trim());
+                vResult["$" + oAttrib.name.toLowerCase()] = this.parseText(oAttrib.value.trim());
             }
         }
         if (oXMLParent.hasChildNodes()) {

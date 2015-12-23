@@ -105,7 +105,7 @@ body {
 }
 
 .cm-s-default .CodeMirror-activeline-background {
-    background: #373831;
+    background: #323232;
 }
 
 .CodeMirror-matchingbracket {
@@ -166,6 +166,10 @@ li.CodeMirror-hint-active {
     background: #0052a4;
 }
 
+.CodeMirror-suspended {
+    background: #2f65ca;
+}
+
 .CodeMirror-breakpoints {
     width: .8em;
 }
@@ -188,3 +192,10 @@ li.CodeMirror-hint-active {
     border-radius: 2px;
 }
 
+.variables .type {
+    color: black;
+}
+
+.variables span {
+    padding-right: 12px;
+}

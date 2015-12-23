@@ -12,6 +12,7 @@ declare var CodeMirror;
 export class EditorComponent {
     private codeMirror;
     private _file:string;
+    private suspendedMarking;
 
     @Input() set file(file:string) {
         this._file = file;
@@ -26,9 +27,24 @@ export class EditorComponent {
         return this._file;
     }
 
+    suspend(line?:number) {
+        if (this.suspendedMarking)
+            this.suspendedMarking.clear();
+
+        if (!line) return;
+
+        this.suspendedMarking = this.codeMirror.markText(
+            {line: line-1, ch: 0},
+            {line: line-1, ch: 1000},
+            {className: "CodeMirror-suspended"}
+        );
+    }
+
     constructor(el:ElementRef, lintService:LintService, debug:DebugService, public filesService:FilesService) {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
+            styleActiveLine: true,
+            lineWrapping: true,
             extraKeys: {"Ctrl-Space": "autocomplete"},
             'lint': {'getAnnotations': (text, callback) => lintService.lint(this.file, callback), 'async': true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]

@@ -45,54 +45,21 @@ export class DebugService {
         this.send("run");
     }
 
-    suspend():void {
-        this.send("break");
-    }
-
     stop():void {
         this.socket.close();
     }
 
     getContext() {
-        return new Promise(resolve => {
-            if (!this.options.includeGlobals) {
-                this.connection
-                    .sendCommand('context_get')
-                    .then(response => resolve(response));
-            } else {
-                Promise.all([
-                    this.connection.sendCommand('context_get'),
-                    this.connection.sendCommand('context_get', '-c 1')
-                ]).then(results => {
-                    var combinedContext = {context: {}};
-
-                    for (let i in results) {
-                        for (let j in results[i].context) {
-                            combinedContext.context[j] = results[i].context[j];
-                        }
-                    }
-
-                    resolve(combinedContext);
-                });
-            }
-        });
+        this.send('context_get');
+        //this.send('context_get', '-d 1');
     }
 
-    getSource(file, startLine, endLine) {
-        var that = this;
+    getStack() {
+        this.send('stack_get');
+        //this.send('context_get', '-d 1');
+    }
 
-        return new Promise(function (resolve, reject) {
-            var parameters = '-f ' + file;
-
-            if (startLine)
-                parameters += ' -b ' + startLine;
-
-            if (endLine)
-                parameters += ' -e ' + endLine;
-
-            that.connection.sendCommand('source', parameters).then(function (response) {
-                resolve(response);
-            });
-        });
+    getStatus() {
+        this.send('status');
     }
 }
