@@ -1,5 +1,5 @@
 <panel-menu class="left">
-    <panel title="Project" active="true">
+    <panel name="Project" active="true">
         <files (select)="file = $event"></files>
     </panel>
 </panel-menu>
@@ -7,10 +7,10 @@
 <editor [file]="file" #editor></editor>
 
 <panel-menu class="right">
-    <panel title="Debug" active="true">
+    <panel name="Debug" active="true">
         <debug [file]="file" (suspended)="editor.suspend($event)"></debug>
     </panel>
-    <panel title="Outline">
+    <panel name="Outline">
         <outline [file]="file"></outline>
     </panel>
 </panel-menu>

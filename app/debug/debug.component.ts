@@ -11,42 +11,59 @@ import {EventEmitter} from "angular2/core";
 })
 export class DebugComponent {
     entry:string = "Parts(1, bom)";
-    context: Array<any> = [];
-    stack: Array<any> = [];
+    context:Array<any> = [];
+    stack:Array<any> = [];
+    status:string = "stopped";
 
     @Input() file:string;
     @Output() suspended = new EventEmitter();
 
-    constructor(private debug: DebugService) {
-        this.debug.response.subscribe(res => this.onResponse(res));
+    constructor(private debug:DebugService) {
+        this.debug.connection.messages.subscribe(res => this.onMessage(res));
     }
 
-    start() {
-        this.debug.start(this.file, this.entry);
+    connect() {
+        this.debug.connect(this.file, this.entry);
     }
 
-    onResponse(res) {
-        console.log(res);
+    onMessage(msg) {
+        console.log(msg);
 
-        if (res.stream && res.stream.$type === "stdout") {
-            alert(res.stream.keyValue);
-        } else if (res.response) {
-            var msg = res.response;
-
-            if (msg.$command === "run" && msg.$status === "break" && msg.$reason === "ok") {
-                this.debug.getContext();
-                this.debug.getStack();
-                this.debug.getStatus();
-            } else if (msg.$command === "context_get") {
-                this.context = msg.property;
-            } else if (msg.$command === "stack_get") {
-                this.stack = msg.stack;
-
-                if (msg.stack.$level === 0) {
-                    this.suspended.emit(msg.stack.$lineno);
-                }
-            }
+        if (msg.init) {
+            this.onInit(msg.init);
+        } else if (msg.stream && msg.stream.$type === "stdout") {
+            this.onStdout(msg.stream);
+        } else if (msg.response) {
+            this.onResponse(msg.response);
         }
     }
 
+    private onInit(init) {
+        this.debug.getStatus();
+    }
+
+    private onStdout(stream) {
+        alert(stream.keyValue);
+        this.debug.getStatus();
+    }
+
+    private onResponse(response) {
+        if (response.$status) this.status = response.$status;
+
+        if (response.$status === "break") {
+            this.debug.getContext();
+            this.debug.getStack();
+        } else if (response.$status && response.$status !== "break") {
+            this.suspended.emit(null);
+        }
+
+        if (response.$command === "context_get") {
+            this.context = response.property;
+        } else if (response.$command === "stack_get") {
+            this.stack = response.stack;
+
+            if (response.stack.$level === 0)
+                this.suspended.emit(response.stack.$lineno);
+        }
+    }
 }

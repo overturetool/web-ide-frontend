@@ -2,64 +2,48 @@ import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService"
 import {EventEmitter} from "angular2/core";
 import {DbgpResponse} from "./DbgpResponse";
+import {DbgpConnection} from "./DbgpConnection";
 
 @Injectable()
 export class DebugService {
-    private root: string = "debug";
-    private fileRoot: string = "file:/home/rsreimer/speciale/web-api/workspace"; // TODO: Remove this
-    private socket: WebSocket;
-    private cmdCount:number = 0;
+    public connection: DbgpConnection;
 
-    public response = new EventEmitter();
-
-    constructor(private server:ServerService) {
+    constructor(server:ServerService) {
+        this.connection = new DbgpConnection(server);
     }
 
-    start(path:string, entry: string):void {
-        this.socket = this.server.connect(`${this.root}/${path}?entry=${btoa(entry)}&type=vdmsl`);
-        this.socket.addEventListener("message", e => this.onMessage(e.data));
+    connect(path:string, entry: string):void {
+        this.connection.connect(path, entry);
     }
 
-    private onMessage(msg):void {
-        var xml = msg.substr(msg.indexOf('<?xml'));
-
-        var response = new DbgpResponse(xml);
-
-        this.response.emit(response.body);
-    }
-
-    private send(cmd:string, params:string = "") {
-        this.cmdCount = (this.cmdCount + 1) % 10000;
-
-        this.socket.send(`${cmd} -i ${this.cmdCount} ${params}`);
-    }
-
-    setBreakpoint(file, line):void {
-        this.send('breakpoint_set', `-t line -f ${this.fileRoot}/${file} -n ${line}`);
+    setBreakpoint(file, line):Promise {
+        var fileRoot = "file:/home/rsreimer/speciale/web-api/workspace"; // TODO: Remove this
+        return this.connection.send('breakpoint_set', `-t line -f ${fileRoot}/${file} -n ${line}`);
     }
 
     removeBreakpoint(file, line):void {
     }
 
-    run():void {
-        this.send("run");
+    run():Promise {
+        return this.connection.send("run");
     }
 
     stop():void {
-        this.socket.close();
+        this.connection.close();
     }
 
-    getContext() {
-        this.send('context_get');
+    getContext(depth:number = 0) {
+        if (depth === 0)
+            this.connection.send('context_get');
         //this.send('context_get', '-d 1');
     }
 
     getStack() {
-        this.send('stack_get');
+        this.connection.send('stack_get');
         //this.send('context_get', '-d 1');
     }
 
-    getStatus() {
-        this.send('status');
+    getStatus():Promise {
+        return this.connection.send('status');
     }
 }
