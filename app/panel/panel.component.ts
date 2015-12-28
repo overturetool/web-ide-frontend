@@ -7,6 +7,6 @@ import {NgIf} from "angular2/common";
     directives: [NgIf]
 })
 export class PanelComponent {
-    @Input() title: string;
+    @Input() name: string;
     @Input() active:boolean = false;
 }
