@@ -13,6 +13,9 @@
 <button (click)="connect()"         [disabled]="status === 'stopped'" class="glyph restart"></button>
 
 <h2>Call stack</h2>
+<div class="variables" *ngFor="#frame of stack">
+    <span class="name">{{frame.$lineno}}: <span class="type">{{frame.$type}}</span></span>
+</div>
 
 <h2>Variables</h2>
 <div class="variables" *ngFor="#variable of context">

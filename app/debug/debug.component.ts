@@ -60,10 +60,8 @@ export class DebugComponent {
         if (response.$command === "context_get") {
             this.context = response.property;
         } else if (response.$command === "stack_get") {
-            this.stack = response.stack;
-
-            if (response.stack.$level === 0)
-                this.suspended.emit(response.stack.$lineno);
+            this.stack = response.stack.length ? response.stack : [response.stack];
+            this.suspended.emit(this.stack[0].$lineno);
         }
     }
 }

@@ -16,20 +16,33 @@ export class DebugService {
         this.connection.connect(path, entry);
     }
 
+    run():void {
+        this.connection.send("run");
+    }
+
+    stop():void {
+        this.connection.send('stop');
+        this.connection.close();
+    }
+
+    stepInto():void {
+        this.connection.send('step_into');
+    }
+
+    stepOver():void {
+        this.connection.send('step_over');
+    }
+
+    stepOut():void {
+        this.connection.send('step_out');
+    }
+
     setBreakpoint(file, line):Promise {
         var fileRoot = "file:/home/rsreimer/speciale/web-api/workspace"; // TODO: Remove this
         return this.connection.send('breakpoint_set', `-t line -f ${fileRoot}/${file} -n ${line}`);
     }
 
     removeBreakpoint(file, line):void {
-    }
-
-    run():Promise {
-        return this.connection.send("run");
-    }
-
-    stop():void {
-        this.connection.close();
     }
 
     getContext(depth:number = 0) {
