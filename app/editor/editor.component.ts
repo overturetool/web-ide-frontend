@@ -28,19 +28,6 @@ export class EditorComponent {
         return this._file;
     }
 
-    suspend(line?:number) {
-        if (this.suspendedMarking)
-            this.suspendedMarking.clear();
-
-        if (!line) return;
-
-        this.suspendedMarking = this.codeMirror.markText(
-            {line: line-1, ch: 0},
-            {line: line-1, ch: 1000},
-            {className: "CodeMirror-suspended"}
-        );
-    }
-
     constructor(
         el:ElementRef,
         lintService:LintService,
@@ -69,6 +56,19 @@ export class EditorComponent {
     }
 
     private setupDebugging() {
+        this.debugService.suspended.subscribe(line => {
+            if (this.suspendedMarking)
+                this.suspendedMarking.clear();
+
+            if (!line) return;
+
+            this.suspendedMarking = this.codeMirror.markText(
+                {line: line-1, ch: 0},
+                {line: line-1, ch: 1000},
+                {className: "CodeMirror-suspended"}
+            );
+        });
+
         this.codeMirror.on("gutterClick", (cm, n) => {
             var info = cm.lineInfo(n);
 

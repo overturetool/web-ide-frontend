@@ -4,11 +4,11 @@
     </panel>
 </panel-menu>
 
-<editor [file]="file" #editor></editor>
+<editor [file]="file"></editor>
 
 <panel-menu class="right">
     <panel name="Debug" active="true">
-        <debug [file]="file" (suspended)="editor.suspend($event)"></debug>
+        <debug [file]="file"></debug>
     </panel>
     <panel name="Outline">
         <outline [file]="file"></outline>
