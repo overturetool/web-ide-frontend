@@ -29,13 +29,9 @@ export class DebugComponent {
     onMessage(msg) {
         console.log(msg);
 
-        if (msg.init) {
-            this.onInit(msg.init);
-        } else if (msg.stream && msg.stream.$type === "stdout") {
-            this.onStdout(msg.stream);
-        } else if (msg.response) {
-            this.onResponse(msg.response);
-        }
+        if (msg.init) this.onInit(msg.init);
+        else if (msg.stream) this.onStdout(msg.stream);
+        else if (msg.response) this.onResponse(msg.response);
     }
 
     private onInit(init) {

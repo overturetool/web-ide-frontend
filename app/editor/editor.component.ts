@@ -2,6 +2,7 @@ import {Component, ElementRef, Input} from "angular2/core"
 import {LintService} from "../lint/LintService"
 import {FilesService} from "../files/FilesService";
 import {DebugService} from "../debug/DebugService";
+import {HintService} from "../hint/HintService";
 
 declare var CodeMirror;
 
@@ -40,36 +41,47 @@ export class EditorComponent {
         );
     }
 
-    constructor(el:ElementRef, lintService:LintService, debug:DebugService, public filesService:FilesService) {
+    constructor(
+        el:ElementRef,
+        lintService:LintService,
+        private hintService: HintService,
+        private debugService:DebugService,
+        private filesService:FilesService)
+    {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,
-            extraKeys: {"Ctrl-Space": "autocomplete"},
-            'lint': {'getAnnotations': (text, callback) => lintService.lint(this.file, callback), 'async': true},
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+            lint: { getAnnotations: (text, callback) => lintService.lint(this.file, callback), async: true },
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
 
-        CodeMirror.commands.autocomplete = function (cm) {
-            cm.showHint({hint: CodeMirror.hint.vdm});
-        };
+        this.setupCodeCompletion();
+        this.setupDebugging();
+    }
 
-        function makeMarker() {
-            var marker = document.createElement("div");
-            marker.classList.add("CodeMirror-breakpoint");
-            marker.innerHTML = "●";
-            return marker;
-        }
+    private setupCodeCompletion() {
+        var hint = (editor, callback) => this.hintService.hint(editor, callback, this.file);
+        hint.async = true;
 
+        CodeMirror.commands.autocomplete = cm => cm.showHint({ hint: hint });
+    }
+
+    private setupDebugging() {
         this.codeMirror.on("gutterClick", (cm, n) => {
             var info = cm.lineInfo(n);
 
             if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints']) {
-                debug.removeBreakpoint(this.file, n + 1);
+                this.debugService.removeBreakpoint(this.file, n + 1);
                 cm.setGutterMarker(n, "CodeMirror-breakpoints", null);
             } else {
-                debug.setBreakpoint(this.file, n + 1);
-                cm.setGutterMarker(n, "CodeMirror-breakpoints", makeMarker());
+                var marker = document.createElement("div");
+                marker.classList.add("CodeMirror-breakpoint");
+                marker.innerHTML = "●";
+
+                this.debugService.setBreakpoint(this.file, n + 1);
+                cm.setGutterMarker(n, "CodeMirror-breakpoints", marker);
             }
         });
     }

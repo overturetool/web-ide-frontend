@@ -21,8 +21,9 @@ export class DebugService {
     }
 
     stop():void {
-        this.connection.send('stop');
-        this.connection.close();
+        this.connection
+            .send('stop')
+            .then(() => this.connection.close());
     }
 
     stepInto():void {

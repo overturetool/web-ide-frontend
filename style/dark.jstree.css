@@ -278,7 +278,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-.jstree-default .jstree-wholerow-clicked {
+.jstree-default .jstree-wholerow-hovered {
     background: #2f65ca;
 }
 .jstree-default .jstree-node {

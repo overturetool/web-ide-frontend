@@ -9,5 +9,6 @@ import {SessionService} from "./auth/SessionService"
 import {FilesService} from "./files/FilesService";
 import {OutlineService} from "./outline/OutlineService";
 import {IdeService} from "./ide/IdeService";
+import {HintService} from "./hint/HintService";
 
-bootstrap(IdeComponent, [HTTP_PROVIDERS, IdeService, LintService, DebugService, ServerService, SessionService, FilesService, OutlineService]);
+bootstrap(IdeComponent, [HTTP_PROVIDERS, IdeService, HintService, LintService, DebugService, ServerService, SessionService, FilesService, OutlineService]);
