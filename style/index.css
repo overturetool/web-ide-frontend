@@ -1,0 +1,128 @@
+body {
+    margin: 0;
+}
+
+.CodeMirror {
+    height: 100vh;
+    width: 100%;
+}
+
+ide {
+    position: relative;
+    display: flex;
+}
+
+ide editor {
+    flex: auto;
+}
+
+panel-menu {
+    display: flex;
+}
+
+panel-menu.right {
+    flex-direction: row-reverse;
+}
+
+panel-menu .menu {
+    height: 100vh;
+    width: 22px;
+    overflow-x: hidden;
+}
+
+panel-menu .menu button {
+    margin-bottom: 78px;
+    background-color: transparent;
+    transform: rotate(90deg);
+    transform-origin: 11px 11px;
+    width: 100px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    outline: none;
+}
+
+panel-menu.left .menu button {
+    margin-top: 78px;
+    transform: rotate(-90deg);
+}
+
+panel > .content {
+    border-width: 0 1px;
+    height: 100vh;
+    width: 300px;
+    overflow: auto;
+}
+
+.glyph.restart {
+    background-position: 0 0;
+}
+
+.glyph.run {
+    background-position: -64px -48px;
+}
+
+.glyph.break {
+    background-position: -32px -72px;
+}
+
+.glyph.step-over {
+    background-position: -128px -72px;
+}
+
+.glyph.step-into {
+    background-position: -64px -72px;
+}
+
+.glyph.step-out {
+    background-position: -96px -72px;
+}
+
+.glyph.stop {
+    background-position: -96px -48px;
+}
+
+.glyph {
+    background-image: url(../images/devtools.png);
+    width: 32px;
+    height: 24px;
+    padding: 8px;
+}
+
+tree ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+tree tree ul {
+    padding-left: 17px;
+}
+
+tree .variable .type {
+    color: black;
+}
+
+tree .variable .value {
+    color: #00a8c6;
+}
+
+tree .variable .icon {
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+}
+
+tree li span.icon.directory {
+    background: url(../images/jstree.png) no-repeat -7px -5px;
+}
+
+tree li span.icon.directory.expanded {
+    background-position: -39px -3px;
+}
+
+.breakpoints .file,
+.stack .file {
+    color: black;
+}

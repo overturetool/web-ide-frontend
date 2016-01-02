@@ -1,0 +1,33 @@
+<div *ngIf="!file">Open a file to debug</div>
+
+<div *ngIf="file">
+    <div *ngIf="!debug.connection.connected">
+        <input [(ngModel)]="entry" placeholder="Entry">
+        <button (click)="connect()">Connect</button>
+    </div>
+
+    <div *ngIf="debug.connection.connected">
+        <button (click)="debug.run()" class="glyph run"></button>
+        <button (click)="debug.stepOver()"  [disabled]="debug.status !== 'break'" class="glyph step-over"></button>
+        <button (click)="debug.stepInto()"  [disabled]="debug.status !== 'break'" class="glyph step-into"></button>
+        <button (click)="debug.stepOut()"   [disabled]="debug.status !== 'break'" class="glyph step-out"></button>
+        <button (click)="debug.stop()" class="glyph stop"></button>
+        <button (click)="connect()" class="glyph restart"></button>
+    </div>
+
+    <h2>Call stack</h2>
+    <div class="stack" *ngFor="#frame of debug.stack.reverse()">
+        <span class="file">{{frame.$filename}}</span> <span class="line">line {{frame.$lineno}}</span>
+    </div>
+
+    <h2>Variables</h2>
+    <tree [nodes]="debug.context"></tree>
+
+    <h2>Breakpoints</h2>
+    <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
+        <span class="file">{{breakpoint.file}}</span> <span class="line">line {{breakpoint.line}}</span>
+    </div>
+
+    <h2>Stdout</h2>
+    <div *ngFor="#line of debug.stdout">{{line}}</div>
+</div>

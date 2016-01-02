@@ -1,0 +1,16 @@
+<panel-menu class="left">
+    <panel name="Project" active="true">
+        <files (select)="file = $event"></files>
+    </panel>
+</panel-menu>
+
+<editor [file]="file"></editor>
+
+<panel-menu class="right">
+    <panel name="Debug" active="true">
+        <debug [file]="file"></debug>
+    </panel>
+    <panel name="Outline">
+        <outline [file]="file"></outline>
+    </panel>
+</panel-menu>

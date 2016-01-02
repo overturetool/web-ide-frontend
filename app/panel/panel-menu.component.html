@@ -1,0 +1,8 @@
+<div class="menu">
+    <button *ngFor="#panel of panels"
+            (click)="select(panel)"
+            [class.active]="panel.active">
+        {{panel.name}}
+    </button>
+</div>
+<ng-content></ng-content>
