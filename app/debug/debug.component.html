@@ -16,17 +16,15 @@
     </div>
 
     <h2>Call stack</h2>
-    <div class="variables" *ngFor="#frame of debug.stack">
-        <span class="name">{{frame.$lineno}}: <span class="type">{{frame.$type}}</span></span>
+    <div class="stack" *ngFor="#frame of debug.stack.reverse()">
+        <span class="type">{{frame.$filename}}</span>: <span class="name">line {{frame.$lineno}}</span>
     </div>
 
     <h2>Variables</h2>
-    <div class="variables" *ngFor="#variable of debug.context">
-        <span class="name">{{variable.$name}}: <span class="type">{{variable.$type}}</span></span>
-    </div>
+    <tree [nodes]="debug.context"></tree>
 
     <h2>Breakpoints</h2>
 
     <h2>Stdout</h2>
-    <div class="variables" *ngFor="#line of debug.stdout">{{line}}</div>
+    <div *ngFor="#line of debug.stdout">{{line}}</div>
 </div>

@@ -167,7 +167,11 @@ li.CodeMirror-hint-active {
 }
 
 .CodeMirror-suspended {
-    background: #2f65ca;
+    background: rgba(47,101,202,1);
+}
+
+.CodeMirror-frame {
+    background: rgba(47,101,202,.3);
 }
 
 .CodeMirror-breakpoints {

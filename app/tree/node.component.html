@@ -1,0 +1,11 @@
+<span *ngIf="data.property"> > </span>
+<span class="name">{{ data.$name }}: </span>
+<span class="type">{{ data.$type }}</span>
+
+{{data.property.length | json}}
+
+<!--
+<div *ngIf="data.property && data.property.length && expanded">
+    <tree [nodes]="data.property"></tree>
+</div>
+-->

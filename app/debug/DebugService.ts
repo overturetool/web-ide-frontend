@@ -111,7 +111,7 @@ export class DebugService {
                 this.status = response.$status;
 
             if (response.$status && response.$status !== "break") {
-                this.suspended.emit(null);
+                this.suspended.emit([]);
             }
 
             if (response.$status === "break") {
@@ -123,8 +123,15 @@ export class DebugService {
                 this.context = response.property;
 
             if (response.$command === "stack_get") {
-                this.stack = response.stack.length ? response.stack : [response.stack];
-                this.suspended.emit(this.stack[0].$lineno);
+                var stack = response.stack.length ? response.stack : [response.stack];
+
+                var fileRoot = "file:/home/rsreimer/speciale/web-api/workspace/"; // TODO: Remove this
+                this.stack = stack.map(frame => {
+                    frame.$filename = frame.$filename.replace(fileRoot, '');
+                    return frame;
+                });
+
+                this.suspended.emit(this.stack.map(f => f.$lineno));
             }
         }
     }

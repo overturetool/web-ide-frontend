@@ -53,6 +53,7 @@ panel > .content {
     border-width: 0 1px;
     height: 100vh;
     width: 300px;
+    overflow: auto;
 }
 
 .glyph.restart {
@@ -88,4 +89,35 @@ panel > .content {
     width: 32px;
     height: 24px;
     padding: 8px;
+}
+
+tree ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+tree tree ul {
+    padding-left: 17px;
+}
+
+tree .variable .type {
+    color: black;
+}
+
+tree .variable .value {
+    color: #00a8c6;
+}
+
+tree .variable .icon {
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+}
+
+tree li span.icon.directory {
+    background: url(../images/jstree.png) no-repeat -7px -5px;
+}
+
+tree li span.icon.directory.expanded {
+    background-position: -39px -3px;
 }

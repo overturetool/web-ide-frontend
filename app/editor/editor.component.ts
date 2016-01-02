@@ -13,7 +13,7 @@ declare var CodeMirror;
 export class EditorComponent {
     private codeMirror;
     private _file:string;
-    private suspendedMarking;
+    private suspendedMarkings:Array = [];
 
     @Input() set file(file:string) {
         this._file = file;
@@ -56,17 +56,17 @@ export class EditorComponent {
     }
 
     private setupDebugging() {
-        this.debugService.suspended.subscribe(line => {
-            if (this.suspendedMarking)
-                this.suspendedMarking.clear();
+        this.debugService.suspended.subscribe(lines => {
+            this.suspendedMarkings.forEach(m => m.clear());
 
-            if (!line) return;
+            if (lines.length === 0) return;
 
-            this.suspendedMarking = this.codeMirror.markText(
-                {line: line-1, ch: 0},
-                {line: line-1, ch: 1000},
-                {className: "CodeMirror-suspended"}
-            );
+            this.suspendedMarkings = lines.map(
+                (line, i) => this.codeMirror.markText(
+                    {line: line-1, ch: 0},
+                    {line: line-1, ch: 1000},
+                    {className: i === 0 ? "CodeMirror-suspended" : "CodeMirror-frame"}
+                ));
         });
 
         this.codeMirror.on("gutterClick", (cm, n) => {
