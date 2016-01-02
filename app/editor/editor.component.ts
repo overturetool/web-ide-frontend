@@ -24,23 +24,22 @@ export class EditorComponent {
             .readFile(file)
             .then(content => this.codeMirror.getDoc().setValue(content));
     }
+
     get file():string {
         return this._file;
     }
 
-    constructor(
-        el:ElementRef,
-        lintService:LintService,
-        private hintService: HintService,
-        private debugService:DebugService,
-        private filesService:FilesService)
-    {
+    constructor(el:ElementRef,
+                lintService:LintService,
+                private hintService:HintService,
+                private debugService:DebugService,
+                private filesService:FilesService) {
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,
-            extraKeys: { "Ctrl-Space": "autocomplete" },
-            lint: { getAnnotations: (text, callback) => lintService.lint(this.file, callback), async: true },
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            lint: {getAnnotations: (text, callback) => lintService.lint(this.file, callback), async: true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
 
@@ -52,37 +51,46 @@ export class EditorComponent {
         var hint = (editor, callback) => this.hintService.hint(editor, callback, this.file);
         hint.async = true;
 
-        CodeMirror.commands.autocomplete = cm => cm.showHint({ hint: hint });
+        CodeMirror.commands.autocomplete = cm => cm.showHint({hint: hint});
     }
 
     private setupDebugging() {
-        this.debugService.suspended.subscribe(lines => {
-            this.suspendedMarkings.forEach(m => m.clear());
+        this.debugService.stackChanged
+            .subscribe(frames => {
+                this.suspendedMarkings.forEach(m => m.clear());
 
-            if (lines.length === 0) return;
+                if (frames.length === 0) return;
 
-            this.suspendedMarkings = lines.map(
-                (line, i) => this.codeMirror.markText(
-                    {line: line-1, ch: 0},
-                    {line: line-1, ch: 1000},
-                    {className: i === 0 ? "CodeMirror-suspended" : "CodeMirror-frame"}
-                ));
-        });
+                this.suspendedMarkings = frames.map(
+                    (frame, i) => this.codeMirror.markText(
+                        {line: frame.$lineno - 1, ch: 0},
+                        {line: frame.$lineno - 1, ch: 1000},
+                        {className: i === 0 ? "CodeMirror-suspended" : "CodeMirror-frame"}
+                    ));
+            });
 
-        this.codeMirror.on("gutterClick", (cm, n) => {
-            var info = cm.lineInfo(n);
+        this.debugService.breakpointsChanged
+            .subscribe(breakpoints => {
+                this.codeMirror.clearGutter("CodeMirror-breakpoints");
 
-            if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints']) {
-                this.debugService.removeBreakpoint(this.file, n + 1);
-                cm.setGutterMarker(n, "CodeMirror-breakpoints", null);
-            } else {
-                var marker = document.createElement("div");
-                marker.classList.add("CodeMirror-breakpoint");
-                marker.innerHTML = "●";
+                breakpoints
+                    .filter(bp => bp.file === this.file)
+                    .forEach(bp => {
+                        var marker = document.createElement("div");
+                        marker.classList.add("CodeMirror-breakpoint");
+                        marker.innerHTML = "●";
 
-                this.debugService.setBreakpoint(this.file, n + 1);
-                cm.setGutterMarker(n, "CodeMirror-breakpoints", marker);
-            }
+                        this.codeMirror.setGutterMarker(bp.line-1, "CodeMirror-breakpoints", marker);
+                    });
+            });
+
+        this.codeMirror.on("gutterClick", (cm, line) => {
+            var info = cm.lineInfo(line);
+
+            if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints'])
+                this.debugService.removeBreakpoint(this.file, line+1);
+            else
+                this.debugService.setBreakpoint(this.file, line+1);
         });
     }
 }

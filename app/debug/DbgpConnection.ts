@@ -21,6 +21,7 @@ export class DbgpConnection {
 
         this.socket = this.server.connect(`${this.root}/${path}?entry=${btoa(entry)}&type=vdmsl`);
         this.socket.addEventListener("message", e => this.onMessage(e.data));
+        this.socket.addEventListener("close", e => this.onClose());
 
         return new Promise(resolve => {
             this.socket.addEventListener("open", () => {
@@ -28,6 +29,10 @@ export class DbgpConnection {
                 resolve();
             })
         });
+    }
+
+    onClose():void {
+        this.connected = false;
     }
 
     private onMessage(msg):void {
@@ -38,7 +43,11 @@ export class DbgpConnection {
         this.messages.emit(response.body);
 
         if (response.body.response) {
-            var id = response.body.response.$transaction_id;
+            var res = response.body.response;
+
+            if (res.$status === "stopped") this.close();
+
+            var id = res.$transaction_id;
 
             if (id && this.requests[id]) {
                 this.requests[id](response.body);
@@ -56,9 +65,7 @@ export class DbgpConnection {
     }
 
     close():void {
-        if (this.socket) this.socket.close();
-        this.connected = false;
-
-        this.messages.emit({ response: { $status: "stopped" } });
+        if (this.socket)
+            this.socket.close();
     }
 }

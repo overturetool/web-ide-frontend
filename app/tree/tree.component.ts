@@ -2,7 +2,6 @@ import {Component} from "angular2/core";
 import {NgFor} from "angular2/common";
 import {Input} from "angular2/core";
 import {NgIf} from "angular2/common";
-import {NodeComponent} from "./node.component";
 
 @Component({
     selector: 'tree',

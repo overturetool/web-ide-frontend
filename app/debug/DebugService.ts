@@ -6,14 +6,16 @@ import {DbgpConnection} from "./DbgpConnection";
 
 @Injectable()
 export class DebugService {
-    status:string = "stopped";
+    status:string = "";
     context:Array<any> = [];
     stack:Array<any> = [];
     stdout:Array<string> = [];
-    suspended:EventEmitter = new EventEmitter();
+    breakpoints:Array = [];
+
+    breakpointsChanged:EventEmitter = new EventEmitter();
+    stackChanged:EventEmitter = new EventEmitter();
 
     private connection:DbgpConnection;
-    private breakpoints = {};
 
     constructor(server:ServerService) {
         this.connection = new DbgpConnection(server);
@@ -21,16 +23,13 @@ export class DebugService {
     }
 
     connect(path:string, entry:string):void {
+        this.status = "";
         this.context = [];
         this.stack = [];
         this.stdout = [];
 
-        this.connection
-            .connect(path, entry)
-            .then(() => {
-                Object.keys(this.breakpoints[path])
-                    .forEach(line => this.setBreakpoint(path, line));
-            });
+        this.connection.connect(path, entry)
+            .then(() => this.syncBreakpoints());
     }
 
     run():void {
@@ -53,34 +52,42 @@ export class DebugService {
         this.connection.send('step_out');
     }
 
+    private syncBreakpoints() {
+        var breakpoints = this.breakpoints.slice();
+        this.breakpoints = [];
+
+        breakpoints.forEach(bp => this.setBreakpoint(bp.file, bp.line));
+        this.breakpointsChanged.emit(this.breakpoints);
+    }
+
     setBreakpoint(file, line):void {
         var fileRoot = "file:/home/rsreimer/speciale/web-api/workspace"; // TODO: Remove this
-
-        if (!this.breakpoints[file]) this.breakpoints[file] = {};
-
-        this.breakpoints[file][line] = null;
 
         if (this.connection.connected) {
             var self = this;
 
             this.connection
                 .send('breakpoint_set', `-t line -f ${fileRoot}/${file} -n ${line}`)
-                .then(res =>
-                    self.breakpoints[file][line] = res.response.$id);
+                .then(res => {
+                    if (!res.response.$id) return;
+
+                    self.breakpoints.push({file: file, line: line, id: res.response.$id});
+                    self.breakpointsChanged.emit(self.breakpoints);
+                });
+        } else {
+            this.breakpoints.push({file: file, line: line});
+            this.breakpointsChanged.emit(this.breakpoints);
         }
     }
 
     removeBreakpoint(file, line):void {
-        if (!this.breakpoints[file] || this.breakpoints[file][line] === undefined) return;
+        var breakpoint = this.breakpoints.filter(bp => bp.file === file && bp.line === line)[0];
 
-        if (this.connection.connected) {
-            var self = this;
+        if (this.connection.connected)
+            this.connection.send('breakpoint_remove', `-d ${breakpoint.id}`);
 
-            this.connection
-                .send('breakpoint_remove', `-d ${this.breakpoints[file][line]}`)
-                .then(() =>
-                    delete self.breakpoints[file][line]);
-        }
+        this.breakpoints = this.breakpoints.filter(bp => bp.file !== file || bp.line !== line);
+        this.breakpointsChanged.emit(this.breakpoints);
     }
 
     getContext():void {
@@ -111,7 +118,7 @@ export class DebugService {
                 this.status = response.$status;
 
             if (response.$status && response.$status !== "break") {
-                this.suspended.emit([]);
+                this.stackChanged.emit([]);
             }
 
             if (response.$status === "break") {
@@ -131,7 +138,7 @@ export class DebugService {
                     return frame;
                 });
 
-                this.suspended.emit(this.stack.map(f => f.$lineno));
+                this.stackChanged.emit(this.stack);
             }
         }
     }

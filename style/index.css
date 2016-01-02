@@ -122,6 +122,7 @@ tree li span.icon.directory.expanded {
     background-position: -39px -3px;
 }
 
+.breakpoints .file,
 .stack .file {
     color: black;
 }
