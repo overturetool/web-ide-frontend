@@ -13,7 +13,6 @@ export class DbgpResponse {
         if (/^\s*$/.test(sValue)) { return null; }
         if (/^(?:true|false)$/i.test(sValue)) { return sValue.toLowerCase() === "true"; }
         if (isFinite(sValue)) { return parseFloat(sValue); }
-        if (isFinite(Date.parse(sValue))) { return new Date(sValue); }
         return sValue;
     }
 
