@@ -121,3 +121,7 @@ tree li span.icon.directory {
 tree li span.icon.directory.expanded {
     background-position: -39px -3px;
 }
+
+.stack .file {
+    color: black;
+}
