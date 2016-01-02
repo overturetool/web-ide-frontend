@@ -10,7 +10,7 @@ export class DebugService {
     context:Array<any> = [];
     stack:Array<any> = [];
     stdout:Array<string> = [];
-    breakpoints:Array = [];
+    breakpoints:Array = [{line: 23, file: "rsreimer/bom.vdmsl"}]; // TODO: Remove this breakpoint
 
     breakpointsChanged:EventEmitter = new EventEmitter();
     stackChanged:EventEmitter = new EventEmitter();
@@ -91,11 +91,38 @@ export class DebugService {
     }
 
     getContext():void {
-        this.connection.send('context_get');
+        this.connection
+            .send('context_names')
+            .then(response => {
+                this.context = [];
+
+                response.response.context
+                    .reverse()
+                    .forEach(context => this.connection
+                        .send('context_get', `-c ${context.$id}`)
+                        .then(res => this.context.push({
+                            $name: context.$name,
+                            property: res.response.property
+                        }))
+                    );
+            });
     }
 
     getStack():void {
-        this.connection.send('stack_get');
+        var self = this;
+
+        this.connection.send('stack_get')
+            .then(response => {
+                self.stack = response.response.stack.length ? response.response.stack : [response.response.stack];
+
+                // TODO: Remove this mapping
+                self.stack = self.stack.map(frame => {
+                    frame.$filename = frame.$filename.replace("file:/home/rsreimer/speciale/web-api/workspace/", '');
+                    return frame;
+                });
+
+                self.stackChanged.emit(self.stack);
+            });
     }
 
     getStatus():void {
@@ -103,8 +130,6 @@ export class DebugService {
     }
 
     private onMessage(msg) {
-        console.log(msg);
-
         if (msg.init || msg.stream)
             this.getStatus();
 
@@ -112,33 +137,17 @@ export class DebugService {
             this.stdout.push(msg.stream.keyValue);
 
         if (msg.response) {
-            var response = msg.response;
+            var status = msg.response.$status;
 
-            if (response.$status)
-                this.status = response.$status;
+            if (!status) return;
 
-            if (response.$status && response.$status !== "break") {
-                this.stackChanged.emit([]);
-            }
+            this.status = status;
 
-            if (response.$status === "break") {
+            if (status === "break") {
                 this.getContext();
                 this.getStack();
-            }
-
-            if (response.$command === "context_get")
-                this.context = response.property;
-
-            if (response.$command === "stack_get") {
-                var stack = response.stack.length ? response.stack : [response.stack];
-
-                var fileRoot = "file:/home/rsreimer/speciale/web-api/workspace/"; // TODO: Remove this
-                this.stack = stack.map(frame => {
-                    frame.$filename = frame.$filename.replace(fileRoot, '');
-                    return frame;
-                });
-
-                this.stackChanged.emit(this.stack);
+            } else {
+                this.stackChanged.emit([]);
             }
         }
     }
