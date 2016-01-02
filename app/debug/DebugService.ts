@@ -12,7 +12,7 @@ export class DebugService {
     stdout:Array<string> = [];
     suspended:EventEmitter = new EventEmitter();
 
-    private connection: DbgpConnection;
+    private connection:DbgpConnection;
     private breakpoints = {};
 
     constructor(server:ServerService) {
@@ -20,12 +20,17 @@ export class DebugService {
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
 
-    connect(path:string, entry: string):void {
-        this.connection.connect(path, entry);
-
+    connect(path:string, entry:string):void {
         this.context = [];
         this.stack = [];
         this.stdout = [];
+
+        this.connection
+            .connect(path, entry)
+            .then(() => {
+                Object.keys(this.breakpoints[path])
+                    .forEach(line => this.setBreakpoint(path, line));
+            });
     }
 
     run():void {
@@ -55,31 +60,39 @@ export class DebugService {
 
         this.breakpoints[file][line] = null;
 
-        if (this.status === "stopped") return;
+        if (this.connection.connected) {
+            var self = this;
 
-        this.connection
-            .send('breakpoint_set', `-t line -f ${fileRoot}/${file} -n ${line}`)
-            .then(res =>
-                this.breakpoints[file][line] = res);
+            this.connection
+                .send('breakpoint_set', `-t line -f ${fileRoot}/${file} -n ${line}`)
+                .then(res =>
+                    self.breakpoints[file][line] = res.response.$id);
+        }
     }
 
-    removeBreakpoint(file, line):Promise {
-        return this.connection.send('breakpoint_remove', `-d `);
+    removeBreakpoint(file, line):void {
+        if (!this.breakpoints[file] || this.breakpoints[file][line] === undefined) return;
+
+        if (this.connection.connected) {
+            var self = this;
+
+            this.connection
+                .send('breakpoint_remove', `-d ${this.breakpoints[file][line]}`)
+                .then(() =>
+                    delete self.breakpoints[file][line]);
+        }
     }
 
-    getContext(depth:number = 0) {
-        if (depth === 0)
-            this.connection.send('context_get');
-        //this.send('context_get', '-d 1');
+    getContext():void {
+        this.connection.send('context_get');
     }
 
-    getStack() {
+    getStack():void {
         this.connection.send('stack_get');
-        //this.send('context_get', '-d 1');
     }
 
-    getStatus():Promise {
-        return this.connection.send('status');
+    getStatus():void {
+        this.connection.send('status');
     }
 
     private onMessage(msg) {
@@ -97,11 +110,13 @@ export class DebugService {
             if (response.$status)
                 this.status = response.$status;
 
+            if (response.$status && response.$status !== "break") {
+                this.suspended.emit(null);
+            }
+
             if (response.$status === "break") {
                 this.getContext();
                 this.getStack();
-            } else {
-                this.suspended.emit(null);
             }
 
             if (response.$command === "context_get")

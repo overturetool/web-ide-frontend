@@ -10,16 +10,24 @@ export class DbgpConnection {
     private cmdCount:number = 0;
     private requests:Array<any> = [];
 
+    public connected: boolean = false;
     public messages = new EventEmitter();
 
     constructor(private server:ServerService) {
     }
 
-    connect(path:string, entry:string):void {
+    connect(path:string, entry:string):Promise {
         this.close();
 
         this.socket = this.server.connect(`${this.root}/${path}?entry=${btoa(entry)}&type=vdmsl`);
         this.socket.addEventListener("message", e => this.onMessage(e.data));
+
+        return new Promise(resolve => {
+            this.socket.addEventListener("open", () => {
+                this.connected = true;
+                resolve();
+            })
+        });
     }
 
     private onMessage(msg):void {
@@ -30,7 +38,7 @@ export class DbgpConnection {
         this.messages.emit(response.body);
 
         if (response.body.response) {
-            var id = response.body.response.$id;
+            var id = response.body.response.$transaction_id;
 
             if (id && this.requests[id]) {
                 this.requests[id](response.body);
@@ -49,6 +57,8 @@ export class DbgpConnection {
 
     close():void {
         if (this.socket) this.socket.close();
+        this.connected = false;
+
         this.messages.emit({ response: { $status: "stopped" } });
     }
 }
