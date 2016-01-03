@@ -6,7 +6,7 @@ import {SessionService} from "../auth/SessionService";
 export class OutlineService {
     private root:string = "outline";
 
-    constructor(private server: ServerService, private session: SessionService) {
+    constructor(private server: ServerService) {
 
     }
 

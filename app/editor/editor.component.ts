@@ -13,6 +13,7 @@ declare var CodeMirror;
 export class EditorComponent {
     private codeMirror;
     private _file:string;
+    private _fileContent:string;
     private suspendedMarkings:Array = [];
 
     @Input() set file(file:string) {
@@ -22,7 +23,11 @@ export class EditorComponent {
 
         this.filesService
             .readFile(file)
-            .then(content => this.codeMirror.getDoc().setValue(content));
+            .then(content => {
+                this.codeMirror.getDoc().setValue(content);
+                this.codeMirror.clearHistory();
+                this._fileContent = content;
+            });
     }
 
     get file():string {
@@ -34,6 +39,7 @@ export class EditorComponent {
                 private hintService:HintService,
                 private debugService:DebugService,
                 private filesService:FilesService) {
+
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             styleActiveLine: true,
@@ -43,8 +49,20 @@ export class EditorComponent {
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
 
+        this.setupFileSystem();
         this.setupCodeCompletion();
         this.setupDebugging();
+    }
+
+    private setupFileSystem() {
+        this.codeMirror.on("change", cm => {
+            var content = cm.getValue();
+
+            if (content === this._fileContent) return;
+
+            this.filesService.writeFile(this.file, cm.getValue());
+            this._fileContent = content;
+        });
     }
 
     private setupCodeCompletion() {

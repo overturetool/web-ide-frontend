@@ -25,4 +25,11 @@ export class FilesService {
             .get(`${this.root}/${path}`)
             .then(res => res.text());
     }
+
+    writeFile(path:string, content:string) {
+        if (!path) return;
+
+        this.server
+            .post(`${this.root}/${path}`, content);
+    }
 }
