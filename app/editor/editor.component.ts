@@ -14,17 +14,12 @@ export class EditorComponent {
     private codeMirror;
     private _file:string;
     private suspendedMarkings:Array = [];
+    private highlightMarking;
 
     @Input() set file(file:string) {
         this._file = file;
-
-        if (!file) return;
-
-        this.filesService
-            .readFile(file)
-            .then(content => this.codeMirror.getDoc().setValue(content));
+        if (file) this.openFile(file);
     }
-
     get file():string {
         return this._file;
     }
@@ -45,6 +40,28 @@ export class EditorComponent {
 
         this.setupCodeCompletion();
         this.setupDebugging();
+    }
+
+    highlight(section: EditorSection) {
+        if (this.highlightMarking) this.highlightMarking.clear();
+
+        if (!section) return;
+
+        this.highlightMarking = this.codeMirror.markText(
+            {line: section.startLine -1, ch: section.startPos -1},
+            {line: section.endLine -1, ch: section.endPos -1},
+            {className: "CodeMirror-highlight"}
+        )
+    }
+
+    focus(line: number) {
+        this.codeMirror.scrollIntoView({line: line -1, ch: 0});
+    }
+
+    private openFile(file) {
+        this.filesService
+            .readFile(file)
+            .then(content => this.codeMirror.getDoc().setValue(content));
     }
 
     private setupCodeCompletion() {

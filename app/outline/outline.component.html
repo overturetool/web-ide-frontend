@@ -1,3 +1,4 @@
-<div *ngFor="#line of _outline">
-    {{line.name}}
-</div>
+<div *ngFor="#item of items"
+     (click)="onSelect(item)"
+     (mouseenter)="onHover(item)"
+     (mouseleave)="onStopHover()">{{item.name}}</div>

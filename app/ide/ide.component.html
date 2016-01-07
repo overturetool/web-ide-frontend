@@ -4,13 +4,13 @@
     </panel>
 </panel-menu>
 
-<editor [file]="file"></editor>
+<editor #editor [file]="file"></editor>
 
 <panel-menu class="right">
     <panel name="Debug" active="true">
         <debug [file]="file"></debug>
     </panel>
     <panel name="Outline">
-        <outline [file]="file"></outline>
+        <outline [file]="file" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
     </panel>
 </panel-menu>
