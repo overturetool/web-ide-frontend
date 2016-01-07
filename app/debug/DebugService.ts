@@ -10,7 +10,7 @@ export class DebugService {
     context:Array<any> = [];
     stack:Array<any> = [];
     stdout:Array<string> = [];
-    breakpoints:Array = []; // TODO: Remove this breakpoint
+    breakpoints:Array = [];
 
     breakpointsChanged:EventEmitter = new EventEmitter();
     stackChanged:EventEmitter = new EventEmitter();
