@@ -10,7 +10,7 @@ export class DebugService {
     context:Array<any> = [];
     stack:Array<any> = [];
     stdout:Array<string> = [];
-    breakpoints:Array = [{line: 23, file: "rsreimer/bom.vdmsl"}]; // TODO: Remove this breakpoint
+    breakpoints:Array = []; // TODO: Remove this breakpoint
 
     breakpointsChanged:EventEmitter = new EventEmitter();
     stackChanged:EventEmitter = new EventEmitter();
@@ -61,7 +61,7 @@ export class DebugService {
     }
 
     setBreakpoint(file, line):void {
-        var fileRoot = "file:/home/rsreimer/speciale/web-api/workspace"; // TODO: Remove this
+        var fileRoot = "file:/home/rsreimer/projects/speciale/web-api/workspace"; // TODO: Remove this
 
         if (this.connection.connected) {
             var self = this;
@@ -117,7 +117,7 @@ export class DebugService {
 
                 // TODO: Remove this mapping
                 self.stack = self.stack.map(frame => {
-                    frame.$filename = frame.$filename.replace("file:/home/rsreimer/speciale/web-api/workspace/", '');
+                    frame.$filename = frame.$filename.replace("file:/home/rsreimer/projects/speciale/web-api/workspace", '');
                     return frame;
                 });
 
