@@ -174,6 +174,10 @@ li.CodeMirror-hint-active {
     background: rgba(47,101,202,.3);
 }
 
+.CodeMirror-highlight {
+    background: rgba(255, 132, 0, 0.7);
+}
+
 .CodeMirror-breakpoints {
     width: .8em;
 }
