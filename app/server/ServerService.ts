@@ -14,11 +14,19 @@ export class ServerService {
         return new WebSocket(`ws://${this.root}/${path}`);
     }
 
-    get(path) {
+    get(path:string) {
         return new Promise(resolve =>
             this.http
                 .get(`http://${this.root}/${path}`)
                 .subscribe(response => resolve(response))
         )
+    }
+
+    post(path:string, body:string) {
+        return new Promise(resolve =>
+            this.http
+                .post(`http://${this.root}/${path}`, body)
+                .subscribe(response => resolve(response))
+        );
     }
 }
