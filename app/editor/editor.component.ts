@@ -72,14 +72,10 @@ export class EditorComponent {
         this.codeMirror.scrollIntoView({line: line -1, ch: 0});
     }
 
-    private openFile(file) {
-        this.filesService
-            .readFile(file)
-            .then(content => {
-                this.codeMirror.getDoc().setValue(content);
-                this.codeMirror.clearHistory();
-                this._fileContent = content;
-            });
+    private openFile(file: File) {
+            this.codeMirror.getDoc().setValue(file.content);
+            this.codeMirror.clearHistory();
+            this._fileContent = file.content;
     }
 
     private setupCodeCompletion() {
