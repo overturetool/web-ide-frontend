@@ -12,45 +12,110 @@ export class FilesComponent {
 
     @Output() select = new EventEmitter();
 
-    constructor(el:ElementRef, files:FilesService) {
+    constructor(el:ElementRef, filesService:FilesService) {
         this.$container = $(el.nativeElement).find(".container").first();
 
         this.$container
             .on('activate_node.jstree', (e, data) => {
-                if (data.node.original.type == "file")
-                    this.select.emit(data.node.original.path);
+                if (data.node.type == "file")
+                    this.select.emit(data.node.original.file);
             })
             .jstree({
-                "state": {"key": "files"},
-                "plugins": ["contextmenu", "dnd", "search", "sort", "state", "wholerow"],
-                "core": {
-                    "animation": false,
-                    "check_callback": true
+                state: {key: "files"},
+                plugins: ["contextmenu", "dnd", "search", "sort", "state", "wholerow", "types"],
+                core: {
+                    animation: false,
+                    check_callback: true
                 },
-                "search": {
-                    "case_insensitive": true,
-                    "show_only_matches" : true
+                types: {
+                    directory: {
+                        icon: "jstree-folder"
+                    },
+                    file: {
+                        icon: "jstree-file",
+                        valid_children: []
+                    }
+                },
+                search: {
+                    case_insensitive: true,
+                    show_only_matches: true
+                },
+                contextmenu: {
+                    items: node => {
+                        var items = {
+                            "createFile": {
+                                label: "New File",
+                                action: data => {
+                                    var jstree = $.jstree.reference(data.reference);
+                                    var selected = jstree.get_selected();
+
+                                    if(!selected.length) return false;
+
+                                    var newNode = jstree.create_node(selected[0], {type: "file"});
+                                    jstree.edit(newNode);
+                                }
+                            },
+                            "createDirectory": {
+                                label: "New Directory",
+                                "separator_after": true,
+                                action: data => {
+                                    var jstree = $.jstree.reference(data.reference);
+                                    var selected = jstree.get_selected();
+
+                                    if(!selected.length) return false;
+
+                                    var node = jstree.create_node(selected[0], {type: "directory"});
+                                    jstree.edit(node);
+                                }
+                            },
+                            "rename": {
+                                label: "Rename",
+                                action: data => {
+                                    var jstree = $.jstree.reference(data.reference);
+                                    var node = jstree.get_node(data.reference);
+                                    jstree.edit(node);
+                                }
+                            },
+                            "delete": {
+                                label: "Delete",
+                                action: data => {
+                                    var jstree = $.jstree.reference(data.reference);
+                                    var selected = jstree.get_selected();
+                                    if(!selected.length) return false;
+
+                                    jstree.delete_node(selected);
+                                }
+                            }
+                        };
+
+                        if (node.type === "file") {
+                            delete items["createDirectory"];
+                            delete items["createFile"];
+                        }
+
+                        return items;
+                    }
                 }
             });
 
-        files.readDir("", 10)
-            .then(dir => {
-                this.$container.jstree(true).settings.core.data = this.dirToJsTree(dir);
-                this.$container.jstree(true).refresh();
-            });
+        filesService.getRoot().then(files => {
+            var jstree = this.$container.jstree(true);
+
+            jstree.settings.core.data = this.filesToJsTree(files);
+            jstree.refresh();
+        });
     }
 
-    dirToJsTree(dir) {
+    filesToJsTree(dir) {
         return dir.map(file => {
             var node:any = {
                 text: file.name,
-                path: file.path,
                 type: file.type,
-                icon: file.type === "directory" ? "jstree-folder" : "jstree-file"
+                file: file
             };
 
             if (file.children)
-                node.children = this.dirToJsTree(file.children);
+                node.children = this.filesToJsTree(file.children);
 
             return node;
         });

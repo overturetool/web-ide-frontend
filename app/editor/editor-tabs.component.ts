@@ -8,6 +8,6 @@ import {File} from "../files/file";
     directives: [EditorComponent]
 })
 export class EditorTabsComponent {
-    files: Array<File> = [new File("rsreimer/bom.vdmsl", "bla")];
-
+    opened: Array<File> = [];
+    current: File;
 }

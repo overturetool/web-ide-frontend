@@ -7,4 +7,5 @@
 </div>
 <div class="editors">
     <editor *ngFor="#file of files" [file]="file" [class.visible]="selected === file.path"></editor>
+    <div *ngIf="!current">Open a file to start editing.</div>
 </div>
