@@ -1,28 +1,27 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {OutlineService} from "./OutlineService";
+import {File} from "../files/file";
 
 @Component({
     selector: "outline",
     templateUrl: "app/outline/outline.component.html"
 })
 export class OutlineComponent {
-    @Input() set file(file) { this.outlineService.update(file) }
-
     @Output() hover:EventEmitter = new EventEmitter();
     @Output() select:EventEmitter = new EventEmitter();
 
-    private items:Array<OutlineItem>;
-
-    constructor(private outlineService:OutlineService) {
-        outlineService.outline
-            .subscribe(items => this.items = items);
+    @Input() set file(file: File) {
+        this.outline.update(file);
     }
 
-    onHover(item: OutlineItem):void {
+    constructor(private outline:OutlineService) {
+    }
+
+    onEnter(item: OutlineItem):void {
         this.hover.emit(item.location);
     }
 
-    onStopHover():void {
+    onLeave():void {
         this.hover.emit(null);
     }
 

@@ -21,6 +21,7 @@ export class EditorComponent {
         this._file = file;
         if (file) this.openFile(file);
     }
+
     get file():string {
         return this._file;
     }
@@ -56,26 +57,26 @@ export class EditorComponent {
         });
     }
 
-    highlight(section: EditorSection) {
+    highlight(section:EditorSection) {
         if (this.highlightMarking) this.highlightMarking.clear();
 
         if (!section) return;
 
         this.highlightMarking = this.codeMirror.markText(
-            {line: section.startLine -1, ch: section.startPos -1},
-            {line: section.endLine -1, ch: section.endPos -1},
+            {line: section.startLine - 1, ch: section.startPos - 1},
+            {line: section.endLine - 1, ch: section.endPos - 1},
             {className: "CodeMirror-highlight"}
         )
     }
 
-    focus(line: number) {
-        this.codeMirror.scrollIntoView({line: line -1, ch: 0});
+    focus(line:number) {
+        this.codeMirror.scrollIntoView({line: line - 1, ch: 0});
     }
 
-    private openFile(file: File) {
-            this.codeMirror.getDoc().setValue(file.content);
-            this.codeMirror.clearHistory();
-            this._fileContent = file.content;
+    private openFile(file:File) {
+        this.codeMirror.getDoc().setValue(file.content);
+        this.codeMirror.clearHistory();
+        this._fileContent = file.content;
     }
 
     private setupCodeCompletion() {
@@ -111,7 +112,7 @@ export class EditorComponent {
                         marker.classList.add("CodeMirror-breakpoint");
                         marker.innerHTML = "●";
 
-                        this.codeMirror.setGutterMarker(bp.line-1, "CodeMirror-breakpoints", marker);
+                        this.codeMirror.setGutterMarker(bp.line - 1, "CodeMirror-breakpoints", marker);
                     });
             });
 
@@ -119,9 +120,9 @@ export class EditorComponent {
             var info = cm.lineInfo(line);
 
             if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints'])
-                this.debugService.removeBreakpoint(this.file, line+1);
+                this.debugService.removeBreakpoint(this.file, line + 1);
             else
-                this.debugService.setBreakpoint(this.file, line+1);
+                this.debugService.setBreakpoint(this.file, line + 1);
         });
     }
 }

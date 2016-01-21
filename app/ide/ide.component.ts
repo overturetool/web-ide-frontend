@@ -4,8 +4,9 @@ import {FilesComponent} from "../files/files.component";
 import {PanelComponent} from "../panel/panel.component";
 import {PanelMenuComponent} from "../panel/panel-menu.component";
 import {OutlineComponent} from "../outline/outline.component";
-import {IdeService} from "./IdeService";
 import {EditorTabsComponent} from "../editor/editor-tabs.component";
+import {FilesService} from "../files/FilesService";
+import {File} from "../files/file";
 
 @Component({
     selector: 'ide',
@@ -13,9 +14,19 @@ import {EditorTabsComponent} from "../editor/editor-tabs.component";
     directives: [EditorTabsComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent]
 })
 export class IdeComponent {
-    public file:string;
+    openFiles: Array<File> = [];
 
-    constructor(private ideService: IdeService) {
+    constructor(public filesService: FilesService) {
+    }
 
+    open(file:File) {
+        this.openFiles.push(file);
+    }
+
+    close(file:File) {
+        var index = this.openFiles.indexOf(file);
+        if (!index) return;
+
+        this.openFiles.splice(index, 1);
     }
 }

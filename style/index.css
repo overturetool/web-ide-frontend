@@ -12,7 +12,7 @@ ide {
     display: flex;
 }
 
-ide editor {
+ide editor-tabs {
     flex: auto;
 }
 

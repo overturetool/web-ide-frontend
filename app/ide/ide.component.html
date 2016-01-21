@@ -1,16 +1,16 @@
 <panel-menu class="left">
     <panel name="Project" active="true">
-        <files (select)="file = $event"></files>
+        <files [files]="filesService.root" (select)="open($event)"></files>
     </panel>
 </panel-menu>
 
-<editor-tabs></editor-tabs>
+<editor-tabs #editortabs [opened]="openFiles" (close)="close($event)" (current)="editor = $event"></editor-tabs>
 
 <panel-menu class="right">
     <panel name="Debug" active="true">
-        <debug [file]="file"></debug>
+        <debug [file]="editor?.file"></debug>
     </panel>
     <panel name="Outline">
-        <outline [file]="file" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
+        <outline [file]="editor?.file" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
     </panel>
 </panel-menu>

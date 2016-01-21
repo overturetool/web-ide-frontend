@@ -9,13 +9,13 @@ import {TreeComponent} from "../tree/tree.component";
     directives: [NgFor, TreeComponent]
 })
 export class DebugComponent {
-    entry:string = "Parts(1, bom)"; // TODO: Remove this.
+    @Input() file:File;
 
-    @Input() file:string;
+    entry:string = "Parts(1, bom)"; // TODO: Remove this.
 
     constructor(private debug:DebugService) { }
 
     connect() {
-        this.debug.connect(this.file, this.entry);
+        this.debug.connect(this.file.path, this.entry);
     }
 }

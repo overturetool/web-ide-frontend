@@ -4,18 +4,16 @@ import {SessionService} from "../auth/SessionService";
 
 @Injectable()
 export class OutlineService {
-    private root:string = "outline";
-
-    outline:EventEmitter<OutlineItem> = new EventEmitter();
+    items:Array<OutlineItem>;
 
     constructor(private server:ServerService) {
     }
 
-    update(file):void {
+    update(file:File):void {
         if (!file) return;
 
         this.server
-            .get(`${this.root}/${file}`)
-            .then(res => this.outline.emit(res.json()));
+            .get(`outline/${file.path}`)
+            .subscribe(res => this.items = res.json());
     }
 }
