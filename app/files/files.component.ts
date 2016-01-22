@@ -6,29 +6,33 @@ import {FilesService} from "./FilesService"
 
 @Component({
     selector: 'files',
-    template: `<input #searchInput type="search" (input)="search(searchInput.value)" placeholder="Search"><div class="container"></div>`
+    template: `<input #input type="search" (input)="search(input.value)" placeholder="Search"><div class="container"></div>`
 })
 export class FilesComponent {
     private $container;
-    private jstree;
 
-    @Input() set files(files) {
-        if (!files) return;
+    constructor(private filesService: FilesService, el:ElementRef) {
+        this.$container = this._setupJsTree(el.nativeElement);
 
-        var jstree = this.$container.jstree(true);
-        jstree.settings.core.data = this.filesToJsTree(files);
-        jstree.refresh();
+        filesService.root.subscribe(files => {
+            var jstree = this.$container.jstree(true);
+            jstree.settings.core.data = this._filesToJsTree(files);
+            jstree.refresh();
+        });
     }
 
-    @Output() select = new EventEmitter();
+    search(event) {
+        var jstree = this.$container.jstree(true);
+        jstree.search(event.target.value);
+    }
 
-    constructor(el:ElementRef) {
-        this.$container = $(el.nativeElement).find(".container").first();
+    private _setupJsTree(element) {
+        var container = $(element).find(".container").first();
 
-        this.$container
+        container
             .on('activate_node.jstree', (e, data) => {
                 if (data.node.type === "file")
-                    this.select.emit(data.node.original.file.path);
+                    this.filesService.openFile(data.node.original.file.path);
             })
             .jstree({
                 state: {key: "files"},
@@ -51,17 +55,14 @@ export class FilesComponent {
                     show_only_matches: true
                 },
                 contextmenu: {
-                    items: this.contextMenu
+                    items: this._contextMenu
                 }
             });
+
+        return container;
     }
 
-    search(event) {
-        var jstree = this.$container.jstree(true);
-        jstree.search(event.target.value);
-    }
-
-    private contextMenu(node) {
+    private _contextMenu(node) {
         var items = {
             "createFile": {
                 label: "New File",
@@ -116,7 +117,7 @@ export class FilesComponent {
         return items;
     }
 
-    private filesToJsTree(dir) {
+    private _filesToJsTree(dir) {
         return dir.map(file => {
             var node:any = {
                 text: file.name,
@@ -125,7 +126,7 @@ export class FilesComponent {
             };
 
             if (file.children)
-                node.children = this.filesToJsTree(file.children);
+                node.children = this._filesToJsTree(file.children);
 
             return node;
         });

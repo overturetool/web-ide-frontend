@@ -1,8 +1,8 @@
 <ul class="nav-tabs">
     <li *ngFor="#pane of panes"
-        (click)="select(pane)"
+        (click)="_open(pane)"
         [class.active]="pane.active">
-        <button>{{pane.name}}</button><button class="glyph close"></button>
+        <button>{{pane.name}}</button><button (close)="_close(pane)" class="glyph close"></button>
     </li>
 </ul>
 <ng-content></ng-content>

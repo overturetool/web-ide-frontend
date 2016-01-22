@@ -1,6 +1,8 @@
 import {Component, Directive, Input, QueryList,
     ViewContainerRef, TemplateRef, ContentChildren} from 'angular2/core';
 import {PaneComponent} from "./pane.component";
+import {Output} from "angular2/core";
+import {EventEmitter} from "angular2/core";
 
 @Component({
     selector: 'tabs',
@@ -9,7 +11,7 @@ import {PaneComponent} from "./pane.component";
 export class TabsComponent {
     @ContentChildren(PaneComponent) panes: QueryList<PaneComponent>;
 
-    select(pane: PaneComponent) {
-        this.panes.toArray().forEach(p => p.active = p == pane);
+    @Input() set selected(id) {
+        this.panes.toArray().forEach(p => p.active = p.id == id);
     }
 }

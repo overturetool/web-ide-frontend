@@ -12,16 +12,16 @@ declare var CodeMirror;
 })
 export class EditorComponent {
     private codeMirror;
-    private _file:string;
-    private _fileContent:string;
     private suspendedMarkings:Array = [];
     private highlightMarking;
 
+    private _file:string;
+
     @Input() set file(file:string) {
-        this._file = file;
-        if (file) this.openFile(file);
+        // Get file content
+        this.filesService.readFile(file).then(this._setContent.bind(this));
     }
-    get file():string {
+    get file() {
         return this._file;
     }
 
@@ -46,14 +46,12 @@ export class EditorComponent {
     }
 
     private setupFileSystem() {
-        this.codeMirror.on("change", cm => {
-            var content = cm.getValue();
-
-            if (content === this._fileContent) return;
-
-            this.filesService.writeFile(this.file, cm.getValue());
-            this._fileContent = content;
-        });
+        // Save file on changes
+        Rx.Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+            .map(cm => cm.getValue())
+            .distinctUntilChanged()
+            .debounce(200)
+            .subscribe(this._save.bind(this));
     }
 
     highlight(section:EditorSection) {
@@ -72,13 +70,13 @@ export class EditorComponent {
         this.codeMirror.scrollIntoView({line: line - 1, ch: 0});
     }
 
-    private openFile(path:string) {
-        this.filesService.readFile(path)
-            .subscribe(content => {
-                this.codeMirror.getDoc().setValue(content);
-                this.codeMirror.clearHistory();
-                this._fileContent = content;
-            });
+    private _save(content:string) {
+        this.filesService.writeFile(this.file, content);
+    }
+
+    private _setContent(content:string) {
+        this.codeMirror.getDoc().setValue(content);
+        this.codeMirror.clearHistory();
     }
 
     private setupCodeCompletion() {

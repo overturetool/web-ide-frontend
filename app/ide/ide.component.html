@@ -1,14 +1,8 @@
 <panel-menu class="left">
-    <panel name="Project" active="true">
-        <files [files]="filesService.root" (select)="open($event)"></files>
-    </panel>
+    <panel name="Project" active="true"><files></files></panel>
 </panel-menu>
 
-<tabs class="editors">
-    <pane *ngFor="#file of openFiles" [name]="file">
-        <editor [file]="file"></editor>
-    </pane>
-</tabs>
+<editor-tabs></editor-tabs>
 
 <panel-menu class="right">
     <panel name="Debug" active="true">

@@ -157,3 +157,11 @@ tabs li button {
 tabs li button.close {
     margin-left: -7px;
 }
+
+pane {
+    display: none;
+}
+
+pane.active {
+    display: block;
+}

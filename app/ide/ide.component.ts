@@ -8,27 +8,14 @@ import {FilesService} from "../files/FilesService";
 import {TabsComponent} from "../tabs/tabs.component";
 import {EditorComponent} from "../editor/editor.component";
 import {PaneComponent} from "../tabs/pane.component";
+import {FilenamePipe} from "../files/filename.pipe";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [TabsComponent, PaneComponent, EditorComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent]
+    directives: [TabsComponent, PaneComponent, EditorComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    pipes: [FilenamePipe],
+    providers: [FilesService]
 })
 export class IdeComponent {
-    openFiles:Array<string> = [];
-    currentFile:string = null;
-
-    constructor(public filesService:FilesService) {
-    }
-
-    open(file:string) {
-        this.openFiles.push(file);
-    }
-
-    close(file:string) {
-        var index = this.openFiles.indexOf(file);
-        if (!index) return;
-
-        this.openFiles.splice(index, 1);
-    }
 }

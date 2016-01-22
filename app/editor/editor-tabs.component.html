@@ -1,0 +1,10 @@
+<ul>
+    <li *ngFor="#file of files"
+        [class.active]="file === current">
+        <button (click)="_open(file)">{{file | filename}}</button><button (close)="_close(file)" class="glyph close"></button>
+    </li>
+</ul>
+<Editor
+        *ngFor="#file of openFiles"
+        [class.active]="file === current"
+        [file]="file"></Editor>

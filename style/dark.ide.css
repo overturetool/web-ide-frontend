@@ -1,4 +1,4 @@
-body, button {
+body {
     font-family: "Open Sans Light", sans-serif;
     font-size: 12px;
     color: #bbbbbb;
@@ -220,4 +220,8 @@ tabs li {
 tabs li.active {
     border-bottom: 0;
     background-color: #515658;
+}
+
+tabs li button {
+    color: #bbbbbb;
 }
