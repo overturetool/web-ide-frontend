@@ -4,26 +4,28 @@ import {FilesComponent} from "../files/files.component";
 import {PanelComponent} from "../panel/panel.component";
 import {PanelMenuComponent} from "../panel/panel-menu.component";
 import {OutlineComponent} from "../outline/outline.component";
-import {EditorTabsComponent} from "../editor/editor-tabs.component";
 import {FilesService} from "../files/FilesService";
-import {File} from "../files/file";
+import {TabsComponent} from "../tabs/tabs.component";
+import {EditorComponent} from "../editor/editor.component";
+import {PaneComponent} from "../tabs/pane.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [EditorTabsComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent]
+    directives: [TabsComponent, PaneComponent, EditorComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent]
 })
 export class IdeComponent {
-    openFiles: Array<File> = [];
+    openFiles:Array<string> = [];
+    currentFile:string = null;
 
-    constructor(public filesService: FilesService) {
+    constructor(public filesService:FilesService) {
     }
 
-    open(file:File) {
+    open(file:string) {
         this.openFiles.push(file);
     }
 
-    close(file:File) {
+    close(file:string) {
         var index = this.openFiles.indexOf(file);
         if (!index) return;
 

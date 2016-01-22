@@ -9,11 +9,10 @@ export class OutlineService {
     constructor(private server:ServerService) {
     }
 
-    update(file:File):void {
-        if (!file) return;
+    update(path:string):void {
+        if (!path) return;
 
-        this.server
-            .get(`outline/${file.path}`)
+        this.server.get(`outline/${path}`)
             .subscribe(res => this.items = res.json());
     }
 }

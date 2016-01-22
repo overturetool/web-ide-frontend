@@ -10,10 +10,10 @@ export class DebugService {
     context:Array<any> = [];
     stack:Array<any> = [];
     stdout:Array<string> = [];
-    breakpoints:Array = [];
+    breakpoints:Array<any> = [];
 
-    breakpointsChanged:EventEmitter = new EventEmitter();
-    stackChanged:EventEmitter = new EventEmitter();
+    breakpointsChanged:EventEmitter<any> = new EventEmitter();
+    stackChanged:EventEmitter<any> = new EventEmitter();
 
     private connection:DbgpConnection;
 

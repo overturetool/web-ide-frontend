@@ -28,7 +28,7 @@ export class FilesComponent {
         this.$container
             .on('activate_node.jstree', (e, data) => {
                 if (data.node.type === "file")
-                    this.select.emit(data.node.original.file);
+                    this.select.emit(data.node.original.file.path);
             })
             .jstree({
                 state: {key: "files"},
@@ -58,7 +58,7 @@ export class FilesComponent {
 
     search(event) {
         var jstree = this.$container.jstree(true);
-        this.jstree.search(event.target.value);
+        jstree.search(event.target.value);
     }
 
     private contextMenu(node) {

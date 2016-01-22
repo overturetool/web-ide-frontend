@@ -7,7 +7,7 @@ import {HintService} from "../hint/HintService";
 declare var CodeMirror;
 
 @Component({
-    selector: "editor",
+    selector: 'editor',
     template: ''
 })
 export class EditorComponent {
@@ -21,7 +21,6 @@ export class EditorComponent {
         this._file = file;
         if (file) this.openFile(file);
     }
-
     get file():string {
         return this._file;
     }
@@ -73,10 +72,13 @@ export class EditorComponent {
         this.codeMirror.scrollIntoView({line: line - 1, ch: 0});
     }
 
-    private openFile(file:File) {
-        this.codeMirror.getDoc().setValue(file.content);
-        this.codeMirror.clearHistory();
-        this._fileContent = file.content;
+    private openFile(path:string) {
+        this.filesService.readFile(path)
+            .subscribe(content => {
+                this.codeMirror.getDoc().setValue(content);
+                this.codeMirror.clearHistory();
+                this._fileContent = content;
+            });
     }
 
     private setupCodeCompletion() {

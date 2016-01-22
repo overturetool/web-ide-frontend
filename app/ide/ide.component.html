@@ -4,13 +4,17 @@
     </panel>
 </panel-menu>
 
-<editor-tabs #editortabs [opened]="openFiles" (close)="close($event)" (current)="editor = $event"></editor-tabs>
+<tabs class="editors">
+    <pane *ngFor="#file of openFiles" [name]="file">
+        <editor [file]="file"></editor>
+    </pane>
+</tabs>
 
 <panel-menu class="right">
     <panel name="Debug" active="true">
-        <debug [file]="editor?.file"></debug>
+        <debug [file]="currentFile"></debug>
     </panel>
     <panel name="Outline">
-        <outline [file]="editor?.file" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
+        <outline [file]="currentFile" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
     </panel>
 </panel-menu>

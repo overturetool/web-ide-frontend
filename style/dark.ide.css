@@ -1,4 +1,4 @@
-body {
+body, button {
     font-family: "Open Sans Light", sans-serif;
     font-size: 12px;
     color: #bbbbbb;
@@ -203,4 +203,20 @@ li.CodeMirror-hint-active {
 button[disabled] {
     border: 2px solid #4c4c4c;
     background-color: #4c4c4c;
+}
+
+tabs ul {
+    background-color: #3c3f41;
+    border-bottom: 4px solid #515658;
+}
+
+tabs li {
+    border: 1px solid #282828;
+    border-left: 0;
+    background-color: #3c3e3f;
+}
+
+tabs li.active {
+    border-bottom: 0;
+    background-color: #515658;
 }
