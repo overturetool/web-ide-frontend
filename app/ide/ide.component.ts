@@ -13,13 +13,15 @@ import {SessionService} from "../auth/SessionService";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
 import {EditorService} from "../editor/EditorService";
+import {LintService} from "../lint/LintService";
+import {HintService} from "../hint/HintService";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
     directives: [EditorTabsComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     pipes: [FilenamePipe],
-    providers: [FilesService, EditorService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
+    providers: [FilesService, LintService, HintService, EditorService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
 })
 export class IdeComponent {
 }

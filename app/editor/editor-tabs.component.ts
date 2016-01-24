@@ -5,6 +5,7 @@ import {EventEmitter} from "angular2/core";
 import {FilesService} from "../files/FilesService";
 import {EditorComponent} from "./editor.component";
 import {FilenamePipe} from "../files/filename.pipe";
+import {OnInit} from "angular2/core";
 
 @Component({
     selector: 'editor-tabs',
@@ -13,7 +14,9 @@ import {FilenamePipe} from "../files/filename.pipe";
     pipes: [FilenamePipe]
 })
 export class EditorTabsComponent {
+    files: Array<string>;
+
     constructor(private filesService: FilesService) {
-        
+        this.filesService.openFiles$.subscribe(files => this.files = files);
     }
 }
