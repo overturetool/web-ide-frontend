@@ -3,6 +3,7 @@ import {LintService} from "../lint/LintService"
 import {FilesService} from "../files/FilesService";
 import {DebugService} from "../debug/DebugService";
 import {HintService} from "../hint/HintService";
+import {Observable} from "rxjs/Observable";
 
 declare var CodeMirror;
 
@@ -47,7 +48,7 @@ export class EditorComponent {
 
     private setupFileSystem() {
         // Save file on changes
-        Rx.Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+        Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
             .map(cm => cm.getValue())
             .distinctUntilChanged()
             .debounce(200)
