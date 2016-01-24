@@ -38,7 +38,14 @@ export class FilesService {
     closeFile(file:string):void {
         var openFiles = this.openFiles$.getValue();
 
-        if (openFiles.indexOf(file) === -1) return;
+        if (this.currentFile$.getValue() === file) {
+            var index = openFiles.indexOf(file);
+
+            if (index > 0)
+                this.currentFile$.next(openFiles[index-1]);
+            else
+                this.currentFile$.next(index+1 < openFiles.length ? openFiles[index+1] : null);
+        }
 
         this.openFiles$.next(openFiles.filter(f => f !== file));
     }

@@ -4,6 +4,7 @@ import {FilesService} from "../files/FilesService";
 import {DebugService} from "../debug/DebugService";
 import {HintService} from "../hint/HintService";
 import {Observable} from "rxjs/Observable";
+import {OnDestroy} from "angular2/core";
 
 declare var CodeMirror;
 
@@ -11,7 +12,7 @@ declare var CodeMirror;
     selector: 'editor',
     template: ''
 })
-export class EditorComponent {
+export class EditorComponent implements OnDestroy {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
@@ -46,6 +47,12 @@ export class EditorComponent {
         this.setupFileSystem();
         this.setupCodeCompletion();
         this.setupDebugging();
+    }
+
+    ngOnDestroy() {
+        // Remove CodeMirror editor from DOM when component is destroyed.
+        var element = this.codeMirror.getWrapperElement();
+        element.parentNode.removeChild(element);
     }
 
     private setupFileSystem() {

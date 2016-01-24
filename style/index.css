@@ -157,3 +157,11 @@ editor-tabs li button {
 editor-tabs li button.close {
     margin-left: -7px;
 }
+
+editor {
+    display: none;
+}
+
+editor.active {
+    display: block;
+}

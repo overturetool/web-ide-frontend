@@ -14,9 +14,19 @@ import {OnInit} from "angular2/core";
     pipes: [FilenamePipe]
 })
 export class EditorTabsComponent {
-    files: Array<string>;
+    files:Array<string>;
+    current:string;
 
-    constructor(private filesService: FilesService) {
+    constructor(private filesService:FilesService) {
         this.filesService.openFiles$.subscribe(files => this.files = files);
+        this.filesService.currentFile$.subscribe(file => this.current = file);
+    }
+
+    select(file: string) {
+        this.filesService.openFile(file);
+    }
+
+    close(file: string) {
+        this.filesService.closeFile(file);
     }
 }
