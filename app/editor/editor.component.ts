@@ -19,6 +19,8 @@ export class EditorComponent {
     private _file:string;
 
     @Input() set file(file:string) {
+        this._file = file;
+
         // Get file content
         this.filesService.readFile(file).then(this._setContent.bind(this));
     }
