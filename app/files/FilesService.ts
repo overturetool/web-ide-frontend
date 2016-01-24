@@ -5,6 +5,7 @@ import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class FilesService {
@@ -16,12 +17,12 @@ export class FilesService {
         this._loadRoot();
     }
 
-    writeFile(path:string, content:string):void {
-        this.serverService.post(`vfs/${path}`, content);
+    writeFile(path:string, content:string) {
+        return this.serverService.post(`vfs/${path}`, content);
     }
 
-    readFile(path:string) {
-        return this.serverService.get(`vfs/${path}`).map(res => res.text()).toPromise();
+    readFile(path:string):Observable<string> {
+        return this.serverService.get(`vfs/${path}`).map(res => res.text());
     }
 
     openFile(file:string):void {
@@ -42,7 +43,7 @@ export class FilesService {
         this.openFiles$.next(openFiles.filter(f => f !== file));
     }
 
-    private _loadRoot() {
+    private _loadRoot():void {
         this.serverService
             .get(`vfs/${this.session.account}?depth=10`) // TODO: Should read whole tree and not just at a depth of 10
             .map(res => res.json())

@@ -22,7 +22,7 @@ export class EditorComponent {
         this._file = file;
 
         // Get file content
-        this.filesService.readFile(file).then(this._setContent.bind(this));
+        this.filesService.readFile(file).subscribe(this._setContent.bind(this));
     }
     get file() {
         return this._file;
@@ -52,9 +52,10 @@ export class EditorComponent {
         // Save file on changes
         Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
             .map(cm => cm.getValue())
+            .debounceTime(200)
             .distinctUntilChanged()
-            .debounce(200)
-            .subscribe(this._save.bind(this));
+            .switchMap(content => this.filesService.writeFile(this.file, content))
+            .subscribe();
     }
 
     highlight(section:EditorSection) {
@@ -71,10 +72,6 @@ export class EditorComponent {
 
     focus(line:number) {
         this.codeMirror.scrollIntoView({line: line - 1, ch: 0});
-    }
-
-    private _save(content:string) {
-        this.filesService.writeFile(this.file, content);
     }
 
     private _setContent(content:string) {
