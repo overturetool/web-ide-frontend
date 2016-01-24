@@ -12,7 +12,7 @@ ide {
     display: flex;
 }
 
-ide .editors {
+ide editor-tabs {
     flex: auto;
 }
 
@@ -131,37 +131,29 @@ tree li span.icon.directory.expanded {
     color: black;
 }
 
-tabs ul {
+editor-tabs ul {
     margin: 0;
     padding: 0;
 }
 
-tabs li {
+editor-tabs li {
     height: 24px;
     line-height: 24px;
     list-style: none;
     display: inline-block;
 }
 
-tabs li.active {
+editor-tabs li.active {
     height: 25px;
     line-height: 25px;
 }
 
-tabs li button {
+editor-tabs li button {
     background: transparent;
     border: 0;
     outline: 0;
 }
 
-tabs li button.close {
+editor-tabs li button.close {
     margin-left: -7px;
-}
-
-pane {
-    display: none;
-}
-
-pane.active {
-    display: block;
 }

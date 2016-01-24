@@ -5,10 +5,6 @@
 <editor-tabs></editor-tabs>
 
 <panel-menu class="right">
-    <panel name="Debug" active="true">
-        <debug [file]="currentFile"></debug>
-    </panel>
-    <panel name="Outline">
-        <outline [file]="currentFile" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
-    </panel>
+    <panel name="Debug" active="true"><debug></debug></panel>
+    <panel name="Outline"><outline></outline></panel>
 </panel-menu>

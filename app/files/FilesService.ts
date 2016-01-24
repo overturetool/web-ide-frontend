@@ -8,13 +8,13 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class FilesService {
-    private _root:Array<any> = [];
-    private _open:Array<string> = [];
-    private _current:string;
+    root:Array<any> = [];
+    openFiles:Array<string> = [];
+    currentFile:string;
 
-    root:BehaviorSubject<Array> = new BehaviorSubject(this._root);
-    openFiles:BehaviorSubject<Array<string>> = new BehaviorSubject(this._open);
-    currentFile:BehaviorSubject<string> = new BehaviorSubject(this._current);
+    root$:BehaviorSubject<Array> = new BehaviorSubject(this.root);
+    openFiles$:BehaviorSubject<Array<string>> = new BehaviorSubject(this.openFiles);
+    currentFile$:BehaviorSubject<string> = new BehaviorSubject(this.currentFile);
 
     constructor(private serverService:ServerService, private session:SessionService) {
         this._loadRoot();
@@ -29,21 +29,23 @@ export class FilesService {
     }
 
     openFile(file:string):void {
-        if (this._open.indexOf(file) === -1) {
-            this._open.push(file);
-            this.openFiles.next(this._open);
+        if (this.openFiles.indexOf(file) === -1) {
+            this.openFiles.push(file);
+            this.openFiles$.next(this.openFiles);
         }
 
-        this._current = file;
-        this.currentFile.next(file);
+        if (this.currentFile !== file) {
+            this.currentFile = file;
+            this.currentFile$.next(this.currentFile);
+        }
     }
 
     closeFile(file:string):void {
-        var index = this._open.indexOf(file);
+        var index = this.openFiles.indexOf(file);
         if (index === -1) return;
 
-        this._open.splice(index, 1);
-        this.openFiles.next(this._open);
+        this.openFiles.splice(index, 1);
+        this.openFiles$.next(this.openFiles);
     }
 
     private _loadRoot() {
@@ -51,8 +53,8 @@ export class FilesService {
             .get(`vfs/${this.session.account}?depth=10`) // TODO: Should read whole tree and not just at a depth of 10
             .map(res => res.json())
             .subscribe(files => {
-                this._root = files;
-                this.root.next(files);
+                this.root = files;
+                this.root$.next(files);
             });
     }
 }

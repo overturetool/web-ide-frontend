@@ -2,13 +2,18 @@ import {Component, Directive, Input, QueryList,
     ViewContainerRef, TemplateRef, ContentChildren} from 'angular2/core';
 import {Output} from "angular2/core";
 import {EventEmitter} from "angular2/core";
+import {FilesService} from "../files/FilesService";
+import {EditorComponent} from "./editor.component";
+import {FilenamePipe} from "../files/filename.pipe";
 
 @Component({
-    selector: 'tabs',
-    templateUrl: 'app/editor/editor-tabs.component.html'
+    selector: 'editor-tabs',
+    templateUrl: 'app/editor/editor-tabs.component.html',
+    directives: [EditorComponent],
+    pipes: [FilenamePipe]
 })
 export class EditorTabsComponent {
-
-
-    private _
+    constructor(private filesService: FilesService) {
+        
+    }
 }

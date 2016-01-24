@@ -1,21 +1,25 @@
-import {Component, View} from 'angular2/core'
-import {DebugComponent} from "../debug/debug.component"
+import {EditorTabsComponent} from "../editor/editor-tabs.component";
+import {DebugComponent} from "../debug/debug.component";
 import {FilesComponent} from "../files/files.component";
 import {PanelComponent} from "../panel/panel.component";
 import {PanelMenuComponent} from "../panel/panel-menu.component";
 import {OutlineComponent} from "../outline/outline.component";
-import {FilesService} from "../files/FilesService";
-import {TabsComponent} from "../tabs/tabs.component";
-import {EditorComponent} from "../editor/editor.component";
-import {PaneComponent} from "../tabs/pane.component";
 import {FilenamePipe} from "../files/filename.pipe";
+import {FilesService} from "../files/FilesService";
+import {OutlineService} from "../outline/OutlineService";
+import {DebugService} from "../debug/DebugService";
+import {ServerService} from "../server/ServerService";
+import {SessionService} from "../auth/SessionService";
+import {HTTP_PROVIDERS} from "angular2/http";
+import {Component} from "angular2/core";
+import {EditorService} from "../editor/EditorService";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [TabsComponent, PaneComponent, EditorComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    directives: [EditorTabsComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     pipes: [FilenamePipe],
-    providers: [FilesService]
+    providers: [FilesService, EditorService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
 })
 export class IdeComponent {
 }

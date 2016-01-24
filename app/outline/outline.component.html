@@ -1,4 +1,4 @@
-<div *ngFor="#item of outline.items"
+<div *ngFor="#item of items$ | async"
      (click)="onSelect(item)"
      (mouseenter)="onEnter(item)"
      (mouseleave)="onLeave()">{{item.name}}</div>

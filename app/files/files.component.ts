@@ -14,7 +14,7 @@ export class FilesComponent {
     constructor(private filesService: FilesService, el:ElementRef) {
         this.$container = this._setupJsTree(el.nativeElement);
 
-        filesService.root.subscribe(files => {
+        filesService.root$.subscribe(files => {
             var jstree = this.$container.jstree(true);
             jstree.settings.core.data = this._filesToJsTree(files);
             jstree.refresh();

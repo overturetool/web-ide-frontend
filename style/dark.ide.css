@@ -206,22 +206,22 @@ button[disabled] {
     background-color: #4c4c4c;
 }
 
-tabs ul {
+editor-tabs ul {
     background-color: #3c3f41;
     border-bottom: 4px solid #515658;
 }
 
-tabs li {
+editor-tabs li {
     border: 1px solid #282828;
     border-left: 0;
     background-color: #3c3e3f;
 }
 
-tabs li.active {
+editor-tabs li.active {
     border-bottom: 0;
     background-color: #515658;
 }
 
-tabs li button {
+editor-tabs li button {
     color: #bbbbbb;
 }

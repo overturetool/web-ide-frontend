@@ -17,18 +17,18 @@ export class DebugService {
 
     private connection:DbgpConnection;
 
-    constructor(server:ServerService) {
-        this.connection = new DbgpConnection(server);
+    constructor(serverService:ServerService) {
+        this.connection = new DbgpConnection(serverService);
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
 
-    connect(path:string, entry:string):void {
+    connect(file:string, entry:string):void {
         this.status = "";
         this.context = [];
         this.stack = [];
         this.stdout = [];
 
-        this.connection.connect(path, entry)
+        this.connection.connect(file, entry)
             .then(() => this.syncBreakpoints());
     }
 

@@ -187,7 +187,7 @@ CodeMirror.defineMode("vdm", function() {
         }
         if ( /[+\-*&%:=<>!?|]/.test(ch)) {
             stream.eatWhile( /[+\-*&%=<>!?|]/);
-            var cur = stream.current();
+            var cur = stream.currentFile();
             if (cur.substring(0,2) == "--") {
                 while (!stream.eol()) stream.next();
                 return "comment";
@@ -195,7 +195,7 @@ CodeMirror.defineMode("vdm", function() {
             return words[cur] || "operator";
         }
         stream.eatWhile(/\w/);
-        var cur = stream.current();
+        var cur = stream.currentFile();
         var cur3 = cur.substring(0, 3);
         var cur4 = cur.substring(0, 4);
         var cur5 = cur.substring(0, 5);

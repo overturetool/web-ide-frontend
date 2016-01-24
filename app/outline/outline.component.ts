@@ -1,30 +1,29 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {OutlineService} from "./OutlineService";
+import {FilesService} from "../files/FilesService";
+import {Observable} from "rxjs/Observable";
+import {EditorService} from "../editor/EditorService";
 
 @Component({
     selector: "outline",
     templateUrl: "app/outline/outline.component.html"
 })
 export class OutlineComponent {
-    @Output() hover:EventEmitter = new EventEmitter();
-    @Output() select:EventEmitter = new EventEmitter();
+    private items$;
 
-    @Input() set file(file:string) {
-        this.outline.update(file);
-    }
-
-    constructor(private outline:OutlineService) {
+    constructor(private outlineService:OutlineService) {
+        this.items$ = this.outlineService.items$;
     }
 
     onEnter(item:OutlineItem):void {
-        this.hover.emit(item.location);
+        this.outlineService.highlight(item.location);
     }
 
     onLeave():void {
-        this.hover.emit(null);
+        this.outlineService.highlight(null);
     }
 
     onSelect(item:OutlineItem):void {
-        this.select.emit(item.location.startLine);
+        this.outlineService.focus(item.location.startLine);
     }
 }
