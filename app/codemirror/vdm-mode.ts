@@ -1,3 +1,5 @@
+declare var CodeMirror;
+
 CodeMirror.defineMode("vdm", function() {
 
     var words = {
@@ -215,7 +217,7 @@ CodeMirror.defineMode("vdm", function() {
             state.tokenize = tokenBase;
         }
         return "string";
-    };
+    }
 
     function tokenComment(stream, state) {
         var prev, next;

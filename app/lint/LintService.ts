@@ -26,11 +26,9 @@ export class LintService {
             callback([]);
         }
         else {
-            this.server
-                .get(`${this.root}/${file}`)
-                .then(response => {
-                    var result = response.json();
-
+            this.server.get(`${this.root}/${file}`)
+                .map(res => res.json())
+                .subscribe(result => {
                     var markers = [].concat(
                         this._result2markers(result.parserErrors, "error"),
                         this._result2markers(result.parserWarnings, "warning"),

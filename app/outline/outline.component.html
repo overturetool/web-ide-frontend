@@ -1,4 +1,4 @@
-<div *ngFor="#item of items"
+<div *ngFor="#item of items$ | async"
      (click)="onSelect(item)"
-     (mouseenter)="onHover(item)"
-     (mouseleave)="onStopHover()">{{item.name}}</div>
+     (mouseenter)="onEnter(item)"
+     (mouseleave)="onLeave()">{{item.name}}</div>

@@ -12,7 +12,7 @@ ide {
     display: flex;
 }
 
-ide editor {
+ide editor-tabs {
     flex: auto;
 }
 
@@ -84,6 +84,10 @@ panel > .content {
     background-position: -96px -48px;
 }
 
+.glyph.close {
+    background-position: -128px 0;
+}
+
 .glyph {
     background-image: url(../images/devtools.png);
     width: 32px;
@@ -125,4 +129,39 @@ tree li span.icon.directory.expanded {
 .breakpoints .file,
 .stack .file {
     color: black;
+}
+
+editor-tabs ul {
+    margin: 0;
+    padding: 0;
+}
+
+editor-tabs li {
+    height: 24px;
+    line-height: 24px;
+    list-style: none;
+    display: inline-block;
+}
+
+editor-tabs li.active {
+    height: 25px;
+    line-height: 25px;
+}
+
+editor-tabs li button {
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+editor-tabs li button.close {
+    margin-left: -7px;
+}
+
+editor {
+    display: none;
+}
+
+editor.active {
+    display: block;
 }

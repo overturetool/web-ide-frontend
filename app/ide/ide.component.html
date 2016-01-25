@@ -1,16 +1,10 @@
 <panel-menu class="left">
-    <panel name="Project" active="true">
-        <files (select)="file = $event"></files>
-    </panel>
+    <panel name="Projects" active="true"><files></files></panel>
 </panel-menu>
 
-<editor #editor [file]="file"></editor>
+<editor-tabs></editor-tabs>
 
 <panel-menu class="right">
-    <panel name="Debug" active="true">
-        <debug [file]="file"></debug>
-    </panel>
-    <panel name="Outline">
-        <outline [file]="file" (hover)="editor.highlight($event)" (select)="editor.focus($event)"></outline>
-    </panel>
+    <panel name="Debug" active="true"><debug></debug></panel>
+    <panel name="Outline"><outline></outline></panel>
 </panel-menu>

@@ -1,11 +1,10 @@
-<div class="tabs">
-    <button *ngFor="#file of files"
-            (click)="select(file.path)"
-            [class.visible]="selected === file.path">
-        {{ file.path }}
-    </button>
-</div>
-<div class="editors">
-    <editor *ngFor="#file of files" [file]="file" [class.visible]="selected === file.path"></editor>
-    <div *ngIf="!current">Open a file to start editing.</div>
-</div>
+<ul>
+    <li *ngFor="#file of files"
+        [class.active]="file === current">
+        <button (click)="select(file)">{{file | filename}}</button><button (click)="close(file)" class="glyph close"></button>
+    </li>
+</ul>
+<editor
+        *ngFor="#file of files"
+        [class.active]="file === current"
+        [file]="file"></editor>

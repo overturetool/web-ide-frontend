@@ -7,7 +7,6 @@ export class ServerService {
     private root:string = "localhost:9000";
 
     constructor(private http:Http) {
-
     }
 
     connect(path:string):WebSocket {
