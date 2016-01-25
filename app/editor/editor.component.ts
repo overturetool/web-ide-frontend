@@ -142,7 +142,8 @@ export class EditorComponent implements OnDestroy {
     }
 
     private setupOutline() {
-        this.changes$.subscribe(() => this.outlineService.update());
+        // TODO: Fix this hack. Delay for fixing outline sometimes returning empty array.
+        this.changes$.delay(200).subscribe(() => this.outlineService.update());
 
         this.outlineService.highlight$.subscribe(section => this.highlight(section));
         this.outlineService.focus$.subscribe(line => this.focus(line));
