@@ -19,8 +19,6 @@ export class OutlineService {
 
     update() {
         var file = this.filesService.currentFile$.getValue();
-        console.log(file);
-
         if (!file) return;
 
         this.serverService.get(`outline/${file}`)
