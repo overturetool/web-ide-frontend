@@ -8,7 +8,7 @@ import {Observable} from "rxjs/Observable";
     templateUrl: "app/outline/outline.component.html"
 })
 export class OutlineComponent {
-    private items$;
+    items$;
 
     constructor(private outlineService:OutlineService) {
         this.items$ = this.outlineService.items$;

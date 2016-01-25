@@ -20,7 +20,7 @@ export class EditorComponent implements OnDestroy {
 
     private _file:string;
 
-    changes$:
+    changes$:Observable<string>;
 
     @Input() set file(file:string) {
         this._file = file;
@@ -141,7 +141,7 @@ export class EditorComponent implements OnDestroy {
     }
 
     private setupOutline() {
-        this.changes$.subscribe(content => this.outlineService.update());
+        this.changes$.subscribe(() => this.outlineService.update());
 
         this.outlineService.highlight$.subscribe(section => this.highlight(section));
         this.outlineService.focus$.subscribe(line => this.focus(line));

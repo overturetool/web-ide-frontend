@@ -9,19 +9,20 @@ import {BehaviorSubject} from "rxjs/Rx";
 
 @Injectable()
 export class OutlineService {
-    items$:BehaviorSubject<Array<OutlineItem>> = new BehaviorSubject([]);
-    highlight$:Subject<EditorSection>;
-    focus$:Subject<number>;
+    items$: Subject<Array<OutlineItem>> = new Subject();
+    highlight$:Subject<EditorSection> = new Subject();
+    focus$:Subject<number> = new Subject();
 
     constructor(private serverService:ServerService,
                 private filesService:FilesService) {
-        this.highlight$ = new Subject();
-        this.focus$ = new Subject();
     }
 
     update() {
-        // Find outline items in current file
         var file = this.filesService.currentFile$.getValue();
+        console.log(file);
+
+        if (!file) return;
+
         this.serverService.get(`outline/${file}`)
             .map(res => res.json())
             .subscribe(items => this.items$.next(items));
