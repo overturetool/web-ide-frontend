@@ -5,6 +5,7 @@ import {DebugService} from "../debug/DebugService";
 import {HintService} from "../hint/HintService";
 import {Observable} from "rxjs/Observable";
 import {OnDestroy} from "angular2/core";
+import {OutlineService} from "../outline/OutlineService";
 
 declare var CodeMirror;
 
@@ -19,6 +20,8 @@ export class EditorComponent implements OnDestroy {
 
     private _file:string;
 
+    changes$:
+
     @Input() set file(file:string) {
         this._file = file;
 
@@ -32,6 +35,7 @@ export class EditorComponent implements OnDestroy {
     constructor(el:ElementRef,
                 lintService:LintService,
                 private hintService:HintService,
+                private outlineService:OutlineService,
                 private debugService:DebugService,
                 private filesService:FilesService) {
 
@@ -44,9 +48,15 @@ export class EditorComponent implements OnDestroy {
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
 
+        this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+            .map(cm => cm.getValue())
+            .debounceTime(200)
+            .distinctUntilChanged();
+
         this.setupFileSystem();
         this.setupCodeCompletion();
         this.setupDebugging();
+        this.setupOutline();
     }
 
     ngOnDestroy() {
@@ -57,12 +67,9 @@ export class EditorComponent implements OnDestroy {
 
     private setupFileSystem() {
         // Save file on changes
-        Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
-            .map(cm => cm.getValue())
-            .debounceTime(200)
-            .distinctUntilChanged()
-            .switchMap(content => this.filesService.writeFile(this.file, content))
-            .subscribe();
+            this.changes$
+                .switchMap(content => this.filesService.writeFile(this.file, content))
+                .subscribe();
     }
 
     highlight(section:EditorSection) {
@@ -131,5 +138,12 @@ export class EditorComponent implements OnDestroy {
             else
                 this.debugService.setBreakpoint(this.file, line + 1);
         });
+    }
+
+    private setupOutline() {
+        this.changes$.subscribe(content => this.outlineService.update());
+
+        this.outlineService.highlight$.subscribe(section => this.highlight(section));
+        this.outlineService.focus$.subscribe(line => this.focus(line));
     }
 }
