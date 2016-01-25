@@ -85,6 +85,7 @@ export class EditorComponent implements OnDestroy {
     }
 
     focus(line:number) {
+        // TODO: Doesn't seem to work with lines over 99
         this.codeMirror.scrollIntoView({line: line - 1, ch: 0});
     }
 
