@@ -39,9 +39,21 @@ export class FilesComponent {
                 plugins: ["contextmenu", "dnd", "search", "sort", "state", "wholerow", "types"],
                 core: {
                     animation: false,
-                    check_callback: true
+                    check_callback: (operation, node, node_parent) => {
+                        if (operation === "move_node") {
+                            if (node.type !== 'project')
+                                return node_parent.parent !== null;
+                            else
+                                return false;
+                        }
+
+                        return true;
+                    }
                 },
                 types: {
+                    project: {
+                        icon: "jstree-sl-project"
+                    },
                     directory: {
                         icon: "jstree-folder"
                     },
@@ -117,16 +129,16 @@ export class FilesComponent {
         return items;
     }
 
-    private _filesToJsTree(dir) {
+    private _filesToJsTree(dir, depth:number = 0) {
         return dir.map(file => {
             var node:any = {
                 text: file.name,
-                type: file.type,
+                type: depth == 0 ? 'project' : file.type,
                 file: file
             };
 
             if (file.children)
-                node.children = this._filesToJsTree(file.children);
+                node.children = this._filesToJsTree(file.children, depth +1);
 
             return node;
         });

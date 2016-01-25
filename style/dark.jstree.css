@@ -390,7 +390,18 @@
     background-position: -260px -4px;
     background-repeat: no-repeat;
 }
-
+.jstree-default .jstree-sl-project {
+    background-position: -164px -68px;
+    background-repeat: no-repeat;
+}
+.jstree-default .jstree-pp-project {
+    background-position: -196px -68px;
+    background-repeat: no-repeat;
+}
+.jstree-default .jstree-rt-project {
+    background-position: -228px -68px;
+    background-repeat: no-repeat;
+}
 
 #jstree-dnd.jstree-default i {
     background: transparent;

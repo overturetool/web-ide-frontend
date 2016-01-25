@@ -2,7 +2,6 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {OutlineService} from "./OutlineService";
 import {FilesService} from "../files/FilesService";
 import {Observable} from "rxjs/Observable";
-import {EditorService} from "../editor/EditorService";
 
 @Component({
     selector: "outline",

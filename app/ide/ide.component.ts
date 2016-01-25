@@ -12,7 +12,6 @@ import {ServerService} from "../server/ServerService";
 import {SessionService} from "../auth/SessionService";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
-import {EditorService} from "../editor/EditorService";
 import {LintService} from "../lint/LintService";
 import {HintService} from "../hint/HintService";
 
@@ -21,7 +20,7 @@ import {HintService} from "../hint/HintService";
     templateUrl: 'app/ide/ide.component.html',
     directives: [EditorTabsComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     pipes: [FilenamePipe],
-    providers: [FilesService, LintService, HintService, EditorService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
+    providers: [FilesService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
 })
 export class IdeComponent {
 }
