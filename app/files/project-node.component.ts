@@ -17,6 +17,10 @@ export class ProjectNodeComponent {
     private open:boolean = false;
     private draggedOver:boolean = false;
 
+    private contextmenu(event) {
+        event.preventDefault();
+    }
+
     private toggle() {
         this.open = !this.open;
     }

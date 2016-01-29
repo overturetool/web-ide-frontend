@@ -1,4 +1,6 @@
-<div draggable="true" (dragstart)="dragstart($event)">
+<div draggable="true"
+     (contextmenu)="contextmenu($event)"
+     (dragstart)="dragstart($event)">
     <span class="icon file">&nbsp;</span>
-    <span class="name" (click)="click($event)" (contextmenu)="contextmenu($event)">{{file.name}}</span>
+    <span class="name" (click)="click($event)">{{file.name}}</span>
 </div>

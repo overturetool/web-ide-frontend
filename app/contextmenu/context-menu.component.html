@@ -1,0 +1,5 @@
+<div *ngIf="contextMenuService.isOpen">
+    <div class="group" *ngFor="#group of contextMenuService.menu">
+        <div class="item" *ngFor="#item of group" (click)="click($event, item)">{{item.label}}</div>
+    </div>
+</div>

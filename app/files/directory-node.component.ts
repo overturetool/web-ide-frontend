@@ -20,6 +20,10 @@ export class DirectoryNodeComponent {
 
     }
 
+    private contextmenu(event) {
+        event.preventDefault();
+    }
+
     private toggle() {
         this.open = !this.open;
     }
@@ -31,6 +35,7 @@ export class DirectoryNodeComponent {
 
     private drop(event) {
         var file = event.dataTransfer.getData("file");
+        this.draggedOver = false;
     }
 
     private dragover(event) {

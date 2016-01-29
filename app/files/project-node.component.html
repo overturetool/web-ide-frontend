@@ -1,4 +1,8 @@
-<div (drop)="drop($event)" (dragover)="dragover($event)" (dragleave)="dragleave($event)" [class.dragged-over]="draggedOver">
+<div (contextmenu)="contextmenu($event)"
+     (drop)="drop($event)"
+     (dragover)="dragover($event)"
+     (dragleave)="dragleave($event)"
+     [class.dragged-over]="draggedOver">
     <span class="icon open" (click)="toggle()" *ngIf="!open">&nbsp;</span>
     <span class="icon close" (click)="toggle()" *ngIf="open">&nbsp;</span>
     <span class="icon sl-project">&nbsp;</span>

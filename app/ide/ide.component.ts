@@ -14,13 +14,15 @@ import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
 import {LintService} from "../lint/LintService";
 import {HintService} from "../hint/HintService";
+import {ContextMenuService} from "../contextmenu/ContextMenuService";
+import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [EditorTabsComponent, DebugComponent, ProjectTreesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    directives: [ContextMenuComponent, EditorTabsComponent, DebugComponent, ProjectTreesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     pipes: [FilenamePipe],
-    providers: [FilesService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
+    providers: [ContextMenuService, FilesService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
 })
 export class IdeComponent {
 }
