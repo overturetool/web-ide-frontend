@@ -1,0 +1,10 @@
+<div (drop)="drop($event)" (dragover)="dragover($event)" (dragleave)="dragleave($event)" [class.dragged-over]="draggedOver">
+    <span class="icon open" (click)="toggle()" *ngIf="!open">&nbsp;</span>
+    <span class="icon close" (click)="toggle()" *ngIf="open">&nbsp;</span>
+    <span class="icon sl-project">&nbsp;</span>
+    <span class="name">{{project.name}}</span>
+</div>
+<div *ngIf="open">
+<directory-node *ngFor="#directory of (project.children | directories)" [directory]="directory"></directory-node>
+<file-node *ngFor="#file of (project.children | files)" [file]="file"></file-node>
+</div>

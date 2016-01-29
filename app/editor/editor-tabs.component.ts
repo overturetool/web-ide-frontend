@@ -22,6 +22,14 @@ export class EditorTabsComponent {
         this.filesService.currentFile$.subscribe(file => this.current = file);
     }
 
+    private click(event, file) {
+        if (event.button === 0)
+            this.select(file);
+        else if (event.button === 1) {
+            this.close(file);
+        }
+    }
+
     select(file: string) {
         this.filesService.openFile(file);
     }

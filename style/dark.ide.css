@@ -225,3 +225,7 @@ editor-tabs li.active {
 editor-tabs li button {
     color: #bbbbbb;
 }
+
+.dragged-over {
+    outline: 1px solid #ff6464;
+}

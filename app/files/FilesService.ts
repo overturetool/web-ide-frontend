@@ -9,20 +9,20 @@ import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class FilesService {
-    root$:BehaviorSubject<Array> = new BehaviorSubject([]);
+    projects$:BehaviorSubject<Array> = new BehaviorSubject([]);
     openFiles$:BehaviorSubject<Array<string>> = new BehaviorSubject([]);
     currentFile$:BehaviorSubject<string> = new BehaviorSubject(null);
 
     constructor(private serverService:ServerService, private session:SessionService) {
-        this._loadRoot();
+        this.loadProjects();
     }
 
     writeFile(path:string, content:string) {
-        return this.serverService.post(`vfs/${path}`, content);
+        return this.serverService.post(`vfs/writeFile/${path}`, content);
     }
 
     readFile(path:string):Observable<string> {
-        return this.serverService.get(`vfs/${path}`).map(res => res.text());
+        return this.serverService.get(`vfs/readFile/${path}`).map(res => res.text());
     }
 
     openFile(file:string):void {
@@ -50,10 +50,10 @@ export class FilesService {
         this.openFiles$.next(openFiles.filter(f => f !== file));
     }
 
-    private _loadRoot():void {
+    private loadProjects():void {
         this.serverService
-            .get(`vfs/${this.session.account}?depth=10`) // TODO: Should read whole tree and not just at a depth of 10
+            .get(`vfs/readdir/${this.session.account}?depth=-1`)
             .map(res => res.json())
-            .subscribe(files => this.root$.next(files));
+            .subscribe(projects => this.projects$.next(projects));
     }
 }

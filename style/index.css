@@ -165,3 +165,63 @@ editor {
 editor.active {
     display: block;
 }
+
+file-node {
+    padding-left: 40px;
+    display: block;
+}
+
+directory-node {
+    padding-left: 20px;
+    display: block;
+}
+
+project-trees {
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* IE/Edge */
+    user-select: none;
+    cursor: default;
+}
+
+project-node .name,
+file-node .name,
+directory-node .name {
+    height: 21px;
+    line-height: 21px;
+    display: inline-block;
+}
+
+file-node .name {
+    cursor: pointer;
+}
+
+.icon {
+    background: url(../images/icons.png) no-repeat;
+    height: 21px;
+    line-height: 21px;
+    width: 16px;
+    display: inline-block;
+}
+
+.icon.file {
+    background-position: -105px -70px;
+}
+.icon.directory {
+    background-position: -265px -6px;
+}
+.icon.sl-project {
+    background-position: -169px -69px;
+}
+.icon.pp-project {
+    background-position: -201px -69px;
+}
+.icon.rt-project {
+    background-position: -233px -69px;
+}
+.icon.open {
+    background-position: -8px -6px;
+}
+.icon.close {
+    background-position: -39px -6px;
+}

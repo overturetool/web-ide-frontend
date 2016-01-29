@@ -1,6 +1,6 @@
 import {EditorTabsComponent} from "../editor/editor-tabs.component";
 import {DebugComponent} from "../debug/debug.component";
-import {FilesComponent} from "../files/files.component";
+import {ProjectTreesComponent} from "../files/project-trees.component";
 import {PanelComponent} from "../panel/panel.component";
 import {PanelMenuComponent} from "../panel/panel-menu.component";
 import {OutlineComponent} from "../outline/outline.component";
@@ -18,7 +18,7 @@ import {HintService} from "../hint/HintService";
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [EditorTabsComponent, DebugComponent, FilesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    directives: [EditorTabsComponent, DebugComponent, ProjectTreesComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     pipes: [FilenamePipe],
     providers: [FilesService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
 })
