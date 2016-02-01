@@ -1,11 +1,11 @@
 <div draggable="true"
-     (contextmenu)="contextmenu($event)"
+     (contextmenu)="contextMenu.open($event)"
      (dragstart)="dragstart($event)">
     <span class="icon file">&nbsp;</span>
     <span class="name" (click)="click($event)">{{file.name}}</span>
 </div>
 
-<context-menu>
-    <button (click)="rename()">Rename</button>
-    <button (click)="delete()">Delete</button>
+<context-menu #contextMenu>
+    <div (click)="rename()" class="item">Rename</div>
+    <div (click)="delete()" class="item">Delete</div>
 </context-menu>

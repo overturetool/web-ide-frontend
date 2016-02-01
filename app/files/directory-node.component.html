@@ -1,5 +1,5 @@
 <div draggable="true"
-     (contextmenu)="contextmenu($event)"
+     (contextmenu)="contextMenu.open($event)"
      (dragstart)="dragstart($event)"
      (drop)="drop($event)"
      (dragover)="dragover($event)"
@@ -10,12 +10,12 @@
     <span class="name">{{directory.name}}</span>
 </div>
 
-<context-menu>
-    <button (click)="createFile()">Create file</button>
-    <button (click)="createDirectory()">Create directory</button>
+<context-menu #contextMenu>
+    <div (click)="createFile()" class="item">Create file</div>
+    <div (click)="createDirectory()" class="item">Create directory</div>
     <hr>
-    <button (click)="rename()">Rename</button>
-    <button (click)="delete()">Delete</button>
+    <div (click)="rename()" class="item">Rename</div>
+    <div (click)="delete()" class="item">Delete</div>
 </context-menu>
 
 <div *ngIf="open">

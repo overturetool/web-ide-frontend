@@ -15,10 +15,6 @@ export class FileNodeComponent {
 
     }
 
-    private contextmenu(event) {
-        event.preventDefault();
-    }
-
     private click(event) {
         if (event.button === 0)
             this.filesService.openFile(this.file.path);

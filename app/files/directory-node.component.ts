@@ -22,10 +22,6 @@ export class DirectoryNodeComponent {
 
     }
 
-    private contextmenu(event) {
-        event.preventDefault();
-    }
-
     private toggle() {
         this.open = !this.open;
     }
