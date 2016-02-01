@@ -1,10 +1,11 @@
 <div draggable="true"
-     (contextmenu)="contextMenu.open($event)"
+     (contextmenu)="click(); contextMenu.open($event)"
      (dragstart)="dragstart($event)"
      (drop)="drop($event)"
      (dragover)="dragover($event)"
      (dragleave)="dragleave($event)"
-     [class.dragged-over]="draggedOver">
+     [class.dragged-over]="draggedOver"
+     [class.active]="active">
     <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon directory">&nbsp;</span>
     <span class="name">{{directory.name}}</span>

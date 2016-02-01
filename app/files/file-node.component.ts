@@ -5,19 +5,22 @@ import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 
 @Component({
     selector: "file-node",
-    templateUrl:"app/files/file-node.component.html",
+    templateUrl: "app/files/file-node.component.html",
     directives: [ContextMenuComponent]
 })
 export class FileNodeComponent {
     @Input() file;
+    active:boolean = false;
 
-    constructor(private filesService: FilesService) {
+    constructor(private filesService:FilesService) {
 
     }
 
     private click(event) {
         if (event.button === 0)
             this.filesService.openFile(this.file.path);
+
+        this.filesService.selectFile(this);
     }
 
     private dragstart(event) {

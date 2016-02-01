@@ -1,8 +1,9 @@
-<div (contextmenu)="contextMenu.open($event)"
+<div (contextmenu)="click(); contextMenu.open($event)"
      (drop)="drop($event)"
      (dragover)="dragover($event)"
      (dragleave)="dragleave($event)"
-     [class.dragged-over]="draggedOver">
+     [class.dragged-over]="draggedOver"
+     [class.active]="active">
     <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon sl-project">&nbsp;</span>
     <span class="name">{{project.name}}</span>

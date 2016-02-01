@@ -23,6 +23,10 @@ export class ProjectNodeComponent {
 
     }
 
+    private click() {
+        this.filesService.selectFile(this);
+    }
+
     private toggle() {
         this.open = !this.open;
     }

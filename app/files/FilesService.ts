@@ -13,6 +13,7 @@ export class FilesService {
     openFiles$:BehaviorSubject<Array<string>> = new BehaviorSubject([]);
     currentFile$:BehaviorSubject<string> = new BehaviorSubject(null);
     movingFile;
+    selectedFile;
 
     constructor(private serverService:ServerService, private session:SessionService) {
         this.loadProjects();
@@ -53,6 +54,13 @@ export class FilesService {
 
     registerMove(file) {
         this.movingFile = file;
+    }
+
+    selectFile(file) {
+        if (this.selectedFile) this.selectedFile.active = false;
+
+        this.selectedFile = file;
+        file.active = true;
     }
 
     moveFileTo(target):void {

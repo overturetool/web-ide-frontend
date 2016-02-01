@@ -22,6 +22,10 @@ export class DirectoryNodeComponent {
 
     }
 
+    private click() {
+        this.filesService.selectFile(this);
+    }
+
     private toggle() {
         this.open = !this.open;
     }

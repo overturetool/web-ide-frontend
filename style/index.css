@@ -192,6 +192,12 @@ directory-node .name {
     display: inline-block;
 }
 
+project-node .active,
+file-node .active,
+directory-node .active {
+    background-color: #0d293e;
+}
+
 file-node .name {
     cursor: pointer;
 }
