@@ -67,6 +67,9 @@ export class FilesService {
                 this._updatePath(this.movingFile);
             });
 
+        var oldParent = this.movingFile.parent;
+        var newParent = target;
+
         // Remove from old position
         this.movingFile.parent.children.splice(this.movingFile.parent.children.indexOf(this.movingFile), 1);
 
@@ -76,6 +79,10 @@ export class FilesService {
 
         // Insert at new position
         target.children.push(this.movingFile);
+
+        // TODO: Fix this hack-ish solution to trigger change detection.
+        oldParent.children = oldParent.children.slice();
+        newParent.children = newParent.children.slice();
     }
 
     loadProjects():void {

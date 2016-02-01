@@ -36,7 +36,7 @@ export class ProjectNodeComponent {
     }
 
     private dragover(event) {
-        if (this.filesService.movingFile.path === `${this.project.path}/${this.filesService.movingFile.name}`) return;
+        if (this.filesService.movingFile.parent === this.project) return;
 
         event.preventDefault();
         this.draggedOver = true;

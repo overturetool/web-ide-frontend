@@ -17,7 +17,7 @@ export class DirectoryNodeComponent {
     private open:boolean = false;
     private draggedOver:boolean = false;
 
-    constructor(private filesService: FilesService) {
+    constructor(private filesService:FilesService) {
 
     }
 
@@ -39,7 +39,8 @@ export class DirectoryNodeComponent {
     }
 
     private dragover(event) {
-        if (this.filesService.movingFile.path === `${this.directory.path}/${this.filesService.movingFile.name}`) return;
+        if (this.filesService.movingFile.parent === this.directory) return;
+        if (this.filesService.movingFile === this.directory) return;
 
         event.preventDefault();
         this.draggedOver = true;
