@@ -229,3 +229,15 @@ editor-tabs li button {
 .dragged-over {
     outline: 1px solid #ff6464;
 }
+
+context-menu hr {
+    border: 0;
+    margin: 2px 0;
+    border-bottom: 1px solid #515151;
+}
+
+context-menu {
+    background-color: #3c3f41;
+    border: 1px solid #515151;
+    box-shadow: 0 0 15px black;
+}

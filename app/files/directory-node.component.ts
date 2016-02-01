@@ -5,11 +5,12 @@ import {FileNodeComponent} from "./file-node.component";
 import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
 import {NgZone} from "angular2/core";
+import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 
 @Component({
     selector: "directory-node",
     templateUrl: "app/files/directory-node.component.html",
-    directives: [DirectoryNodeComponent, FileNodeComponent],
+    directives: [DirectoryNodeComponent, FileNodeComponent, ContextMenuComponent],
     pipes: [DirectoriesPipe, FilesPipe]
 })
 export class DirectoryNodeComponent {

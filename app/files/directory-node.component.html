@@ -5,11 +5,19 @@
      (dragover)="dragover($event)"
      (dragleave)="dragleave($event)"
      [class.dragged-over]="draggedOver">
-    <span class="icon open" (click)="toggle()" *ngIf="!open">&nbsp;</span>
-    <span class="icon close" (click)="toggle()" *ngIf="open">&nbsp;</span>
+    <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon directory">&nbsp;</span>
     <span class="name">{{directory.name}}</span>
 </div>
+
+<context-menu>
+    <button (click)="createFile()">Create file</button>
+    <button (click)="createDirectory()">Create directory</button>
+    <hr>
+    <button (click)="rename()">Rename</button>
+    <button (click)="delete()">Delete</button>
+</context-menu>
+
 <div *ngIf="open">
     <directory-node *ngFor="#childDirectory of (directory.children | directories)"
                     [directory]="childDirectory"></directory-node>

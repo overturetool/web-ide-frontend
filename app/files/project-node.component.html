@@ -1,13 +1,21 @@
-<div (contextmenu)="contextmenu($event)"
+<div (contextmenu)="contextMenu.open($event)"
      (drop)="drop($event)"
      (dragover)="dragover($event)"
      (dragleave)="dragleave($event)"
      [class.dragged-over]="draggedOver">
-    <span class="icon open" (click)="toggle()" *ngIf="!open">&nbsp;</span>
-    <span class="icon close" (click)="toggle()" *ngIf="open">&nbsp;</span>
+    <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon sl-project">&nbsp;</span>
     <span class="name">{{project.name}}</span>
 </div>
+
+<context-menu #contextMenu>
+    <div (click)="createFile()" class="item">Create file</div>
+    <div (click)="createDirectory()" class="item">Create directory</div>
+    <hr>
+    <div (click)="rename()" class="item">Rename</div>
+    <div (click)="delete()" class="item">Delete</div>
+</context-menu>
+
 <div *ngIf="open">
 <directory-node *ngFor="#directory of (project.children | directories)" [directory]="directory"></directory-node>
 <file-node *ngFor="#file of (project.children | files)" [file]="file"></file-node>

@@ -6,11 +6,12 @@ import {FileNodeComponent} from "./file-node.component";
 import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
 import {NgZone} from "angular2/core";
+import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 
 @Component({
     selector: "project-node",
     templateUrl: "app/files/project-node.component.html",
-    directives: [DirectoryNodeComponent, FileNodeComponent],
+    directives: [DirectoryNodeComponent, FileNodeComponent, ContextMenuComponent],
     pipes: [DirectoriesPipe, FilesPipe]
 })
 export class ProjectNodeComponent {
@@ -20,10 +21,6 @@ export class ProjectNodeComponent {
 
     constructor(private filesService: FilesService) {
 
-    }
-
-    private contextmenu(event) {
-        event.preventDefault();
     }
 
     private toggle() {

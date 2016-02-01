@@ -219,9 +219,30 @@ file-node .name {
 .icon.rt-project {
     background-position: -233px -69px;
 }
-.icon.open {
+.icon.close {
     background-position: -8px -6px;
 }
-.icon.close {
+.icon.open {
     background-position: -39px -6px;
+}
+
+context-menu {
+    display: none;
+    width: 150px;
+    position: fixed;
+}
+
+context-menu.open {
+    display: block;
+}
+
+context-menu .item {
+    padding: 0 5px;
+    color: #bbbbbb;
+    height: 21px;
+    line-height: 21px;
+}
+
+context-menu .item:hover {
+    background-color: #2f65ca;
 }

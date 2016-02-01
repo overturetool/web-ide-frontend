@@ -4,3 +4,8 @@
     <span class="icon file">&nbsp;</span>
     <span class="name" (click)="click($event)">{{file.name}}</span>
 </div>
+
+<context-menu>
+    <button (click)="rename()">Rename</button>
+    <button (click)="delete()">Delete</button>
+</context-menu>
