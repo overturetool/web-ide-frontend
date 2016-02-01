@@ -23,6 +23,6 @@ export class FileNodeComponent {
     }
 
     private dragstart(event) {
-        event.dataTransfer.setData("file", this.file);
+        this.filesService.registerMove(this.file);
     }
 }

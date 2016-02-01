@@ -4,6 +4,7 @@ import {Input} from "angular2/core";
 import {FileNodeComponent} from "./file-node.component";
 import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
+import {NgZone} from "angular2/core";
 
 @Component({
     selector: "directory-node",
@@ -29,23 +30,22 @@ export class DirectoryNodeComponent {
     }
 
     private dragstart(event) {
-        event.dataTransfer.setData("file", this.directory);
-        event.dataTransfer.effectAllowed = "move";
+        this.filesService.registerMove(this.directory);
     }
 
-    private drop(event) {
-        var file = event.dataTransfer.getData("file");
+    private drop() {
+        this.filesService.moveFileTo(this.directory);
         this.draggedOver = false;
     }
 
     private dragover(event) {
-        event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
+        if (this.filesService.movingFile.path === `${this.directory.path}/${this.filesService.movingFile.name}`) return;
 
+        event.preventDefault();
         this.draggedOver = true;
     }
 
-    private dragleave(event) {
+    private dragleave() {
         this.draggedOver = false;
     }
 }
