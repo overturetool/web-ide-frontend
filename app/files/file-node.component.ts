@@ -11,9 +11,20 @@ import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 export class FileNodeComponent {
     @Input() file;
     active:boolean = false;
+    renaming:boolean = false;
+    newName:string;
 
     constructor(private filesService:FilesService) {
 
+    }
+
+    startRename() {
+        this.renaming = true;
+        this.newName = this.file.name;
+    }
+
+    rename() {
+        this.filesService.renameFile(this.file);
     }
 
     delete() {

@@ -241,3 +241,15 @@ context-menu {
     border: 1px solid #515151;
     box-shadow: 0 0 15px black;
 }
+
+project-node input,
+file-node input,
+directory-node input {
+    background-color: transparent;
+    border: 1px solid #515151;
+    color: #bbbbbb;
+    padding: 2px 3px;
+    margin: 1px;
+    height: 16px;
+    outline: none;
+}

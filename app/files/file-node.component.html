@@ -3,10 +3,11 @@
      (dragstart)="dragstart($event)"
      [class.active]="active">
     <span class="icon file">&nbsp;</span>
-    <span class="name" (click)="click($event)">{{file.name}}</span>
+    <input *ngIf="renaming" [(ngModel)]="newName">
+    <span *ngIf="!renaming" class="name" (click)="click($event)">{{file.name}}</span>
 </div>
 
 <context-menu #contextMenu>
-    <div (click)="rename()" class="item">Rename file</div>
+    <div (click)="startRename()" class="item">Rename file</div>
     <div (click)="delete()" class="item">Delete file</div>
 </context-menu>
