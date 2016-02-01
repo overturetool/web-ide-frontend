@@ -16,6 +16,10 @@ export class FileNodeComponent {
 
     }
 
+    delete() {
+        this.filesService.deleteFile(this.file);
+    }
+
     private click(event) {
         if (event.button === 0)
             this.filesService.openFile(this.file.path);

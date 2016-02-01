@@ -52,6 +52,24 @@ export class FilesService {
         this.openFiles$.next(openFiles.filter(f => f !== file));
     }
 
+    deleteFile(file) {
+        if (file.type === "file") this.closeFile(file.path);
+
+        // Remove from file tree
+        if (file.parent) {
+            var oldParent = file.parent;
+            file.parent.children.splice(file.parent.children.indexOf(file), 1);
+            oldParent.children = oldParent.children.slice(); // TODO: Fix this hack-ish solution to trigger change detection.
+        }
+
+        this.serverService.delete(`vfs/delete/${file.path}`).subscribe();
+    }
+
+    renameFile(file) {
+        // TODO
+        return this.serverService.put(`vfs/rename/${file.path}`);
+    }
+
     registerMove(file) {
         this.movingFile = file;
     }
@@ -64,7 +82,7 @@ export class FilesService {
     }
 
     moveFileTo(target):void {
-        this.serverService.put(`vfs/move/${this.movingFile.path}`, { destination: target.path })
+        this.serverService.put(`vfs/move/${this.movingFile.path}`, {destination: target.path})
             //.map(res => res.json()) TODO: Remove this comment
             .subscribe(newName => {
                 return; // TODO: Remove this.

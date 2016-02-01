@@ -37,4 +37,8 @@ export class ServerService {
 
         return this.http.put(`http://${this.root}/${path}`, JSON.stringify(body), {headers: headers});
     }
+
+    delete(path:string):Observable {
+        return this.http.delete(`http://${this.root}/${path}`);
+    }
 }

@@ -22,6 +22,10 @@ export class DirectoryNodeComponent {
 
     }
 
+    delete() {
+        this.filesService.deleteFile(this.directory);
+    }
+
     private click() {
         this.filesService.selectFile(this);
     }

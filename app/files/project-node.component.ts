@@ -23,6 +23,10 @@ export class ProjectNodeComponent {
 
     }
 
+    delete() {
+        this.filesService.deleteFile(this.project);
+    }
+
     private click() {
         this.filesService.selectFile(this);
     }
