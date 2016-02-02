@@ -6,14 +6,15 @@
      [class.active]="active">
     <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon sl-project">&nbsp;</span>
-    <span class="name">{{project.name}}</span>
+    <span *ngIf="renaming" [ngFormModel]="renameForm"><input ngControl="name" (blur)="onBlur()" (keyup)="onKeyup($event)"></span>
+    <span *ngIf="!renaming" class="name">{{project.name}}</span>
 </div>
 
 <context-menu #contextMenu>
     <div (click)="createFile()" class="item">Create file</div>
     <div (click)="createDirectory()" class="item">Create directory</div>
     <hr>
-    <div (click)="rename()" class="item">Rename project</div>
+    <div (click)="startRename()" class="item">Rename project</div>
     <div (click)="delete()" class="item">Delete project</div>
 </context-menu>
 

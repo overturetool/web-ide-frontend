@@ -9,7 +9,7 @@ import {Observable} from "rxjs/Observable";
 import {FilesService} from "./FilesService";
 
 @Injectable()
-export class ProjectTreesService {
+export class WorkspaceService {
     selectedComponent;
     renamingComponent;
     renamingNode;
@@ -19,7 +19,7 @@ export class ProjectTreesService {
     }
 
     createFile(parent) {
-        var name = "new_file";
+        var name = "new-file";
 
         var file = {
             name: name,
@@ -33,11 +33,11 @@ export class ProjectTreesService {
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();
 
-        this.filesService.writeFile(file.path, "\n").subscribe();
+        this.filesService.createFile(file).subscribe();
     }
 
     createDirectory(parent) {
-        var name = "new_directory";
+        var name = "new-directory";
 
         var directory = {
             name: name,
@@ -52,8 +52,7 @@ export class ProjectTreesService {
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();
 
-        // TODO: Add create directory method
-        //this.filesService.writeFile(directory.path, "\n");
+        this.filesService.createDirectory(directory).subscribe();
     }
 
     startRename(component, node) {
@@ -65,32 +64,20 @@ export class ProjectTreesService {
         this.renamingNode = node;
     }
 
-    renameTo(name) {/*
+    renameTo(name) {
         this.filesService.renameFile(this.renamingNode, name)
             .subscribe(newName => {
-                if (this.movingNode.name === newName) return;
+                if (this.renamingNode.name === newName) return;
 
                 // Update state in case of name collision
-                this.movingNode.name = newName;
-                this._updatePath(this.movingNode);
+                this.renamingNode.name = newName;
+                this.updatePath(this.renamingNode);
             });
 
-        var oldParent = this.movingNode.parent;
-        var newParent = target;
+        this.renamingNode.name = name;
 
-        // Remove from old position
-        this.movingNode.parent.children.splice(this.movingNode.parent.children.indexOf(this.movingNode), 1);
-
-        // Update state of moving file
-        this.movingNode.parent = target; // Update parent reference
-        this._updatePath(this.movingNode); // Update path string of node and subtree
-
-        // Insert at new position
-        target.children.push(this.movingNode);
-
-        // TODO: Fix this hack-ish solution to trigger change detection.
-        oldParent.children = oldParent.children.slice();
-        newParent.children = newParent.children.slice();*/
+        // Update path string of node and subtree
+        this.updatePath(this.renamingNode);
     }
 
     delete(node) {
@@ -125,7 +112,7 @@ export class ProjectTreesService {
 
                 // Update state in case of name collision
                 this.movingNode.name = newName;
-                this._updatePath(this.movingNode);
+                this.updatePath(this.movingNode);
             });
 
         var oldParent = this.movingNode.parent;
@@ -136,7 +123,7 @@ export class ProjectTreesService {
 
         // Update state of moving file
         this.movingNode.parent = target; // Update parent reference
-        this._updatePath(this.movingNode); // Update path string of node and subtree
+        this.updatePath(this.movingNode); // Update path string of node and subtree
 
         // Insert at new position
         target.children.push(this.movingNode);
@@ -146,10 +133,10 @@ export class ProjectTreesService {
         newParent.children = newParent.children.slice();
     }
 
-    private _updatePath(node) {
+    private updatePath(node) {
         node.path = `${node.parent.path}/${node.name}`;
 
         if (node.children !== undefined)
-            node.children.forEach(child => this._updatePath(child));
+            node.children.forEach(child => this.updatePath(child));
     }
 }

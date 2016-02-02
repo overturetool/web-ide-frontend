@@ -6,8 +6,10 @@ import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
 import {NgZone} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
-import {ProjectTreesService} from "./ProjectTreesService";
 import {ViewChild} from "angular2/core";
+import {RegexValidator} from "../misc/validators/RegexValidator";
+import {FormBuilder} from "angular2/common";
+import {WorkspaceService} from "./WorkspaceService";
 
 @Component({
     selector: "directory-node",
@@ -21,17 +23,48 @@ export class DirectoryNodeComponent {
 
     private open:boolean = false;
     private draggedOver:boolean = false;
+    active:boolean = false;
+    renaming:boolean = false;
+    renameForm;
 
-    constructor(private projectTreesService:ProjectTreesService) {
+    constructor(private workspaceService:WorkspaceService,
+                private fb:FormBuilder) {
+        this.renameForm = this.fb.group({
+            name: ['', RegexValidator.regex(/^[\w\-. ]+$/)]
+        });
+    }
 
+    startRename() {
+        this.workspaceService.startRename(this, this.directory);
+        this.renameForm.controls.name.updateValue(this.directory.name);
+    }
+
+    private onBlur() {
+        var name = this.renameForm.controls.name;
+
+        if (name.valid)
+            this.workspaceService.renameTo(name.value);
+
+        this.renaming = false;
+    }
+
+    private onKeyup(event) {
+        if (event.keyCode !== 13) return;
+
+        var name = this.renameForm.controls.name;
+
+        if (name.valid) {
+            this.workspaceService.renameTo(name.value);
+            this.renaming = false;
+        }
     }
 
     delete() {
-        this.projectTreesService.delete(this.directory);
+        this.workspaceService.delete(this.directory);
     }
 
     private onContextMenu(event) {
-        this.projectTreesService.select(this);
+        this.workspaceService.select(this);
         this.contextMenu.open(event);
     }
 
@@ -40,17 +73,17 @@ export class DirectoryNodeComponent {
     }
 
     private dragstart(event) {
-        this.projectTreesService.startMove(this.directory);
+        this.workspaceService.startMove(this.directory);
     }
 
     private drop() {
-        this.projectTreesService.moveTo(this.directory);
+        this.workspaceService.moveTo(this.directory);
         this.draggedOver = false;
     }
 
     private dragover(event) {
-        if (this.projectTreesService.movingNode.parent === this.directory) return;
-        if (this.projectTreesService.movingNode === this.directory) return;
+        if (this.workspaceService.movingNode.parent === this.directory) return;
+        if (this.workspaceService.movingNode === this.directory) return;
 
         event.preventDefault();
         this.draggedOver = true;
