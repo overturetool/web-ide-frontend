@@ -225,3 +225,37 @@ editor-tabs li.active {
 editor-tabs li button {
     color: #bbbbbb;
 }
+
+.dragged-over {
+    outline: 1px solid #ff6464;
+}
+
+context-menu hr {
+    border: 0;
+    margin: 2px 0;
+    border-bottom: 1px solid #515151;
+}
+
+context-menu {
+    background-color: #3c3f41;
+    border: 1px solid #515151;
+    box-shadow: 0 0 15px black;
+}
+
+project-node input,
+file-node input,
+directory-node input {
+    background-color: transparent;
+    border: 1px solid #515151;
+    color: #bbbbbb;
+    padding: 2px 3px;
+    margin: 1px;
+    height: 16px;
+    outline: none;
+}
+
+project-node input.ng-invalid,
+file-node input.ng-invalid,
+directory-node input.ng-invalid {
+    border: 1px solid #ac3f3c;
+}

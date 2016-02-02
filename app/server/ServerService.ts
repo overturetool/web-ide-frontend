@@ -1,6 +1,7 @@
 import {Injectable} from "angular2/core"
 import {Http} from "angular2/http";
 import {Observable} from "rxjs/Observable";
+import {Headers} from "angular2/http";
 
 @Injectable()
 export class ServerService {
@@ -17,7 +18,27 @@ export class ServerService {
         return this.http.get(`http://${this.root}/${path}`);
     }
 
-    post(path:string, body:string):Observable {
-        return this.http.post(`http://${this.root}/${path}`, body);
+    post(path:string, body:any):Observable {
+        if (typeof(body) !== "object")
+            return this.http.post(`http://${this.root}/${path}`, body);
+
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this.http.post(`http://${this.root}/${path}`, JSON.stringify(body), {headers: headers});
+    }
+
+    put(path:string, body:any):Observable {
+        if (typeof(body) !== "object")
+            return this.http.put(`http://${this.root}/${path}`, body);
+
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this.http.put(`http://${this.root}/${path}`, JSON.stringify(body), {headers: headers});
+    }
+
+    delete(path:string):Observable {
+        return this.http.delete(`http://${this.root}/${path}`);
     }
 }

@@ -1,7 +1,7 @@
 <ul>
     <li *ngFor="#file of files"
         [class.active]="file === current">
-        <button (click)="select(file)">{{file | filename}}</button><button (click)="close(file)" class="glyph close"></button>
+        <button (click)="click($event, file)">{{file | filename}}</button><button (click)="close(file)" class="glyph close"></button>
     </li>
 </ul>
 <editor
