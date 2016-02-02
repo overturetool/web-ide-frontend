@@ -12,8 +12,6 @@ export class FilesService {
     projects$:BehaviorSubject<Array> = new BehaviorSubject([]);
     openFiles$:BehaviorSubject<Array<string>> = new BehaviorSubject([]);
     currentFile$:BehaviorSubject<string> = new BehaviorSubject(null);
-    movingFile;
-    selectedFile;
 
     constructor(private serverService:ServerService, private session:SessionService) {
         this.loadProjects();
@@ -53,62 +51,15 @@ export class FilesService {
     }
 
     deleteFile(file) {
-        if (file.type === "file") this.closeFile(file.path);
-
-        // Remove from file tree
-        if (file.parent) {
-            var oldParent = file.parent;
-            file.parent.children.splice(file.parent.children.indexOf(file), 1);
-            oldParent.children = oldParent.children.slice(); // TODO: Fix this hack-ish solution to trigger change detection.
-        }
+        if (file.type === "file")
+            this.closeFile(file.path);
 
         this.serverService.delete(`vfs/delete/${file.path}`).subscribe();
     }
 
-    renameFile(file) {
-        // TODO
-        return this.serverService.put(`vfs/rename/${file.path}`);
-    }
-
-    registerMove(file) {
-        this.movingFile = file;
-    }
-
-    selectFile(file) {
-        if (this.selectedFile) this.selectedFile.active = false;
-
-        this.selectedFile = file;
-        file.active = true;
-    }
-
-    moveFileTo(target):void {
-        this.serverService.put(`vfs/move/${this.movingFile.path}`, {destination: target.path})
-            //.map(res => res.json()) TODO: Remove this comment
-            .subscribe(newName => {
-                return; // TODO: Remove this.
-                if (this.movingFile.name === newName) return;
-
-                // Update state in case of name collision
-                this.movingFile.name = newName;
-                this._updatePath(this.movingFile);
-            });
-
-        var oldParent = this.movingFile.parent;
-        var newParent = target;
-
-        // Remove from old position
-        this.movingFile.parent.children.splice(this.movingFile.parent.children.indexOf(this.movingFile), 1);
-
-        // Update state of moving file
-        this.movingFile.parent = target; // Update parent reference
-        this._updatePath(this.movingFile); // Update path string of node and subtree
-
-        // Insert at new position
-        target.children.push(this.movingFile);
-
-        // TODO: Fix this hack-ish solution to trigger change detection.
-        oldParent.children = oldParent.children.slice();
-        newParent.children = newParent.children.slice();
+    moveFile(file, target):Observable {
+        return this.serverService.put(`vfs/move/${file.path}`, {destination: target.path})
+            .map(res => res.text());
     }
 
     loadProjects():void {

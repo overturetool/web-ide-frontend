@@ -2,6 +2,10 @@ import {ElementRef, Component} from "angular2/core";
 import {FilesService} from "./FilesService";
 import {Input} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
+import {FormBuilder} from "angular2/common";
+import {Validators} from "angular2/common";
+import {RegexValidator} from "../misc/validators/RegexValidator";
+import {ProjectTreesService} from "./ProjectTreesService";
 
 @Component({
     selector: "file-node",
@@ -12,19 +16,23 @@ export class FileNodeComponent {
     @Input() file;
     active:boolean = false;
     renaming:boolean = false;
-    newName:string;
+    renameForm;
 
-    constructor(private filesService:FilesService) {
+    constructor(private projectTreesService:ProjectTreesService,
+                private filesService:FilesService,
+                private fb:FormBuilder) {
+        this.renameForm = this.fb.group({
+            name: ['', RegexValidator.regex(/^[\w\-. ]+$/)]
+        });
 
+        this.renameForm.controls.name.valueChanges
+            .filter(() => this.renaming)
+            .subscribe(name => this.projectTreesService.renameTo(name));
     }
 
     startRename() {
         this.renaming = true;
-        this.newName = this.file.name;
-    }
-
-    rename() {
-        this.filesService.renameFile(this.file);
+        this.renameForm.controls.name.updateValue(this.file.name);
     }
 
     delete() {
@@ -35,10 +43,10 @@ export class FileNodeComponent {
         if (event.button === 0)
             this.filesService.openFile(this.file.path);
 
-        this.filesService.selectFile(this);
+        this.projectTreesService.select(this);
     }
 
     private dragstart(event) {
-        this.filesService.registerMove(this.file);
+        this.projectTreesService.startMove(this.file);
     }
 }
