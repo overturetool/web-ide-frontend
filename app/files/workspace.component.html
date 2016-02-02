@@ -1,0 +1,3 @@
+<div *ngIf="workspace">
+    <project-node *ngFor="#project of workspace.children" [project]="project"></project-node>
+</div>

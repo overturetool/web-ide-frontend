@@ -7,8 +7,10 @@ import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
 import {NgZone} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
-import {ProjectTreesService} from "./ProjectTreesService";
 import {ViewChild} from "angular2/core";
+import {FormBuilder} from "angular2/common";
+import {RegexValidator} from "../misc/validators/RegexValidator";
+import {WorkspaceService} from "./WorkspaceService";
 
 @Component({
     selector: "project-node",
@@ -22,25 +24,56 @@ export class ProjectNodeComponent {
 
     private open:boolean = false;
     private draggedOver:boolean = false;
+    active:boolean = false;
+    renaming:boolean = false;
+    renameForm;
 
-    constructor(private projectTreesService:ProjectTreesService) {
+    constructor(private workspaceService:WorkspaceService,
+                private fb:FormBuilder) {
+        this.renameForm = this.fb.group({
+            name: ['', RegexValidator.regex(/^[\w\-. ]+$/)]
+        });
+    }
 
+    startRename() {
+        this.workspaceService.startRename(this, this.project);
+        this.renameForm.controls.name.updateValue(this.project.name);
+    }
+
+    private onBlur() {
+        var name = this.renameForm.controls.name;
+
+        if (name.valid)
+            this.workspaceService.renameTo(name.value);
+
+        this.renaming = false;
+    }
+
+    private onKeyup(event) {
+        if (event.keyCode !== 13) return;
+
+        var name = this.renameForm.controls.name;
+
+        if (name.valid) {
+            this.workspaceService.renameTo(name.value);
+            this.renaming = false;
+        }
     }
 
     delete() {
-        this.projectTreesService.delete(this.project);
+        this.workspaceService.delete(this.project);
     }
 
     private createFile() {
-        this.projectTreesService.createFile(this.project);
+        this.workspaceService.createFile(this.project);
     }
 
     private createDirectory() {
-        this.projectTreesService.createDirectory(this.project);
+        this.workspaceService.createDirectory(this.project);
     }
 
     private onContextMenu(event) {
-        this.projectTreesService.select(this);
+        this.workspaceService.select(this);
         this.contextMenu.open(event);
     }
 
@@ -49,12 +82,12 @@ export class ProjectNodeComponent {
     }
 
     private drop() {
-        this.projectTreesService.moveTo(this.project);
+        this.workspaceService.moveTo(this.project);
         this.draggedOver = false;
     }
 
     private dragover(event) {
-        if (this.projectTreesService.movingNode.parent === this.project) return;
+        if (this.workspaceService.movingNode.parent === this.project) return;
 
         event.preventDefault();
         this.draggedOver = true;

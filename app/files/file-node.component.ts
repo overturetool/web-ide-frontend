@@ -5,8 +5,8 @@ import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 import {FormBuilder} from "angular2/common";
 import {Validators} from "angular2/common";
 import {RegexValidator} from "../misc/validators/RegexValidator";
-import {ProjectTreesService} from "./ProjectTreesService";
 import {ViewChild} from "angular2/core";
+import {WorkspaceService} from "./WorkspaceService";
 
 @Component({
     selector: "file-node",
@@ -21,7 +21,7 @@ export class FileNodeComponent {
     renaming:boolean = false;
     renameForm;
 
-    constructor(private projectTreesService:ProjectTreesService,
+    constructor(private workspaceService:WorkspaceService,
                 private filesService:FilesService,
                 private fb:FormBuilder) {
         this.renameForm = this.fb.group({
@@ -30,19 +30,19 @@ export class FileNodeComponent {
     }
 
     startRename() {
-        this.projectTreesService.startRename(this, this.file);
+        this.workspaceService.startRename(this, this.file);
         this.renameForm.controls.name.updateValue(this.file.name);
     }
 
     delete() {
-        this.projectTreesService.delete(this.file);
+        this.workspaceService.delete(this.file);
     }
 
     private onBlur() {
         var name = this.renameForm.controls.name;
 
         if (name.valid)
-            this.projectTreesService.renameTo(name.value);
+            this.workspaceService.renameTo(name.value);
 
         this.renaming = false;
     }
@@ -53,13 +53,13 @@ export class FileNodeComponent {
         var name = this.renameForm.controls.name;
 
         if (name.valid) {
-            this.projectTreesService.renameTo(name.value);
+            this.workspaceService.renameTo(name.value);
             this.renaming = false;
         }
     }
 
     private onContextMenu(event) {
-        this.projectTreesService.select(this);
+        this.workspaceService.select(this);
         this.contextMenu.open(event);
     }
 
@@ -67,10 +67,10 @@ export class FileNodeComponent {
         if (event.button === 0)
             this.filesService.openFile(this.file.path);
 
-        this.projectTreesService.select(this);
+        this.workspaceService.select(this);
     }
 
     private dragstart(event) {
-        this.projectTreesService.startMove(this.file);
+        this.workspaceService.startMove(this.file);
     }
 }
