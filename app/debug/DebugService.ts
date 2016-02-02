@@ -22,7 +22,7 @@ export class DebugService {
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
 
-    connect(file:string, entry:string):void {
+    connect(file, entry:string):void {
         this.status = "";
         this.context = [];
         this.stack = [];

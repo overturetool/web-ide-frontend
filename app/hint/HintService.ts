@@ -19,7 +19,7 @@ export class HintService {
         while (/[\w$]+/.test(lineText.charAt(end))) ++end;
 
         this.serverService
-            .get(`codecompletion/${file}?line=${cur.line}&column=${cur.ch}`)
+            .get(`codecompletion/${file.path}?line=${cur.line}&column=${cur.ch}`)
             .map(res => res.json().map(hint => hint.replacementString))
             .subscribe(hints => callback({
                 list: hints,

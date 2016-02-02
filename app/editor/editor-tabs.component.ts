@@ -4,18 +4,16 @@ import {Output} from "angular2/core";
 import {EventEmitter} from "angular2/core";
 import {FilesService} from "../files/FilesService";
 import {EditorComponent} from "./editor.component";
-import {FilenamePipe} from "../files/filename.pipe";
 import {OnInit} from "angular2/core";
 
 @Component({
     selector: 'editor-tabs',
     templateUrl: 'app/editor/editor-tabs.component.html',
-    directives: [EditorComponent],
-    pipes: [FilenamePipe]
+    directives: [EditorComponent]
 })
 export class EditorTabsComponent {
-    files:Array<string>;
-    current:string;
+    files:Array;
+    current;
 
     constructor(private filesService:FilesService) {
         this.filesService.openFiles$.subscribe(files => this.files = files);
@@ -30,11 +28,11 @@ export class EditorTabsComponent {
         }
     }
 
-    select(file: string) {
+    select(file) {
         this.filesService.openFile(file);
     }
 
-    close(file: string) {
+    close(file) {
         this.filesService.closeFile(file);
     }
 }

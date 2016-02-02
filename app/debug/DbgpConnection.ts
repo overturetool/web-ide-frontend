@@ -15,13 +15,10 @@ export class DbgpConnection {
     constructor(private server:ServerService) {
     }
 
-    connect(path:string, entry:string):Promise<Object> {
+    connect(file, entry:string):Promise<Object> {
         this.close();
 
-        var pathParts = path.split('/');
-
-        var workspace = pathParts[0];
-        var project = pathParts[1];
+        var [workspace, project] = file.path.split('/');
 
         this.socket = this.server.connect(`debug/${workspace}/${project}?entry=${btoa(entry)}&type=vdmsl`);
         this.socket.addEventListener("message", e => this.onMessage(e.data));

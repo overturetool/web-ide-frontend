@@ -11,22 +11,22 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class FilesService {
     workspace$:Subject = new Subject();
-    openFiles$:BehaviorSubject<Array<string>> = new BehaviorSubject([]);
-    currentFile$:BehaviorSubject<string> = new BehaviorSubject(null);
+    openFiles$:BehaviorSubject<Array> = new BehaviorSubject([]);
+    currentFile$:BehaviorSubject = new BehaviorSubject(null);
 
     constructor(private serverService:ServerService, private session:SessionService) {
         this.loadWorkspace();
     }
 
-    writeFile(path:string, content:string) {
-        return this.serverService.post(`vfs/writeFile/${path}`, content);
+    writeFile(file, content:string):void {
+        this.serverService.post(`vfs/writeFile/${file.path}`, content).subscribe();
     }
 
-    readFile(path:string):Observable<string> {
-        return this.serverService.get(`vfs/readFile/${path}`).map(res => res.text());
+    readFile(file):Observable<string> {
+        return this.serverService.get(`vfs/readFile/${file.path}`).map(res => res.text());
     }
 
-    openFile(file:string):void {
+    openFile(file):void {
         var openFiles = this.openFiles$.getValue();
         if (openFiles.indexOf(file) === -1)
             this.openFiles$.next([...openFiles, file]);
@@ -36,15 +36,17 @@ export class FilesService {
             this.currentFile$.next(file);
     }
 
-    closeFile(file:string):void {
+    closeFile(file):void {
         var openFiles = this.openFiles$.getValue();
 
         if (this.currentFile$.getValue() === file) {
             var index = openFiles.indexOf(file);
 
             if (index > 0)
+                // Open file to the left
                 this.currentFile$.next(openFiles[index - 1]);
             else
+                // Open file to the right or no file
                 this.currentFile$.next(index + 1 < openFiles.length ? openFiles[index + 1] : null);
         }
 
@@ -53,7 +55,7 @@ export class FilesService {
 
     deleteFile(file) {
         if (file.type === "file")
-            this.closeFile(file.path);
+            this.closeFile(file);
 
         this.serverService.delete(`vfs/delete/${file.path}`).subscribe();
     }
@@ -64,9 +66,7 @@ export class FilesService {
     }
 
     renameFile(file, newName) {
-        var path = `${file.parent.path}/${newName}`;
-
-        return this.serverService.put(`vfs/move/${file.path}`, {destination:path})
+        return this.serverService.put(`vfs/move/${file.path}`, {destination:`${file.parent.path}/${newName}`})
             .map(res => res.text());
     }
 

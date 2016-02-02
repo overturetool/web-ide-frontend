@@ -19,14 +19,15 @@ export class LintService {
     private root:string = "lint";
 
     constructor(private server: ServerService) {
+
     }
 
-    lint(file:string, callback:(data:[Marker])=>void):void {
+    lint(file, callback:(data:[Marker])=>void):void {
         if (!file) {
             callback([]);
         }
         else {
-            this.server.get(`${this.root}/${file}`)
+            this.server.get(`${this.root}/${file.path}`)
                 .map(res => res.json())
                 .subscribe(result => {
                     var markers = [].concat(

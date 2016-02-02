@@ -9,21 +9,23 @@ import {BehaviorSubject} from "rxjs/Rx";
 
 @Injectable()
 export class OutlineService {
-    items$: Subject<Array<OutlineItem>> = new Subject();
+    items$:Subject<Array<OutlineItem>> = new Subject();
     highlight$:Subject<EditorSection> = new Subject();
     focus$:Subject<number> = new Subject();
 
     constructor(private serverService:ServerService,
                 private filesService:FilesService) {
+        this.filesService.currentFile$.subscribe(file => this.update(file));
     }
 
-    update() {
-        var file = this.filesService.currentFile$.getValue();
-        if (!file) return;
-
-        this.serverService.get(`outline/${file}`)
-            .map(res => res.json())
-            .subscribe(items => this.items$.next(items));
+    update(file) {
+        if (!file) {
+            this.items$.next([]);
+        } else {
+            this.serverService.get(`outline/${file.path}`)
+                .map(res => res.json())
+                .subscribe(items => this.items$.next(items));
+        }
     }
 
     highlight(item:EditorSection):void {
