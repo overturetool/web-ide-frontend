@@ -6,6 +6,7 @@ import {FormBuilder} from "angular2/common";
 import {Validators} from "angular2/common";
 import {RegexValidator} from "../misc/validators/RegexValidator";
 import {ProjectTreesService} from "./ProjectTreesService";
+import {ViewChild} from "angular2/core";
 
 @Component({
     selector: "file-node",
@@ -14,6 +15,8 @@ import {ProjectTreesService} from "./ProjectTreesService";
 })
 export class FileNodeComponent {
     @Input() file;
+    @ViewChild(ContextMenuComponent) contextMenu:ContextMenuComponent;
+
     active:boolean = false;
     renaming:boolean = false;
     renameForm;
@@ -31,12 +34,17 @@ export class FileNodeComponent {
     }
 
     startRename() {
-        this.renaming = true;
+        this.projectTreesService.startRename(this);
         this.renameForm.controls.name.updateValue(this.file.name);
     }
 
     delete() {
-        this.filesService.deleteFile(this.file);
+        this.projectTreesService.delete(this.file);
+    }
+
+    private onContextMenu(event) {
+        this.projectTreesService.select(this);
+        this.contextMenu.open(event);
     }
 
     private click(event) {

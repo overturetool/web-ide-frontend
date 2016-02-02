@@ -8,6 +8,7 @@ import {FilesPipe} from "./files.pipe";
 import {NgZone} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 import {ProjectTreesService} from "./ProjectTreesService";
+import {ViewChild} from "angular2/core";
 
 @Component({
     selector: "project-node",
@@ -17,19 +18,22 @@ import {ProjectTreesService} from "./ProjectTreesService";
 })
 export class ProjectNodeComponent {
     @Input() project;
+    @ViewChild(ContextMenuComponent) contextMenu:ContextMenuComponent;
+
     private open:boolean = false;
     private draggedOver:boolean = false;
 
-    constructor(private projectTreesService:ProjectTreesService, private filesService: FilesService) {
+    constructor(private projectTreesService:ProjectTreesService) {
 
     }
 
     delete() {
-        this.filesService.deleteFile(this.project);
+        this.projectTreesService.delete(this.project);
     }
 
-    private click() {
+    private onContextMenu(event) {
         this.projectTreesService.select(this);
+        this.contextMenu.open(event);
     }
 
     private toggle() {

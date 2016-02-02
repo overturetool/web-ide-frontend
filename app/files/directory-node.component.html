@@ -1,5 +1,5 @@
 <div draggable="true"
-     (contextmenu)="click(); contextMenu.open($event)"
+     (contextmenu)="onContextMenu($event)"
      (dragstart)="dragstart($event)"
      (drop)="drop($event)"
      (dragover)="dragover($event)"
@@ -11,7 +11,7 @@
     <span class="name">{{directory.name}}</span>
 </div>
 
-<context-menu #contextMenu>
+<context-menu>
     <div (click)="createFile()" class="item">Create file</div>
     <div (click)="createDirectory()" class="item">Create directory</div>
     <hr>

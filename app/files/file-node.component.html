@@ -1,10 +1,10 @@
-<div (contextmenu)="click($event); contextMenu.open($event)" draggable="true" (dragstart)="dragstart($event)" [class.active]="active">
+<div (contextmenu)="onContextMenu($event)" draggable="true" (dragstart)="dragstart($event)" [class.active]="active">
     <span class="icon file">&nbsp;</span>
     <span *ngIf="renaming" [ngFormModel]="renameForm"><input ngControl="name"></span>
     <span *ngIf="!renaming" class="name" (click)="click($event)">{{file.name}}</span>
 </div>
 
-<context-menu #contextMenu>
+<context-menu>
     <div (click)="startRename()" class="item">Rename file</div>
     <div (click)="delete()" class="item">Delete file</div>
 </context-menu>

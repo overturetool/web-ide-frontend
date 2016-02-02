@@ -22,6 +22,7 @@ export class ProjectTreesService {
             this.renamingComponent.renaming = false;
 
         this.renamingComponent = component;
+        this.renamingComponent.renaming = true;
     }
 
     renameTo(name) {
@@ -46,7 +47,7 @@ export class ProjectTreesService {
             this.selectedComponent.active = false;
 
         this.selectedComponent = component;
-        component.active = true;
+        this.selectedComponent.active = true;
     }
 
     startMove(node) {
