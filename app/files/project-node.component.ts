@@ -31,6 +31,14 @@ export class ProjectNodeComponent {
         this.projectTreesService.delete(this.project);
     }
 
+    private createFile() {
+        this.projectTreesService.createFile(this.project);
+    }
+
+    private createDirectory() {
+        this.projectTreesService.createDirectory(this.project);
+    }
+
     private onContextMenu(event) {
         this.projectTreesService.select(this);
         this.contextMenu.open(event);
