@@ -27,19 +27,35 @@ export class FileNodeComponent {
         this.renameForm = this.fb.group({
             name: ['', RegexValidator.regex(/^[\w\-. ]+$/)]
         });
-
-        this.renameForm.controls.name.valueChanges
-            .filter(() => this.renaming)
-            .subscribe(name => this.projectTreesService.renameTo(name));
     }
 
     startRename() {
-        this.projectTreesService.startRename(this);
+        this.projectTreesService.startRename(this, this.file);
         this.renameForm.controls.name.updateValue(this.file.name);
     }
 
     delete() {
         this.projectTreesService.delete(this.file);
+    }
+
+    private onBlur() {
+        var name = this.renameForm.controls.name;
+
+        if (name.valid)
+            this.projectTreesService.renameTo(name.value);
+
+        this.renaming = false;
+    }
+
+    private onKeyup(event) {
+        if (event.keyCode !== 13) return;
+
+        var name = this.renameForm.controls.name;
+
+        if (name.valid) {
+            this.projectTreesService.renameTo(name.value);
+            this.renaming = false;
+        }
     }
 
     private onContextMenu(event) {

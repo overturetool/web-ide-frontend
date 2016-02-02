@@ -62,6 +62,11 @@ export class FilesService {
             .map(res => res.text());
     }
 
+    renameFile(file, newName) {
+        /*return this.serverService.put(`vfs/move/${file.path}`, {destination: target.path})
+            .map(res => res.text());*/
+    }
+
     loadProjects():void {
         this.serverService
             .get(`vfs/readdir/${this.session.account}?depth=-1`)

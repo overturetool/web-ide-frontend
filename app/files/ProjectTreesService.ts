@@ -12,21 +12,47 @@ import {FilesService} from "./FilesService";
 export class ProjectTreesService {
     selectedComponent;
     renamingComponent;
+    renamingNode;
     movingNode;
 
     constructor(private filesService:FilesService) {
     }
 
-    startRename(component) {
+    startRename(component, node) {
         if (this.renamingComponent)
             this.renamingComponent.renaming = false;
 
         this.renamingComponent = component;
         this.renamingComponent.renaming = true;
+        this.renamingNode = node;
     }
 
-    renameTo(name) {
+    renameTo(name) {/*
+        this.filesService.renameFile(this.renamingNode, name)
+            .subscribe(newName => {
+                if (this.movingNode.name === newName) return;
 
+                // Update state in case of name collision
+                this.movingNode.name = newName;
+                this._updatePath(this.movingNode);
+            });
+
+        var oldParent = this.movingNode.parent;
+        var newParent = target;
+
+        // Remove from old position
+        this.movingNode.parent.children.splice(this.movingNode.parent.children.indexOf(this.movingNode), 1);
+
+        // Update state of moving file
+        this.movingNode.parent = target; // Update parent reference
+        this._updatePath(this.movingNode); // Update path string of node and subtree
+
+        // Insert at new position
+        target.children.push(this.movingNode);
+
+        // TODO: Fix this hack-ish solution to trigger change detection.
+        oldParent.children = oldParent.children.slice();
+        newParent.children = newParent.children.slice();*/
     }
 
     delete(node) {

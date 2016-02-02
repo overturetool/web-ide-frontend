@@ -253,3 +253,9 @@ directory-node input {
     height: 16px;
     outline: none;
 }
+
+project-node input.ng-invalid,
+file-node input.ng-invalid,
+directory-node input.ng-invalid {
+    border: 1px solid #ac3f3c;
+}
