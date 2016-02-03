@@ -14,12 +14,14 @@ import {SessionService} from "../auth/SessionService";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
 import {WorkspaceComponent} from "../files/workspace.component";
+import {ProofObligationsComponent} from "../proof-obligations/proof-obligations.component";
+import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [EditorTabsComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [ContextMenuService, FilesService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
+    directives: [ProofObligationsComponent, EditorTabsComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    providers: [ProofObligationsService, ContextMenuService, FilesService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
 })
 export class IdeComponent {
 }
