@@ -48,14 +48,8 @@ export class FileNodeComponent {
     }
 
     private onKeyup(event) {
-        if (event.keyCode !== 13) return;
-
-        var name = this.renameForm.controls.name;
-
-        if (name.valid) {
-            this.workspaceService.renameTo(name.value);
+        if (event.keyCode === 13)
             this.renaming = false;
-        }
     }
 
     private onContextMenu(event) {
