@@ -50,14 +50,7 @@ export class ProjectNodeComponent {
     }
 
     private onKeyup(event) {
-        if (event.keyCode !== 13) return;
-
-        var name = this.renameForm.controls.name;
-
-        if (name.valid) {
-            this.workspaceService.renameTo(name.value);
-            this.renaming = false;
-        }
+        if (event.keyCode === 13) this.renaming = false;
     }
 
     delete() {

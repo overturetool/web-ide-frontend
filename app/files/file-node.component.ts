@@ -48,8 +48,7 @@ export class FileNodeComponent {
     }
 
     private onKeyup(event) {
-        if (event.keyCode === 13)
-            this.renaming = false;
+        if (event.keyCode === 13) this.renaming = false;
     }
 
     private onContextMenu(event) {
