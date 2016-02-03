@@ -1,0 +1,8 @@
+<div *ngFor="#item of items"
+     (click)="onSelect(item)"
+     (mouseenter)="onEnter(item)"
+     (mouseleave)="onLeave()">
+    <span>{{ item.name }} </span>
+    <span class="kind">{{ item.kind }} </span>
+    <span class="valuetree">{{ item.valuetree }}</span>
+</div>

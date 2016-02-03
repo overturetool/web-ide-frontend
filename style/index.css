@@ -31,11 +31,11 @@ panel-menu .menu {
 }
 
 panel-menu .menu button {
-    margin-bottom: 78px;
+    margin-bottom: 128px;
     background-color: transparent;
     transform: rotate(90deg);
     transform-origin: 11px 11px;
-    width: 100px;
+    width: 150px;
     height: 22px;
     line-height: 22px;
     text-align: center;
@@ -45,7 +45,7 @@ panel-menu .menu button {
 }
 
 panel-menu.left .menu button {
-    margin-top: 78px;
+    margin-top: 128px;
     transform: rotate(-90deg);
 }
 
@@ -251,4 +251,13 @@ context-menu .item {
 
 context-menu .item:hover {
     background-color: #2f65ca;
+}
+
+
+proof-obligations .kind {
+    color: black;
+}
+
+proof-obligations .valuetree {
+    color: #00a8c6;
 }
