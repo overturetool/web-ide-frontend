@@ -18,9 +18,7 @@ export class WorkspaceService {
     constructor(private filesService:FilesService) {
     }
 
-    createFile(parent) {
-        var name = "new-file";
-
+    createFile(parent, name = "new-file") {
         var file = {
             name: name,
             type: "file",
@@ -36,9 +34,7 @@ export class WorkspaceService {
         this.filesService.createFile(file).subscribe();
     }
 
-    createDirectory(parent) {
-        var name = "new-directory";
-
+    createDirectory(parent, name = "new-directory") {
         var directory = {
             name: name,
             type: "directory",
@@ -53,6 +49,10 @@ export class WorkspaceService {
         parent.children = parent.children.slice();
 
         this.filesService.createDirectory(directory).subscribe();
+    }
+
+    createProject(parent, name = "new-project") {
+        this.createDirectory(parent, name);
     }
 
     startRename(component, node) {

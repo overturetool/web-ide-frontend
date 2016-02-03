@@ -176,6 +176,11 @@ directory-node {
     display: block;
 }
 
+.new-project-button {
+    padding-left: 19px;
+    cursor: pointer;
+}
+
 project-trees {
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
     -moz-user-select: none;      /* Firefox */
@@ -224,6 +229,9 @@ file-node .name {
 }
 .icon.rt-project {
     background-position: -233px -69px;
+}
+.icon.new-project {
+    background-position: -169px -37px;
 }
 .icon.close {
     background-position: -8px -6px;

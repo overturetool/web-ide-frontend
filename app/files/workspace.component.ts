@@ -12,7 +12,11 @@ import {WorkspaceService} from "./WorkspaceService";
 export class WorkspaceComponent {
     private workspace;
 
-    constructor(private filesService:FilesService) {
+    constructor(private filesService:FilesService, private workspaceService:WorkspaceService) {
         this.filesService.workspace$.subscribe(workspace => this.workspace = workspace);
+    }
+
+    createProject() {
+        this.workspaceService.createProject(this.workspace);
     }
 }
