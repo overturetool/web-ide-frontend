@@ -52,7 +52,7 @@ export class WorkspaceService {
     }
 
     createProject(parent, name = "new-project") {
-        this.createDirectory(parent, name);
+        this.createDirectory(parent, name).subscribe();
     }
 
     startRename(component, node) {
