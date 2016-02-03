@@ -8,10 +8,10 @@ import {Observable} from "rxjs/Observable";
     templateUrl: "app/outline/outline.component.html"
 })
 export class OutlineComponent {
-    items$;
+    items:Array<OutlineItem>;
 
     constructor(private outlineService:OutlineService) {
-        this.items$ = this.outlineService.items$;
+        this.outlineService.items$.subscribe(items => this.items = items);
     }
 
     onEnter(item:OutlineItem):void {

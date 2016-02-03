@@ -18,11 +18,11 @@ export class EditorComponent implements OnDestroy {
     private suspendedMarkings:Array = [];
     private highlightMarking;
 
-    private _file:string;
+    private _file;
 
     changes$:Observable<string>;
 
-    @Input() set file(file:string) {
+    @Input() set file(file) {
         this._file = file;
 
         // Get file content
@@ -50,7 +50,7 @@ export class EditorComponent implements OnDestroy {
 
         this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
             .map(cm => cm.getValue())
-            .debounceTime(200)
+            .debounceTime(300)
             .distinctUntilChanged();
 
         this.setupFileSystem();
@@ -68,8 +68,7 @@ export class EditorComponent implements OnDestroy {
     private setupFileSystem() {
         // Save file on changes
             this.changes$
-                .switchMap(content => this.filesService.writeFile(this.file, content))
-                .subscribe();
+                .subscribe(content => this.filesService.writeFile(this.file, content));
     }
 
     highlight(section:EditorSection) {
@@ -143,7 +142,7 @@ export class EditorComponent implements OnDestroy {
 
     private setupOutline() {
         // TODO: Fix this hack. Delay for fixing outline sometimes returning empty array.
-        this.changes$.delay(200).subscribe(() => this.outlineService.update());
+        this.changes$.delay(300).subscribe(() => this.outlineService.update(this.file));
 
         this.outlineService.highlight$.subscribe(section => this.highlight(section));
         this.outlineService.focus$.subscribe(line => this.focus(line));

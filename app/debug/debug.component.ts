@@ -10,7 +10,7 @@ import {FilesService} from "../files/FilesService";
     directives: [NgFor, TreeComponent]
 })
 export class DebugComponent {
-    file:string;
+    file;
     entry:string = "Parts(1, bom)"; // TODO: Remove this default value
 
     constructor(private debug:DebugService,

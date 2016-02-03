@@ -65,7 +65,7 @@ export class FileNodeComponent {
 
     private click(event) {
         if (event.button === 0)
-            this.filesService.openFile(this.file.path);
+            this.filesService.openFile(this.file);
 
         this.workspaceService.select(this);
     }
