@@ -6,6 +6,7 @@ import {HintService} from "../hint/HintService";
 import {Observable} from "rxjs/Observable";
 import {OnDestroy} from "angular2/core";
 import {OutlineService} from "../outline/OutlineService";
+import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
 
 declare var CodeMirror;
 
@@ -28,6 +29,7 @@ export class EditorComponent implements OnDestroy {
         // Get file content
         this.filesService.readFile(file).subscribe(this._setContent.bind(this));
     }
+
     get file() {
         return this._file;
     }
@@ -37,7 +39,8 @@ export class EditorComponent implements OnDestroy {
                 private hintService:HintService,
                 private outlineService:OutlineService,
                 private debugService:DebugService,
-                private filesService:FilesService) {
+                private filesService:FilesService,
+                private proofObligationsService:ProofObligationsService) {
 
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
@@ -57,6 +60,7 @@ export class EditorComponent implements OnDestroy {
         this.setupCodeCompletion();
         this.setupDebugging();
         this.setupOutline();
+        this.setupProofObligations();
     }
 
     ngOnDestroy() {
@@ -67,8 +71,8 @@ export class EditorComponent implements OnDestroy {
 
     private setupFileSystem() {
         // Save file on changes
-            this.changes$
-                .subscribe(content => this.filesService.writeFile(this.file, content));
+        this.changes$
+            .subscribe(content => this.filesService.writeFile(this.file, content));
     }
 
     highlight(section:EditorSection) {
@@ -146,5 +150,13 @@ export class EditorComponent implements OnDestroy {
 
         this.outlineService.highlight$.subscribe(section => this.highlight(section));
         this.outlineService.focus$.subscribe(line => this.focus(line));
+    }
+
+    private setupProofObligations() {
+        // TODO: Fix this hack. Delay for fixing proof obligations sometimes returning empty array.
+        this.changes$.delay(200).subscribe(() => this.proofObligationsService.update(this.file));
+
+        this.proofObligationsService.highlight$.subscribe(section => this.highlight(section));
+        this.proofObligationsService.focus$.subscribe(line => this.focus(line));
     }
 }
