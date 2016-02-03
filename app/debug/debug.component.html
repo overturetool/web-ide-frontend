@@ -25,7 +25,7 @@
 
     <h2>Breakpoints</h2>
     <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
-        <span class="file">{{breakpoint.file}}</span> <span class="line">line {{breakpoint.line}}</span>
+        <span class="file">{{breakpoint.file.name}}</span> <span class="line">line {{breakpoint.line}}</span>
     </div>
 
     <h2>Stdout</h2>

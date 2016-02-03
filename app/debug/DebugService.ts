@@ -61,13 +61,11 @@ export class DebugService {
     }
 
     setBreakpoint(file, line):void {
-        var fileRoot = "file:/home/rsreimer/projects/speciale/web-api/workspace"; // TODO: Remove this
-
         if (this.connection.connected) {
             var self = this;
 
             this.connection
-                .send('breakpoint_set', `-t line -f ${fileRoot}/${file} -n ${line}`)
+                .send('breakpoint_set', `-t line -f ${file.path} -n ${line}`)
                 .then(res => {
                     if (!res.response.$id) return;
 
@@ -117,7 +115,8 @@ export class DebugService {
 
                 // TODO: Remove this mapping
                 self.stack = self.stack.map(frame => {
-                    frame.$filename = frame.$filename.replace("file:/home/rsreimer/projects/speciale/web-api/workspace", '');
+                    frame.$filename = frame.$filename
+                        .replace("file:/home/rsreimer/projects/speciale/web-api/workspace", "");
                     return frame;
                 });
 
