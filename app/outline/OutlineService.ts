@@ -13,9 +13,8 @@ export class OutlineService {
     highlight$:Subject<EditorSection> = new Subject();
     focus$:Subject<number> = new Subject();
 
-    constructor(private serverService:ServerService,
-                private filesService:FilesService) {
-        this.filesService.currentFile$.subscribe(file => this.update(file));
+    constructor(private serverService:ServerService) {
+
     }
 
     update(file) {
