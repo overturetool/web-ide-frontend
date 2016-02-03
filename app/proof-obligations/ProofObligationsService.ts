@@ -13,8 +13,9 @@ export class ProofObligationsService {
     highlight$:Subject<EditorSection> = new Subject();
     focus$:Subject<number> = new Subject();
 
-    constructor(private serverService:ServerService) {
-
+    constructor(private serverService:ServerService,
+                private filesService:FilesService) {
+        this.filesService.currentFile$.subscribe(file => this.update(file));
     }
 
     update(file) {

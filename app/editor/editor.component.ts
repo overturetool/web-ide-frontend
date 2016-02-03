@@ -52,6 +52,7 @@ export class EditorComponent implements OnDestroy {
         });
 
         this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+            .skip(1)
             .map(cm => cm.getValue())
             .debounceTime(300)
             .distinctUntilChanged();
@@ -145,16 +146,14 @@ export class EditorComponent implements OnDestroy {
     }
 
     private setupOutline() {
-        // TODO: Fix this hack. Delay for fixing outline sometimes returning empty array.
-        this.changes$.delay(300).subscribe(() => this.outlineService.update(this.file));
+        this.changes$.subscribe(() => this.outlineService.update(this.file));
 
         this.outlineService.highlight$.subscribe(section => this.highlight(section));
         this.outlineService.focus$.subscribe(line => this.focus(line));
     }
 
     private setupProofObligations() {
-        // TODO: Fix this hack. Delay for fixing proof obligations sometimes returning empty array.
-        this.changes$.delay(200).subscribe(() => this.proofObligationsService.update(this.file));
+        this.changes$.subscribe(() => this.proofObligationsService.update(this.file));
 
         this.proofObligationsService.highlight$.subscribe(section => this.highlight(section));
         this.proofObligationsService.focus$.subscribe(line => this.focus(line));
