@@ -68,6 +68,14 @@ export class DirectoryNodeComponent {
         this.contextMenu.open(event);
     }
 
+    private createFile() {
+        this.workspaceService.createFile(this.directory);
+    }
+
+    private createDirectory() {
+        this.workspaceService.createDirectory(this.directory);
+    }
+
     private toggle() {
         this.open = !this.open;
     }

@@ -53,9 +53,21 @@ export class FilesService {
         this.openFiles$.next(openFiles.filter(f => f !== file));
     }
 
+    closeDirectory(directory):void {
+        directory.children.forEach(child => {
+            if (child.type === "file") {
+                this.closeFile(child);
+            } else {
+                this.closeDirectory(child);
+            }
+        });
+    }
+
     deleteFile(file) {
         if (file.type === "file")
             this.closeFile(file);
+        else
+            this.closeDirectory(file);
 
         this.serverService.delete(`vfs/delete/${file.path}`).subscribe();
     }
