@@ -14,10 +14,13 @@ export class File {
     parent:Directory;
     name:string;
     path:string;
-    content:string;
 
     constructor(private serverService:ServerService,
                 private workspaceService:WorkspaceService) {
+    }
+
+    read():Observable {
+        return this.serverService.get(`vfs/readFile/${this.path}`).map(res => res.text());
     }
 
     write(content:string):void {
@@ -25,10 +28,6 @@ export class File {
     }
 
     open():void {
-        this.serverService.get(`vfs/readFile/${this.path}`)
-            .map(res => res.text())
-            .subscribe(content => this.content = content);
-
         this.workspaceService.openFile(this);
     }
 

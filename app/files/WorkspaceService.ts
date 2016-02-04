@@ -159,7 +159,7 @@ export class WorkspaceService {
                     return this._mapChildren(directory);
                 }
             });
-s
+
         return node;
     }
 }

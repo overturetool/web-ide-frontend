@@ -3,6 +3,9 @@ import {LintService} from "../lint/LintService"
 import {DebugService} from "../debug/DebugService";
 import {HintService} from "../hint/HintService";
 import {Observable} from "rxjs/Observable";
+import "rxjs/add/observable/fromEventPattern";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/distinctUntilChanged";
 import {OnDestroy} from "angular2/core";
 import {OutlineService} from "../outline/OutlineService";
 import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
@@ -49,20 +52,21 @@ export class EditorComponent implements OnDestroy {
     }
 
     private init(file:File) {
-        // TODO: Wait for file to read content
-        this.codeMirror.getDoc().setValue(file.content);
-        this.codeMirror.clearHistory();
+        file.read().subscribe(content => {
+            this.codeMirror.getDoc().setValue(content);
+            this.codeMirror.clearHistory();
 
-        this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
-            .map(cm => cm.getValue())
-            .debounceTime(300)
-            .distinctUntilChanged();
+            this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+                .map(cm => cm.getValue())
+                .debounceTime(300)
+                .distinctUntilChanged();
 
-        this.setupFileSystem();
-        this.setupCodeCompletion();
-        this.setupDebugging();
-        this.setupOutline();
-        this.setupProofObligations();
+            this.setupFileSystem();
+            this.setupCodeCompletion();
+            this.setupDebugging();
+            this.setupOutline();
+            this.setupProofObligations();
+        });
     }
 
     ngOnDestroy() {
