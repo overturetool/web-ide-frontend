@@ -3,7 +3,7 @@
 <div *ngIf="file">
     <div *ngIf="!debug.connection.connected">
         <input [(ngModel)]="entry" placeholder="Entry">
-        <button (click)="connect()">Connect</button>
+        <button (click)="connect()" [disabled]="debug.connection.connecting">Connect</button>
     </div>
 
     <div *ngIf="debug.connection.connected">
@@ -25,7 +25,12 @@
 
     <h2>Breakpoints</h2>
     <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
-        <span class="file">{{breakpoint.file.name}}</span> <span class="line">line {{breakpoint.line}}</span>
+        <div class="debug-interactable">
+            <div class="location">
+                <input type="checkbox"> {{breakpoint.file.name}}: <span class="line">{{breakpoint.line}}</span>
+            </div>
+            <div class="source-code">{{breakpoint}}</div>
+        </div>
     </div>
 
     <h2>Stdout</h2>

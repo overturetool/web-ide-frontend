@@ -1,11 +1,11 @@
 import {Output, Injectable, EventEmitter} from "angular2/core";
 import {ServerService} from "../server/ServerService";
 import {SessionService} from "../auth/SessionService";
-import {FilesService} from "../files/FilesService";
 import {Observable} from "rxjs/Observable";
 import {OnInit} from "angular2/core";
 import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs/Rx";
+import {WorkspaceService} from "../files/WorkspaceService";
 
 @Injectable()
 export class OutlineService {
@@ -14,8 +14,8 @@ export class OutlineService {
     focus$:Subject<number> = new Subject();
 
     constructor(private serverService:ServerService,
-                private filesService:FilesService) {
-        this.filesService.currentFile$.subscribe(file => this.update(file));
+                private workspaceService:WorkspaceService) {
+        this.workspaceService.currentFile$.subscribe(file => this.update(file));
     }
 
     update(file) {

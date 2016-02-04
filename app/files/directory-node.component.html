@@ -8,7 +8,7 @@
      [class.active]="active">
     <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon directory">&nbsp;</span>
-    <span *ngIf="renaming" [ngFormModel]="renameForm"><input ngControl="name" (blur)="onBlur()" (keyup)="onKeyup($event)"></span>
+    <span *ngIf="renaming" [ngFormModel]="renameForm"><input ngControl="name" (blur)="rename()" (keyup)="onKeyup($event)"></span>
     <span *ngIf="!renaming" class="name">{{directory.name}}</span>
 </div>
 

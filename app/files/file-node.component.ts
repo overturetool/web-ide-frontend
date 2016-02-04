@@ -1,5 +1,4 @@
 import {ElementRef, Component} from "angular2/core";
-import {FilesService} from "./FilesService";
 import {Input} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 import {FormBuilder} from "angular2/common";
@@ -22,7 +21,6 @@ export class FileNodeComponent {
     renameForm;
 
     constructor(private workspaceService:WorkspaceService,
-                private filesService:FilesService,
                 private fb:FormBuilder) {
         this.renameForm = this.fb.group({
             name: ['', RegexValidator.regex(/^[\w\-. ]+$/)]
@@ -35,20 +33,22 @@ export class FileNodeComponent {
     }
 
     delete() {
-        this.workspaceService.delete(this.file);
+        this.file.delete();
     }
 
-    private onBlur() {
+    rename() {
         var name = this.renameForm.controls.name;
 
         if (name.valid)
-            this.workspaceService.renameTo(name.value);
+            this.file.rename(name.value);
 
+        this.renameForm.controls.name.updateValue("");
         this.renaming = false;
     }
 
     private onKeyup(event) {
-        if (event.keyCode === 13) this.renaming = false;
+        if (event.keyCode === 13)
+            this.rename();
     }
 
     private onContextMenu(event) {
@@ -58,7 +58,7 @@ export class FileNodeComponent {
 
     private click(event) {
         if (event.button === 0)
-            this.filesService.openFile(this.file);
+            this.file.open();
 
         this.workspaceService.select(this);
     }

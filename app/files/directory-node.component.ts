@@ -1,5 +1,4 @@
 import {ElementRef, Component} from "angular2/core";
-import {FilesService} from "./FilesService";
 import {Input} from "angular2/core";
 import {FileNodeComponent} from "./file-node.component";
 import {DirectoriesPipe} from "./directories.pipe";
@@ -39,21 +38,23 @@ export class DirectoryNodeComponent {
         this.renameForm.controls.name.updateValue(this.directory.name);
     }
 
-    private onBlur() {
+    rename() {
         var name = this.renameForm.controls.name;
 
         if (name.valid)
-            this.workspaceService.renameTo(name.value);
+            this.directory.rename(name.value);
 
+        this.renameForm.controls.name.updateValue("");
         this.renaming = false;
     }
 
     private onKeyup(event) {
-        if (event.keyCode === 13) this.renaming = false;
+        if (event.keyCode === 13)
+            this.rename();
     }
 
     delete() {
-        this.workspaceService.delete(this.directory);
+        this.directory.delete();
     }
 
     private onContextMenu(event) {
@@ -62,11 +63,11 @@ export class DirectoryNodeComponent {
     }
 
     private createFile() {
-        this.workspaceService.createFile(this.directory);
+        this.workspaceService.newFile(this.directory);
     }
 
     private createDirectory() {
-        this.workspaceService.createDirectory(this.directory);
+        this.workspaceService.newDirectory(this.directory);
     }
 
     private toggle() {
@@ -78,7 +79,7 @@ export class DirectoryNodeComponent {
     }
 
     private drop() {
-        this.workspaceService.moveTo(this.directory);
+        this.directory.move(this.workspaceService.movingNode);
         this.draggedOver = false;
     }
 

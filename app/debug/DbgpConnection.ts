@@ -9,6 +9,7 @@ export class DbgpConnection {
     private cmdCount:number = 0;
     private requests:Array<any> = [];
 
+    public connecting: boolean = false;
     public connected: boolean = false;
     public messages = new EventEmitter();
 
@@ -24,9 +25,12 @@ export class DbgpConnection {
         this.socket.addEventListener("message", e => this.onMessage(e.data));
         this.socket.addEventListener("close", e => this.onClose());
 
+        this.connecting = true;
+
         return new Promise(resolve => {
             this.socket.addEventListener("open", () => {
                 this.connected = true;
+                this.connecting = false;
                 resolve();
             })
         });

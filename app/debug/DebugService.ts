@@ -1,6 +1,6 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService"
-import {EventEmitter} from "angular2/core";
+import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
 import {DbgpResponse} from "./DbgpResponse";
 import {DbgpConnection} from "./DbgpConnection";
 
@@ -8,12 +8,12 @@ import {DbgpConnection} from "./DbgpConnection";
 export class DebugService {
     status:string = "";
     context:Array<any> = [];
-    stack:Array<any> = [];
+    stack:Array<StackFrame> = [];
     stdout:Array<string> = [];
     breakpoints:Array<any> = [];
 
-    breakpointsChanged:EventEmitter<any> = new EventEmitter();
-    stackChanged:EventEmitter<any> = new EventEmitter();
+    breakpointsChanged:BehaviorSubject<Array> = new BehaviorSubject([]);
+    stackChanged:BehaviorSubject<Array<StackFrame>> = new BehaviorSubject([]);
 
     private connection:DbgpConnection;
 
@@ -57,7 +57,7 @@ export class DebugService {
         this.breakpoints = [];
 
         breakpoints.forEach(bp => this.setBreakpoint(bp.file, bp.line));
-        this.breakpointsChanged.emit(this.breakpoints);
+        this.breakpointsChanged.next(this.breakpoints);
     }
 
     setBreakpoint(file, line):void {
@@ -70,11 +70,11 @@ export class DebugService {
                     if (!res.response.$id) return;
 
                     self.breakpoints.push({file: file, line: line, id: res.response.$id});
-                    self.breakpointsChanged.emit(self.breakpoints);
+                    self.breakpointsChanged.next(self.breakpoints);
                 });
         } else {
             this.breakpoints.push({file: file, line: line});
-            this.breakpointsChanged.emit(this.breakpoints);
+            this.breakpointsChanged.next(this.breakpoints);
         }
     }
 
@@ -85,7 +85,7 @@ export class DebugService {
             this.connection.send('breakpoint_remove', `-d ${breakpoint.id}`);
 
         this.breakpoints = this.breakpoints.filter(bp => bp.file !== file || bp.line !== line);
-        this.breakpointsChanged.emit(this.breakpoints);
+        this.breakpointsChanged.next(this.breakpoints);
     }
 
     getContext():void {
@@ -116,11 +116,11 @@ export class DebugService {
                 // TODO: Remove this mapping
                 self.stack = self.stack.map(frame => {
                     frame.$filename = frame.$filename
-                        .replace("file:/home/rsreimer/projects/speciale/web-api/workspace", "");
+                        .replace("file:/home/rsreimer/projects/speciale/web-api/workspace/", "");
                     return frame;
                 });
 
-                self.stackChanged.emit(self.stack);
+                self.stackChanged.next(self.stack);
             });
     }
 
@@ -146,7 +146,7 @@ export class DebugService {
                 this.getContext();
                 this.getStack();
             } else {
-                this.stackChanged.emit([]);
+                this.stackChanged.next([]);
             }
         }
     }
