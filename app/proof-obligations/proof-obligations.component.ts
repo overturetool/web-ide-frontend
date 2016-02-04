@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
-import {FilesService} from "../files/FilesService";
 import {Observable} from "rxjs/Observable";
 import {ProofObligationsService} from "./ProofObligationsService";
 

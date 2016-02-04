@@ -3,7 +3,7 @@
 <div *ngIf="file">
     <div *ngIf="!debug.connection.connected">
         <input [(ngModel)]="entry" placeholder="Entry">
-        <button (click)="connect()">Connect</button>
+        <button (click)="connect()" [disabled]="debug.connection.connecting">Connect</button>
     </div>
 
     <div *ngIf="debug.connection.connected">

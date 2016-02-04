@@ -2,7 +2,7 @@ import {Component, Input} from "angular2/core";
 import {DebugService} from "./DebugService";
 import {NgFor} from "angular2/common";
 import {TreeComponent} from "../tree/tree.component";
-import {FilesService} from "../files/FilesService";
+import {WorkspaceService} from "../files/WorkspaceService";
 
 @Component({
     selector: "debug",
@@ -11,11 +11,11 @@ import {FilesService} from "../files/FilesService";
 })
 export class DebugComponent {
     file;
-    entry:string = "Parts(1, bom)"; // TODO: Remove this default value
+    entry:string = "BAGTEST`TestBagAll()"; // TODO: Remove this default value
 
     constructor(private debug:DebugService,
-                private filesService:FilesService) {
-        this.filesService.currentFile$.subscribe(file => this.file = file);
+                private workspaceService:WorkspaceService) {
+        this.workspaceService.currentFile$.subscribe(file => this.file = file);
     }
 
     connect() {
