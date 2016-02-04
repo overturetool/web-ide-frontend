@@ -17,6 +17,14 @@ export class Directory {
     constructor(private serverService:ServerService) {
     }
 
+    find(path:Array<string>):File|Directory {
+        if (path.length === 0) return this;
+
+        return this.children
+            .filter(child => child.name === path[0])[0]
+            .find(path.slice(1));
+    }
+
     close() {
         this.children.forEach(child => child.close());
     }

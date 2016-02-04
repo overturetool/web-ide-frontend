@@ -9,10 +9,11 @@ import 'rxjs/add/operator/toPromise';
 import {Observable} from "rxjs/Observable";
 import {Directory} from "./Directory";
 import {File} from "./File";
+import {DebugService} from "../debug/DebugService";
 
 @Injectable()
 export class WorkspaceService {
-    workspace$:Subject = new Subject();
+    workspace$:BehaviorSubject = new BehaviorSubject(null);
     openFiles$:BehaviorSubject<Array> = new BehaviorSubject([]);
     currentFile$:BehaviorSubject = new BehaviorSubject(null);
 

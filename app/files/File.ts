@@ -19,6 +19,10 @@ export class File {
                 private workspaceService:WorkspaceService) {
     }
 
+    find(path:Array<string>):File {
+        return this;
+    }
+
     read():Observable {
         return this.serverService.get(`vfs/readFile/${this.path}`).map(res => res.text());
     }

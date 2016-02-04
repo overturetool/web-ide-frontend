@@ -9,6 +9,7 @@ import "rxjs/add/operator/distinctUntilChanged";
 import {OnDestroy} from "angular2/core";
 import {OutlineService} from "../outline/OutlineService";
 import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
+import {WorkspaceService} from "../files/WorkspaceService";
 
 declare var CodeMirror;
 
@@ -39,6 +40,7 @@ export class EditorComponent implements OnDestroy {
                 private hintService:HintService,
                 private outlineService:OutlineService,
                 private debugService:DebugService,
+                private workspaceService:WorkspaceService,
                 private proofObligationsService:ProofObligationsService) {
 
         this.codeMirror = CodeMirror(el.nativeElement, {
@@ -56,6 +58,7 @@ export class EditorComponent implements OnDestroy {
             this.codeMirror.getDoc().setValue(content);
             this.codeMirror.clearHistory();
 
+            // Editor changes
             this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
                 .map(cm => cm.getValue())
                 .debounceTime(300)
@@ -76,9 +79,7 @@ export class EditorComponent implements OnDestroy {
     }
 
     private setupFileSystem() {
-        // Save file on changes
-        this.changes$
-            .subscribe(content => this.file.write(content));
+        this.changes$.subscribe(content => this.file.write(content));
     }
 
     highlight(section:EditorSection) {
@@ -95,7 +96,7 @@ export class EditorComponent implements OnDestroy {
 
     focus(line:number) {
         // TODO: Doesn't seem to work with lines over 99
-        this.codeMirror.scrollIntoView({line: line - 1, ch: 0});
+        this.codeMirror.scrollIntoView({line: line - 1, ch: 0}, 500);
     }
 
     private setupCodeCompletion() {
@@ -109,14 +110,13 @@ export class EditorComponent implements OnDestroy {
         this.debugService.stackChanged
             .subscribe((allFrames:Array<StackFrame>) => {
                 var breakedFrame = allFrames[0];
-                var frames = allFrames.filter(frame => {
-                    console.log(frame.$filename, this.file.path);
-                    return frame.$filename === this.file.path;
-                });
+                var frames = allFrames.filter(frame => frame.$filename === this.file.path);
 
                 this.suspendedMarkings.forEach(m => m.clear());
 
                 if (frames.length === 0) return;
+
+                this.focus(breakedFrame.$lineno);
 
                 this.suspendedMarkings = frames
                     .map(frame => this.codeMirror.markText(
