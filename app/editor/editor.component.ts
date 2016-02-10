@@ -58,7 +58,6 @@ export class EditorComponent {
 
         this.editorService.highlight$.subscribe(section => this.highlight(section));
         this.editorService.focus$.subscribe(line => this.focus(line));
-        this.editorService.goto$.subscribe(line => this.goto(line));
 
         this.setupCodeCompletion();
         this.setupDebugging();
@@ -78,7 +77,9 @@ export class EditorComponent {
 
     focus(line:number) {
         // TODO: Doesn't seem to work with lines over 99
-        this.codeMirror.scrollIntoView({line: line - 1, ch: 0}, 500);
+        this.codeMirror.scrollIntoView({line: line - 1}, 500);
+        this.codeMirror.setCursor({line: line - 1});
+        this.codeMirror.focus();
     }
 
     private load(file:File):void {

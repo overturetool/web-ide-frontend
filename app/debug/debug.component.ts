@@ -28,6 +28,6 @@ export class DebugComponent {
     }
 
     goToLine(line:number):void {
-        throw Error("Not implemented");
+        this.editorService.focus$.next(line);
     }
 }

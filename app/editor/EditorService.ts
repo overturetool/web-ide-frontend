@@ -11,7 +11,6 @@ export class EditorService {
 
     highlight$:Subject<EditorSection> = new Subject();
     focus$:Subject<number> = new Subject();
-    goto$:Subject<number> = new Subject();
 
     openFile(file:File):void {
         var openFiles = this.openFiles$.getValue();
