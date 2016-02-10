@@ -54,22 +54,25 @@ export class EditorComponent implements OnDestroy {
     }
 
     private init(file:File) {
-        file.read().subscribe(content => {
-            this.codeMirror.getDoc().setValue(content);
-            this.codeMirror.clearHistory();
+        file.load();
 
-            // Editor changes
-            this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
-                .map(cm => cm.getValue())
-                .debounceTime(300)
-                .distinctUntilChanged();
+        file.content$.skip(1).take(1)
+            .subscribe(content => {
+                this.codeMirror.getDoc().setValue(content);
+                this.codeMirror.clearHistory();
 
-            this.setupFileSystem();
-            this.setupCodeCompletion();
-            this.setupDebugging();
-            this.setupOutline();
-            this.setupProofObligations();
-        });
+                // Editor changes
+                this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+                    .map(cm => cm.getValue())
+                    .debounceTime(300)
+                    .distinctUntilChanged();
+
+                this.setupFileSystem();
+                this.setupCodeCompletion();
+                this.setupDebugging();
+                this.setupOutline();
+                this.setupProofObligations();
+            });
     }
 
     ngOnDestroy() {

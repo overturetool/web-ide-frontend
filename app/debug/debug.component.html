@@ -25,11 +25,13 @@
 
     <h2>Breakpoints</h2>
     <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
-        <div class="debug-interactable">
-            <div class="location">
-                <input type="checkbox"> {{breakpoint.file.name}}: <span class="line">{{breakpoint.line}}</span>
+        <div class="breakpoint">
+            <input type="checkbox" [(ngModel)]="breakpoint.active">
+            <div class="location" (click)="goToLine(breakpoint.line)">
+                <div>{{breakpoint.file.name}}: <span class="line">{{breakpoint.line}}</span></div>
+                <code>{{getLine(breakpoint.file, breakpoint.line)}}</code>
             </div>
-            <div class="source-code">{{breakpoint}}</div>
+
         </div>
     </div>
 

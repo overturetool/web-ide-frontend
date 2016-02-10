@@ -3,6 +3,8 @@ import {ServerService} from "../server/ServerService"
 import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
 import {DbgpResponse} from "./DbgpResponse";
 import {DbgpConnection} from "./DbgpConnection";
+import {Breakpoint} from "./Breakpoint";
+import {File} from "../files/File";
 
 @Injectable()
 export class DebugService {
@@ -60,7 +62,7 @@ export class DebugService {
         this.breakpointsChanged.next(this.breakpoints);
     }
 
-    setBreakpoint(file, line):void {
+    setBreakpoint(file:File, line:number):void {
         if (this.connection.connected) {
             var self = this;
 
@@ -69,11 +71,14 @@ export class DebugService {
                 .then(res => {
                     if (!res.response.$id) return;
 
-                    self.breakpoints.push({file: file, line: line, id: res.response.$id});
+                    var breakpoint = self.createBreakpoint(file, line);
+                    breakpoint.id = res.response.$id;
+
+                    self.breakpoints.push(breakpoint);
                     self.breakpointsChanged.next(self.breakpoints);
                 });
         } else {
-            this.breakpoints.push({file: file, line: line});
+            this.breakpoints.push(this.createBreakpoint(file, line));
             this.breakpointsChanged.next(this.breakpoints);
         }
     }
@@ -126,6 +131,10 @@ export class DebugService {
 
     getStatus():void {
         this.connection.send('status');
+    }
+
+    createBreakpoint(file:File, line:number):Breakpoint {
+        return new Breakpoint(file, line);
     }
 
     private onMessage(msg) {

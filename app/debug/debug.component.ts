@@ -21,4 +21,12 @@ export class DebugComponent {
     connect() {
         this.debug.connect(this.file, this.entry);
     }
+
+    getLine(file:File, line:number):string {
+        return file.content$.getValue().split("\n")[line-1];
+    }
+
+    goToLine(line:number):void {
+        throw Error("Not implemented");
+    }
 }

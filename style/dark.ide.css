@@ -259,3 +259,24 @@ file-node input.ng-invalid,
 directory-node input.ng-invalid {
     border: 1px solid #ac3f3c;
 }
+
+.breakpoint {
+    position: relative;
+    border-top: 1px solid #555555;
+    border-bottom: 1px solid #282828;
+}
+
+.breakpoint input {
+    position: absolute;
+    top: 5px;
+}
+
+.breakpoint .location {
+    margin-left: 25px;
+    padding: 5px 0;
+}
+
+.breakpoint .location:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

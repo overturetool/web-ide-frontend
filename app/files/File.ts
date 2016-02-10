@@ -9,11 +9,13 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {WorkspaceService} from "./WorkspaceService";
 import {Directory} from "./Directory";
+import {ReplaySubject} from "rxjs/Rx";
 
 export class File {
     parent:Directory;
     name:string;
     path:string;
+    content$ = new BehaviorSubject("");
 
     constructor(private serverService:ServerService,
                 private workspaceService:WorkspaceService) {
@@ -23,11 +25,14 @@ export class File {
         return this;
     }
 
-    read():Observable {
-        return this.serverService.get(`vfs/readFile/${this.path}`).map(res => res.text());
+    load():void {
+        this.serverService.get(`vfs/readFile/${this.path}`)
+            .map(res => res.text())
+            .subscribe(content => this.content$.next(content));
     }
 
     write(content:string):void {
+        this.content$.next(content);
         this.serverService.post(`vfs/writeFile/${this.path}`, content).subscribe();
     }
 
