@@ -11,13 +11,12 @@ export class WorkspaceFactory {
 
     }
 
-    createFile(parent:Directory, name:string, path:string, content:string = ""):File {
+    createFile(parent:Directory, name:string, path:string):File {
         var file = new File(this.serverService, this.editorService);
 
         file.parent = parent;
         file.name = name;
         file.path = path;
-        file.content$.next(content);
 
         parent.children.push(file);
 

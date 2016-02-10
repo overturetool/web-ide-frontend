@@ -17,9 +17,9 @@ declare var CodeMirror;
 
 @Component({
     selector: 'editor',
-    template: ''
+    template: '<div [class.active]="file"></div>'
 })
-export class EditorComponent implements OnDestroy {
+export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
@@ -34,10 +34,9 @@ export class EditorComponent implements OnDestroy {
                 private editorService:EditorService) {
 
         this.editorService.currentFile$
-            .filter(file => file !== null)
             .subscribe(file => this.load(file));
 
-        this.codeMirror = CodeMirror(el.nativeElement, {
+        this.codeMirror = CodeMirror(el.nativeElement.querySelector("div"), {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,
@@ -65,12 +64,6 @@ export class EditorComponent implements OnDestroy {
         this.setupDebugging();
     }
 
-    ngOnDestroy() {
-        // Remove CodeMirror editor from DOM when component is destroyed.
-        var element = this.codeMirror.getWrapperElement();
-        element.parentNode.removeChild(element);
-    }
-
     highlight(section:EditorSection) {
         if (this.highlightMarking) this.highlightMarking.clear();
 
@@ -89,16 +82,20 @@ export class EditorComponent implements OnDestroy {
     }
 
     private load(file:File):void {
-        this.file = file;
+        if (file === null) {
+            this.file = file;
+            return;
+        }
 
         if (file.document !== null) {
-            this.codeMirror.swapDoc(file.document);
+            this.file = file;
+            setTimeout(() => this.codeMirror.swapDoc(file.document), 0);
         } else {
             file.content$
                 .filter(content => content !== null)
                 .take(1)
                 .subscribe(content => {
-                    file.document = CodeMirror.Doc(content);
+                    file.document = CodeMirror.Doc(content, "vdm");
                     this.load(file);
                 });
         }
