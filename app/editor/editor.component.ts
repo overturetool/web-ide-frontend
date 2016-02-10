@@ -10,6 +10,8 @@ import {OnDestroy} from "angular2/core";
 import {OutlineService} from "../outline/OutlineService";
 import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
 import {WorkspaceService} from "../files/WorkspaceService";
+import {EditorService} from "./EditorService";
+import {File} from "../files/File";
 
 declare var CodeMirror;
 
@@ -21,27 +23,19 @@ export class EditorComponent implements OnDestroy {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
-
-    private _file;
+    private file:File;
 
     changes$:Observable<string>;
 
-    @Input() set file(file) {
-        this._file = file;
-        this.init(file);
-    }
-
-    get file() {
-        return this._file;
-    }
-
     constructor(el:ElementRef,
-                lintService:LintService,
+                private lintService:LintService,
                 private hintService:HintService,
-                private outlineService:OutlineService,
                 private debugService:DebugService,
-                private workspaceService:WorkspaceService,
-                private proofObligationsService:ProofObligationsService) {
+                private editorService:EditorService) {
+
+        this.editorService.currentFile$
+            .filter(file => file !== null)
+            .subscribe(file => this.load(file));
 
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
@@ -51,38 +45,30 @@ export class EditorComponent implements OnDestroy {
             lint: {getAnnotations: (text, callback) => lintService.lint(this.file, callback), async: true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
-    }
 
-    private init(file:File) {
-        file.load();
+        // Editor changes
+        this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+            .map(cm => cm.getValue())
+            .debounceTime(300)
+            .distinctUntilChanged();
 
-        file.content$.skip(1).take(1)
-            .subscribe(content => {
-                this.codeMirror.getDoc().setValue(content);
-                this.codeMirror.clearHistory();
+        this.changes$.subscribe(content => {
+            this.editorService.onChange();
+            this.file.write(content);
+        });
 
-                // Editor changes
-                this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
-                    .map(cm => cm.getValue())
-                    .debounceTime(300)
-                    .distinctUntilChanged();
+        this.editorService.highlight$.subscribe(section => this.highlight(section));
+        this.editorService.focus$.subscribe(line => this.focus(line));
+        this.editorService.goto$.subscribe(line => this.goto(line));
 
-                this.setupFileSystem();
-                this.setupCodeCompletion();
-                this.setupDebugging();
-                this.setupOutline();
-                this.setupProofObligations();
-            });
+        this.setupCodeCompletion();
+        this.setupDebugging();
     }
 
     ngOnDestroy() {
         // Remove CodeMirror editor from DOM when component is destroyed.
         var element = this.codeMirror.getWrapperElement();
         element.parentNode.removeChild(element);
-    }
-
-    private setupFileSystem() {
-        this.changes$.subscribe(content => this.file.write(content));
     }
 
     highlight(section:EditorSection) {
@@ -100,6 +86,22 @@ export class EditorComponent implements OnDestroy {
     focus(line:number) {
         // TODO: Doesn't seem to work with lines over 99
         this.codeMirror.scrollIntoView({line: line - 1, ch: 0}, 500);
+    }
+
+    private load(file:File):void {
+        this.file = file;
+
+        if (file.document !== null) {
+            this.codeMirror.swapDoc(file.document);
+        } else {
+            file.content$
+                .filter(content => content !== null)
+                .take(1)
+                .subscribe(content => {
+                    file.document = CodeMirror.Doc(content);
+                    this.load(file);
+                });
+        }
     }
 
     private setupCodeCompletion() {
@@ -152,19 +154,5 @@ export class EditorComponent implements OnDestroy {
             else
                 this.debugService.setBreakpoint(this.file, line + 1);
         });
-    }
-
-    private setupOutline() {
-        this.changes$.subscribe(() => this.outlineService.update(this.file));
-
-        this.outlineService.highlight$.subscribe(section => this.highlight(section));
-        this.outlineService.focus$.subscribe(line => this.focus(line));
-    }
-
-    private setupProofObligations() {
-        this.changes$.subscribe(() => this.proofObligationsService.update(this.file));
-
-        this.proofObligationsService.highlight$.subscribe(section => this.highlight(section));
-        this.proofObligationsService.focus$.subscribe(line => this.focus(line));
     }
 }

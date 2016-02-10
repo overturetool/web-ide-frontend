@@ -7,18 +7,19 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
-import {WorkspaceService} from "./WorkspaceService";
 import {Directory} from "./Directory";
 import {ReplaySubject} from "rxjs/Rx";
+import {EditorService} from "../editor/EditorService";
 
 export class File {
     parent:Directory;
     name:string;
     path:string;
-    content$ = new BehaviorSubject("");
+    document = null;
+    content$ = new BehaviorSubject(null);
 
     constructor(private serverService:ServerService,
-                private workspaceService:WorkspaceService) {
+                private editorService:EditorService) {
     }
 
     find(path:Array<string>):File {
@@ -37,11 +38,12 @@ export class File {
     }
 
     open():void {
-        this.workspaceService.openFile(this);
+        this.load();
+        this.editorService.openFile(this);
     }
 
     close():void {
-        this.workspaceService.closeFile(this);
+        this.editorService.closeFile(this);
     }
 
     delete():void {

@@ -4,7 +4,4 @@
         <button (click)="click($event, file)">{{file.name}}</button><button (click)="close(file)" class="glyph close"></button>
     </li>
 </ul>
-<editor
-        *ngFor="#file of files"
-        [class.active]="file === current"
-        [file]="file"></editor>
+<editor></editor>
