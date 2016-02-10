@@ -158,11 +158,11 @@ editor-tabs li button.close {
     margin-left: -7px;
 }
 
-editor {
+editor > div {
     display: none;
 }
 
-editor.active {
+editor > div.active {
     display: block;
 }
 

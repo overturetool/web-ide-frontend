@@ -7,6 +7,7 @@ import {OnInit} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {DebugService} from "../debug/DebugService";
 import "rxjs/add/operator/filter";
+import {EditorService} from "./EditorService";
 
 @Component({
     selector: 'editor-tabs',
@@ -14,13 +15,14 @@ import "rxjs/add/operator/filter";
     directives: [EditorComponent]
 })
 export class EditorTabsComponent {
-    files:Array;
-    current;
+    files:Array<File> = [];
+    current:File = null;
 
-    constructor(private workspaceService:WorkspaceService,
+    constructor(private editorService:EditorService,
+                private workspaceService:WorkspaceService,
                 private debugService:DebugService) {
-        this.workspaceService.openFiles$.subscribe(files => this.files = files);
-        this.workspaceService.currentFile$.subscribe(file => this.current = file);
+        this.editorService.openFiles$.subscribe(files => this.files = files);
+        this.editorService.currentFile$.subscribe(file => this.current = file);
 
         this.debugService.stackChanged
             .filter(frames => frames.length > 0)

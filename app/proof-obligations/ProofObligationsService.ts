@@ -6,6 +6,7 @@ import {OnInit} from "angular2/core";
 import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs/Rx";
 import {WorkspaceService} from "../files/WorkspaceService";
+import {EditorService} from "../editor/EditorService";
 
 @Injectable()
 export class ProofObligationsService {
@@ -14,8 +15,8 @@ export class ProofObligationsService {
     focus$:Subject<number> = new Subject();
 
     constructor(private serverService:ServerService,
-                private workspaceService:WorkspaceService) {
-        this.workspaceService.currentFile$.subscribe(file => this.update(file));
+                private editorService:EditorService) {
+        this.editorService.currentFile$.subscribe(file => this.update(file));
     }
 
     update(file) {
@@ -28,11 +29,11 @@ export class ProofObligationsService {
         }
     }
 
-    highlight(item:EditorSection):void {
-        this.highlight$.next(item);
+    highlight(section:EditorSection):void {
+        this.editorService.highlight$.next(section);
     }
 
     focus(line:number):void {
-        this.focus$.next(line);
+        this.editorService.focus$.next(line);
     }
 }
