@@ -147,15 +147,22 @@ export class DebugService {
         if (msg.response) {
             var status = msg.response.$status;
 
-            if (!status) return;
+            if (status) {
+                this.status = status;
 
-            this.status = status;
+                if (status === "break") {
+                    this.getContext();
+                    this.getStack();
+                } else {
+                    this.stackChanged.next([]);
+                }
+            }
 
-            if (status === "break") {
-                this.getContext();
-                this.getStack();
-            } else {
-                this.stackChanged.next([]);
+            var error = msg.response.error;
+
+            if (error) {
+                this.stop();
+                this.stdout.push(error.message);
             }
         }
     }
