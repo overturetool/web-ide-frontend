@@ -181,13 +181,18 @@ directory-node {
     cursor: pointer;
 }
 
-project-trees {
+workspace {
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
     -moz-user-select: none;      /* Firefox */
     -ms-user-select: none;       /* IE/Edge */
     user-select: none;
     cursor: default;
 }
+
+workspace input {
+    cursor: text;
+}
+
 
 project-node .name,
 file-node .name,
