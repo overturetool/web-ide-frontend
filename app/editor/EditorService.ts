@@ -2,6 +2,7 @@ import {BehaviorSubject} from "rxjs/Rx";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {Injectable} from "angular2/core";
+import {FilePosition} from "./FilePosition";
 
 @Injectable()
 export class EditorService {

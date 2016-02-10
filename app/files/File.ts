@@ -38,7 +38,9 @@ export class File {
     }
 
     open():void {
-        this.load();
+        if (this.content$.getValue() === null)
+            this.load();
+
         this.editorService.openFile(this);
     }
 
