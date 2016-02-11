@@ -12,6 +12,7 @@ import {ProofObligationsService} from "../proof-obligations/ProofObligationsServ
 import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "./EditorService";
 import {File} from "../files/File";
+import {EditorPosition} from "./EditorPosition";
 
 declare var CodeMirror;
 
@@ -23,7 +24,7 @@ export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
-    private file:File;
+    private file:File = null;
 
     changes$:Observable<string>;
 
@@ -53,11 +54,11 @@ export class EditorComponent {
 
         this.changes$.subscribe(content => {
             this.editorService.onChange();
-            this.file.write(content);
+            this.file.save(content);
         });
 
         this.editorService.highlight$.subscribe(section => this.highlight(section));
-        this.editorService.focus$.subscribe(line => this.focus(line));
+        this.editorService.goto$.subscribe(position => this.goto(position.line, position.char));
 
         this.setupCodeCompletion();
         this.setupDebugging();
@@ -75,31 +76,24 @@ export class EditorComponent {
         )
     }
 
-    focus(line:number) {
+    goto(line:number, char?:number) {
         // TODO: Doesn't seem to work with lines over 99
-        this.codeMirror.scrollIntoView({line: line - 1}, 500);
-        this.codeMirror.setCursor({line: line - 1});
+        var position = {line: line -1};
+        if (char) position.ch = char -1;
+
+        this.codeMirror.scrollIntoView(position, 500);
+        this.codeMirror.setCursor(position);
         this.codeMirror.focus();
     }
 
     private load(file:File):void {
-        if (file === null) {
-            this.file = file;
-            return;
-        }
+        if (file !== null)
+            this.codeMirror.swapDoc(file.document);
 
-        if (file.document !== null) {
-            this.file = file;
-            setTimeout(() => this.codeMirror.swapDoc(file.document), 0);
-        } else {
-            file.content$
-                .filter(content => content !== null)
-                .take(1)
-                .subscribe(content => {
-                    file.document = CodeMirror.Doc(content, "vdm");
-                    this.load(file);
-                });
-        }
+        if (this.file === null)
+            setTimeout(() => this.codeMirror.refresh(), 0);
+
+        this.file = file;
     }
 
     private setupCodeCompletion() {
@@ -119,7 +113,7 @@ export class EditorComponent {
 
                 if (frames.length === 0) return;
 
-                this.focus(breakedFrame.$lineno);
+                this.goto(breakedFrame.$lineno);
 
                 this.suspendedMarkings = frames
                     .map(frame => this.codeMirror.markText(

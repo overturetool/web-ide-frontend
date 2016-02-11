@@ -2,7 +2,7 @@ import {BehaviorSubject} from "rxjs/Rx";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {Injectable} from "angular2/core";
-import {FilePosition} from "./FilePosition";
+import {EditorPosition} from "./EditorPosition";
 
 @Injectable()
 export class EditorService {
@@ -11,9 +11,10 @@ export class EditorService {
     changes$:Subject<File> = new Subject();
 
     highlight$:Subject<EditorSection> = new Subject();
+    goto$:Subject<EditorPosition> = new Subject();
     focus$:Subject<number> = new Subject();
 
-    openFile(file:File):void {
+    loadFile(file:File):void {
         var openFiles = this.openFiles$.getValue();
         if (openFiles.indexOf(file) === -1)
             this.openFiles$.next([...openFiles, file]);
@@ -42,5 +43,9 @@ export class EditorService {
 
     onChange() {
         this.changes$.next(this.currentFile$.getValue());
+    }
+
+    goto(line:number, char?:number) {
+        this.goto$.next(new EditorPosition(line, char));
     }
 }

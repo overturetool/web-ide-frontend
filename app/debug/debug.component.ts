@@ -4,7 +4,6 @@ import {NgFor} from "angular2/common";
 import {TreeComponent} from "../tree/tree.component";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
-import {FilePosition} from "../editor/FilePosition";
 
 @Component({
     selector: "debug",
@@ -25,11 +24,11 @@ export class DebugComponent {
     }
 
     getLine(file:File, line:number):string {
-        return file.content$.getValue().split("\n")[line-1];
+        return file.document.getLine(line-1);
     }
 
     goToLine(file:File, line:number):void {
         file.open();
-        setTimeout(() => this.editorService.focus$.next(line), 0);
+        this.editorService.goto(line);
     }
 }

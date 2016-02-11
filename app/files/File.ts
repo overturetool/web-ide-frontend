@@ -10,13 +10,13 @@ import {Subject} from "rxjs/Subject";
 import {Directory} from "./Directory";
 import {ReplaySubject} from "rxjs/Rx";
 import {EditorService} from "../editor/EditorService";
+import {FilePosition} from "../editor/FilePosition";
 
 export class File {
     parent:Directory;
     name:string;
     path:string;
     document = null;
-    content$ = new BehaviorSubject(null);
 
     constructor(private serverService:ServerService,
                 private editorService:EditorService) {
@@ -25,23 +25,21 @@ export class File {
     find(path:Array<string>):File {
         return this;
     }
-
-    load():void {
-        this.serverService.get(`vfs/readFile/${this.path}`)
-            .map(res => res.text())
-            .subscribe(content => this.content$.next(content));
-    }
-
-    write(content:string):void {
-        this.content$.next(content);
+    save(content:string):void {
         this.serverService.post(`vfs/writeFile/${this.path}`, content).subscribe();
     }
 
     open():void {
-        if (this.content$.getValue() === null)
-            this.load();
-
-        this.editorService.openFile(this);
+        if (this.document === null) {
+            this.serverService.get(`vfs/readFile/${this.path}`)
+                .map(res => res.text())
+                .subscribe(content => {
+                    this.document = CodeMirror.Doc(content, "vdm");
+                    this.editorService.loadFile(this);
+                });
+        } else {
+            this.editorService.loadFile(this);
+        }
     }
 
     close():void {
