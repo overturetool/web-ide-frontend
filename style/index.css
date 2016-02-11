@@ -104,14 +104,6 @@ tree tree ul {
     padding-left: 17px;
 }
 
-tree .variable .type {
-    color: black;
-}
-
-tree .variable .value {
-    color: #00a8c6;
-}
-
 tree .variable .icon {
     display: inline-block;
     height: 17px;

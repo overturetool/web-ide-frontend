@@ -59,6 +59,7 @@ export class EditorComponent {
 
         this.editorService.highlight$.subscribe(section => this.highlight(section));
         this.editorService.goto$.subscribe(position => this.goto(position.line, position.char));
+        this.editorService.focus$.subscribe(line => this.focus(line));
 
         this.setupCodeCompletion();
         this.setupDebugging();
@@ -76,13 +77,17 @@ export class EditorComponent {
         )
     }
 
-    goto(line:number, char?:number) {
+    focus(line:number, char?:number) {
         // TODO: Doesn't seem to work with lines over 99
         var position = {line: line -1};
         if (char) position.ch = char -1;
 
         this.codeMirror.scrollIntoView(position, 500);
         this.codeMirror.setCursor(position);
+    }
+
+    goto(line:number, char?:number) {
+        this.focus(line, char);
         this.codeMirror.focus();
     }
 
@@ -113,7 +118,7 @@ export class EditorComponent {
 
                 if (frames.length === 0) return;
 
-                this.goto(breakedFrame.$lineno);
+                this.focus(breakedFrame.$lineno);
 
                 this.suspendedMarkings = frames
                     .map(frame => this.codeMirror.markText(

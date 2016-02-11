@@ -260,10 +260,25 @@ directory-node input.ng-invalid {
     border: 1px solid #ac3f3c;
 }
 
-.breakpoint {
+.breakpoint,
+.variable {
     position: relative;
     border-top: 1px solid #555555;
     border-bottom: 1px solid #282828;
+    padding: 5px 0;
+}
+
+tree .variable .type {
+    color: black;
+}
+
+tree .variable .description {
+    padding-bottom: 5px;
+}
+
+tree .variable .name {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .breakpoint input {
@@ -273,7 +288,6 @@ directory-node input.ng-invalid {
 
 .breakpoint .location {
     margin-left: 25px;
-    padding: 5px 0;
 }
 
 .breakpoint .location:hover {

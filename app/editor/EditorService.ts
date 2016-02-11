@@ -15,13 +15,15 @@ export class EditorService {
     focus$:Subject<number> = new Subject();
 
     loadFile(file:File):void {
+        var currentFile = this.currentFile$.getValue();
+
+        if (currentFile === file) return;
+
+        this.currentFile$.next(file);
+
         var openFiles = this.openFiles$.getValue();
         if (openFiles.indexOf(file) === -1)
             this.openFiles$.next([...openFiles, file]);
-
-        var currentFile = this.currentFile$.getValue();
-        if (currentFile !== file)
-            this.currentFile$.next(file);
     }
 
     closeFile(file:File):void {
@@ -47,5 +49,9 @@ export class EditorService {
 
     goto(line:number, char?:number) {
         this.goto$.next(new EditorPosition(line, char));
+    }
+
+    focus(line:number) {
+        this.focus$.next(line);
     }
 }
