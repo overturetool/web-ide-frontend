@@ -16,8 +16,9 @@
     </div>
 
     <h2>Call stack</h2>
-    <div class="stack" *ngFor="#frame of debug.stack.reverse()">
-        <span class="file">{{frame.$filename}}</span> <span class="line">line {{frame.$lineno}}</span>
+    <div class="frame" *ngFor="#frame of debug.stack.reverse()">
+        <div>{{frame.$filename}}:{{frame.$lineno}}</div>
+        <code>Get file line.</code>
     </div>
 
     <h2>Variables</h2>
@@ -28,7 +29,7 @@
         <div class="breakpoint">
             <input type="checkbox" [(ngModel)]="breakpoint.active">
             <div class="location" (click)="focus(breakpoint.file, breakpoint.line)">
-                <div>{{breakpoint.file.name}}: <span class="line">{{breakpoint.line}}</span></div>
+                <div>{{breakpoint.file.name}}:{{breakpoint.line}}</div>
                 <code>{{getLine(breakpoint.file, breakpoint.line)}}</code>
             </div>
         </div>
