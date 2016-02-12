@@ -1,13 +1,17 @@
-<panel-menu class="left">
-    <panel name="Projects" active="true"><workspace></workspace></panel>
-</panel-menu>
-
-<editor-tabs></editor-tabs>
-
-<panel-menu class="right">
-    <panel name="Debug" active="true"><debug></debug></panel>
+<div class="center-wrapper">
+    <panel-menu class="left">
+        <panel name="Projects" active="true"><workspace></workspace></panel>
+    </panel-menu>
+    <div class="center">
+        <editor-tabs></editor-tabs>
+        <editor></editor>
+    </div>
+    <panel-menu class="right">
+        <panel name="Debug" active="true"><debug></debug></panel>
+        <panel name="Outline"><outline></outline></panel>
+        <panel name="Proof Obligations"><proof-obligations></proof-obligations></panel>
+    </panel-menu>
+</div>
+<panel-menu class="bottom">
     <panel name="Outline"><outline></outline></panel>
-    <panel name="Proof Obligations"><proof-obligations></proof-obligations></panel>
 </panel-menu>
-
-<context-menu></context-menu>

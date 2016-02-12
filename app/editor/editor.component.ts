@@ -13,18 +13,21 @@ import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "./EditorService";
 import {File} from "../files/File";
 import {EditorPosition} from "./EditorPosition";
+import {HostBinding} from "angular2/core";
 
 declare var CodeMirror;
 
 @Component({
     selector: 'editor',
-    template: '<div [class.active]="file"></div>'
+    template: ''
 })
 export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
     private file:File = null;
+
+    @HostBinding('class.active') get active() { return !!this.file }
 
     changes$:Observable<string>;
 
@@ -37,7 +40,7 @@ export class EditorComponent {
         this.editorService.currentFile$
             .subscribe(file => this.load(file));
 
-        this.codeMirror = CodeMirror(el.nativeElement.querySelector("div"), {
+        this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,

@@ -11,8 +11,7 @@ import {EditorService} from "./EditorService";
 
 @Component({
     selector: 'editor-tabs',
-    templateUrl: 'app/editor/editor-tabs.component.html',
-    directives: [EditorComponent]
+    templateUrl: 'app/editor/editor-tabs.component.html'
 })
 export class EditorTabsComponent {
     files:Array<File> = [];
