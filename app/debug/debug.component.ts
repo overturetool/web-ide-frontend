@@ -4,6 +4,7 @@ import {NgFor} from "angular2/common";
 import {TreeComponent} from "../tree/tree.component";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
+import {StackFrame} from "./StackFrame";
 
 @Component({
     selector: "debug",
@@ -11,7 +12,7 @@ import {EditorService} from "../editor/EditorService";
     directives: [NgFor, TreeComponent]
 })
 export class DebugComponent {
-    file;
+    file:File;
     entry:string = "BAGTEST`TestBagAll()"; // TODO: Remove this default value
 
     constructor(private debug:DebugService,
@@ -28,6 +29,7 @@ export class DebugComponent {
     }
 
     selectFrame(frame:StackFrame):void {
+        this.debug.getContext(frame);
         this.focus(frame.file, frame.line);
     }
 

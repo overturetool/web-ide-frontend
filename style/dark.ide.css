@@ -266,7 +266,11 @@ directory-node input.ng-invalid {
     position: relative;
     border-top: 1px solid #555555;
     border-bottom: 1px solid #282828;
-    padding: 5px 0;
+    padding: 5px;
+}
+
+.frame.active {
+    background-color: rgba(47,101,202,.3);
 }
 
 tree .variable .type {

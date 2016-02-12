@@ -16,7 +16,10 @@
     </div>
 
     <h2>Call stack</h2>
-    <div class="frame" *ngFor="#frame of debug.stack.reverse()" (click)="selectFrame(frame)">
+    <div *ngFor="#frame of debug.stack.reverse()"
+         (click)="selectFrame(frame)"
+         [class.active]="debug.currentFrame === frame"
+         class="frame">
         <div>{{frame.file.name}}:{{frame.line}}</div>
         <code>{{getLine(frame.file, frame.line)}}.</code>
     </div>

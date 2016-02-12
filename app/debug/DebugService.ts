@@ -14,6 +14,7 @@ export class DebugService {
     status:string = "";
     context:Array<any> = [];
     stack:Array<StackFrame> = [];
+    currentFrame:StackFrame;
     stdout:Array<string> = [];
     breakpoints:Array<any> = [];
 
@@ -98,7 +99,10 @@ export class DebugService {
         this.breakpointsChanged.next(this.breakpoints);
     }
 
-    getContext(level: number):void {
+    getContext(frame?: StackFrame):void {
+        this.currentFrame = frame;
+        var level = frame ? frame.level : 0;
+
         this.connection
             .send('context_names')
             .then(response => {
@@ -107,7 +111,7 @@ export class DebugService {
                 response.response.context
                     .reverse()
                     .forEach(context => this.connection
-                        .send('context_get', `-c ${context.$id}`)
+                        .send('context_get', `-d ${level} -c ${context.$id}`)
                         .then(res => this.context.push({
                             $name: context.$name,
                             property: res.response.property
@@ -137,6 +141,7 @@ export class DebugService {
                     return this.createStackFrame(frame.$level, file, frame.$lineno, char);
                 });
 
+                this.currentFrame = self.stack[0];
                 self.stack[0].file.open();
                 this.editorService.focus(self.stack[0].line);
 
