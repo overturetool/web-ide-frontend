@@ -18,17 +18,9 @@ export class EditorTabsComponent {
     files:Array<File> = [];
     current:File = null;
 
-    constructor(private editorService:EditorService,
-                private workspaceService:WorkspaceService,
-                private debugService:DebugService) {
+    constructor(private editorService:EditorService) {
         this.editorService.openFiles$.subscribe(files => this.files = files);
         this.editorService.currentFile$.subscribe(file => this.current = file);
-
-        this.debugService.stackChanged
-            .filter(frames => frames.length > 0)
-            .map(frames => frames[0].$filename.split("/").slice(1))
-            .subscribe(parts => this.workspaceService
-                .workspace$.getValue().find(parts).open());
     }
 
     private click(event, file) {

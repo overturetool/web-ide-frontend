@@ -12,7 +12,7 @@ import {EditorService} from "../editor/EditorService";
 })
 export class DebugComponent {
     file;
-    entry:string = "Parts(1,bom)"; // TODO: Remove this default value
+    entry:string = "BAGTEST`TestBagAll()"; // TODO: Remove this default value
 
     constructor(private debug:DebugService,
                 private editorService:EditorService) {
@@ -25,6 +25,10 @@ export class DebugComponent {
 
     getLine(file:File, line:number):string {
         return file.document.getLine(line-1);
+    }
+
+    selectFrame(frame:StackFrame):void {
+        this.focus(frame.file, frame.line);
     }
 
     focus(file:File, line:number):void {

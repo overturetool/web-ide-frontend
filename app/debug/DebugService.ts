@@ -4,7 +4,10 @@ import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
 import {DbgpResponse} from "./DbgpResponse";
 import {DbgpConnection} from "./DbgpConnection";
 import {Breakpoint} from "./Breakpoint";
+import {StackFrame} from "./StackFrame";
 import {File} from "../files/File";
+import {WorkspaceService} from "../files/WorkspaceService";
+import {EditorService} from "../editor/EditorService";
 
 @Injectable()
 export class DebugService {
@@ -19,7 +22,9 @@ export class DebugService {
 
     private connection:DbgpConnection;
 
-    constructor(serverService:ServerService) {
+    constructor(serverService:ServerService,
+                private editorService:EditorService,
+                private workspaceService:WorkspaceService) {
         this.connection = new DbgpConnection(serverService);
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
@@ -93,7 +98,7 @@ export class DebugService {
         this.breakpointsChanged.next(this.breakpoints);
     }
 
-    getContext():void {
+    getContext(level: number):void {
         this.connection
             .send('context_names')
             .then(response => {
@@ -116,14 +121,24 @@ export class DebugService {
 
         this.connection.send('stack_get')
             .then(response => {
-                self.stack = response.response.stack.length ? response.response.stack : [response.response.stack];
+                var stack = response.response.stack.length ? response.response.stack : [response.response.stack];
 
                 // TODO: Remove this mapping
-                self.stack = self.stack.map(frame => {
+                stack = stack.map(frame => {
                     frame.$filename = frame.$filename
                         .replace("file:/home/rsreimer/projects/speciale/web-api/workspace/", "");
                     return frame;
                 });
+
+                self.stack = stack.map(frame => {
+                    var file = this.workspaceService.workspace$.getValue().find(frame.$filename.split("/").slice(1));
+                    var char = parseInt(frame.$cmdbegin.split(":")[1]);
+
+                    return this.createStackFrame(frame.$level, file, frame.$lineno, char);
+                });
+
+                self.stack[0].file.open();
+                this.editorService.focus(self.stack[0].line);
 
                 self.stackChanged.next(self.stack);
             });
@@ -135,6 +150,10 @@ export class DebugService {
 
     createBreakpoint(file:File, line:number):Breakpoint {
         return new Breakpoint(file, line);
+    }
+
+    createStackFrame(level:number, file:File, line:number, char:number):StackFrame {
+        return new StackFrame(level, file, line, char);
     }
 
     private onMessage(msg) {

@@ -277,8 +277,7 @@ tree .variable .description {
     padding-bottom: 5px;
 }
 
-tree .variable .name {
-    text-decoration: underline;
+tree .variable {
     cursor: pointer;
 }
 
@@ -291,7 +290,8 @@ tree .variable .name {
     margin-left: 25px;
 }
 
-.breakpoint .location:hover {
+.breakpoint .location:hover,
+.frame:hover {
     text-decoration: underline;
     cursor: pointer;
 }

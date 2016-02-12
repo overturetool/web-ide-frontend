@@ -79,8 +79,8 @@ export class EditorComponent {
 
     focus(line:number, char?:number) {
         // TODO: Doesn't seem to work with lines over 99
-        var position = {line: line -1};
-        if (char) position.ch = char -1;
+        var position = {line: line - 1};
+        if (char) position.ch = char - 1;
 
         this.codeMirror.scrollIntoView(position, 500);
         this.codeMirror.setCursor(position);
@@ -92,13 +92,16 @@ export class EditorComponent {
     }
 
     private load(file:File):void {
-        if (file !== null)
-            this.codeMirror.swapDoc(file.document);
-
         if (this.file === null)
             setTimeout(() => this.codeMirror.refresh(), 0);
 
         this.file = file;
+
+        if (this.file !== null) {
+            this.codeMirror.swapDoc(this.file.document);
+            this.updateBreakpoints();
+            this.updateStackFrames();
+        }
     }
 
     private setupCodeCompletion() {
@@ -108,40 +111,45 @@ export class EditorComponent {
         CodeMirror.commands.autocomplete = cm => cm.showHint({hint: hint});
     }
 
+    private updateStackFrames() {
+        var stack = this.debugService.stackChanged.getValue();
+
+        var breakedFrame = stack[0];
+        var frames = stack.filter(frame => frame.file === this.file);
+
+        this.suspendedMarkings.forEach(m => m.clear());
+
+        if (frames.length === 0) return;
+
+        this.focus(breakedFrame.line);
+
+        this.suspendedMarkings = frames
+            .map(frame => this.codeMirror.markText(
+                {line: frame.line - 1, ch: frame.char - 1},
+                {line: frame.line - 1, ch: 1000},
+                {className: frame === breakedFrame ? "CodeMirror-suspended" : "CodeMirror-frame"}
+            ));
+    }
+
+    private updateBreakpoints() {
+        this.codeMirror.clearGutter("CodeMirror-breakpoints");
+
+        var breakpoints = this.debugService.breakpointsChanged.getValue();
+
+        breakpoints
+            .filter(bp => bp.file === this.file)
+            .forEach(bp => {
+                var marker = document.createElement("div");
+                marker.classList.add("CodeMirror-breakpoint");
+                marker.innerHTML = "●";
+
+                this.codeMirror.setGutterMarker(bp.line - 1, "CodeMirror-breakpoints", marker);
+            });
+    }
+
     private setupDebugging() {
-        this.debugService.stackChanged
-            .subscribe((allFrames:Array<StackFrame>) => {
-                var breakedFrame = allFrames[0];
-                var frames = allFrames.filter(frame => frame.$filename === this.file.path);
-
-                this.suspendedMarkings.forEach(m => m.clear());
-
-                if (frames.length === 0) return;
-
-                this.focus(breakedFrame.$lineno);
-
-                this.suspendedMarkings = frames
-                    .map(frame => this.codeMirror.markText(
-                        {line: frame.$lineno - 1, ch: 0},
-                        {line: frame.$lineno - 1, ch: 1000},
-                        {className: frame === breakedFrame ? "CodeMirror-suspended" : "CodeMirror-frame"}
-                    ));
-            });
-
-        this.debugService.breakpointsChanged
-            .subscribe(breakpoints => {
-                this.codeMirror.clearGutter("CodeMirror-breakpoints");
-
-                breakpoints
-                    .filter(bp => bp.file === this.file)
-                    .forEach(bp => {
-                        var marker = document.createElement("div");
-                        marker.classList.add("CodeMirror-breakpoint");
-                        marker.innerHTML = "●";
-
-                        this.codeMirror.setGutterMarker(bp.line - 1, "CodeMirror-breakpoints", marker);
-                    });
-            });
+        this.debugService.stackChanged.subscribe(frames => this.updateStackFrames());
+        this.debugService.breakpointsChanged.subscribe(frames => this.updateBreakpoints());
 
         this.codeMirror.on("gutterClick", (cm, line) => {
             var info = cm.lineInfo(line);
