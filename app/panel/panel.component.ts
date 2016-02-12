@@ -1,5 +1,6 @@
 import {Component, Input} from "angular2/core"
 import {NgIf} from "angular2/common";
+import {HostBinding} from "angular2/core";
 
 @Component({
     selector: "panel",
@@ -7,6 +8,7 @@ import {NgIf} from "angular2/common";
     directives: [NgIf]
 })
 export class PanelComponent {
+    @HostBinding("class.active") active:boolean = false;
+
     @Input() name: string;
-    @Input() active:boolean = false;
 }

@@ -5,64 +5,64 @@ body {
 }
 
 ide {
-    height: 100vh;
-    flex-direction: column;
-}
-
-ide,
-.center,
-.center-wrapper {
     display:flex;
-}
-
-.center {
     flex-direction: column;
+    height: 100vh;
 }
 
-.center,
-.center-wrapper {
+editor {
     flex-grow: 1;
 }
 
-
-/**************************** Panels ****************************/
-
-panel-menu,
-panel {
+.center-wrapper {
+    flex-grow: 1;
     display: flex;
 }
 
-panel-menu.bottom {
-    flex-direction: column-reverse;
-}
-
-panel-menu.left panel > .content,
-panel-menu.right panel > .content {
-    border-width: 0 1px;
-    width: 300px;
-    overflow-y: scroll;
-}
-
-panel-menu.bottom panel > .content {
-    border-width: 1px 0;
+.center {
     flex-grow: 1;
-    height: 300px;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 }
 
-panel-menu.right {
+panel-menu.left, panel-menu.right {
+    display: flex;
+}
+
+/**************************** Panels ****************************/
+
+panel {
+    flex-grow: 1;
+    display: flex;
+}
+
+panel-menu.left {
     flex-direction: row-reverse;
 }
 
-panel-menu.left .menu,
-panel-menu.right .menu {
-    width: 22px;
+panel.active {
+    overflow-y: scroll;
+}
+
+.left panel > .content,
+.right panel > .content {
+    border-width: 0 1px;
+    width: 300px;
+}
+
+.bottom panel > .content {
+    border-width: 1px 0;
+    height: 300px;
+}
+
+.left .menu,
+.right .menu {
+    width: 24px;
     overflow-x: hidden;
 }
 
-panel-menu.bottom .menu {
-    height: 22px;
-    overflow-y: hidden;
+.bottom .menu {
+    height: 24px;
 }
 
 panel-menu .menu button {
@@ -76,13 +76,13 @@ panel-menu .menu button {
     outline: none;
 }
 
-panel-menu.right .menu button {
+.right .menu button {
     margin-bottom: 128px;
     transform-origin: 11px 11px;
     transform: rotate(90deg);
 }
 
-panel-menu.left .menu button {
+.left .menu button {
     margin-top: 128px;
     transform-origin: 11px 11px;
     transform: rotate(-90deg);

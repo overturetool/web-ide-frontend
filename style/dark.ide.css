@@ -139,21 +139,21 @@ panel-menu.bottom .menu {
 }
 
 panel-menu .menu,
-panel .content {
+panel {
     background-color: #3c3f41;
 }
 
-panel-menu.left panel .content {
+panel-menu.left panel.active {
     border-right: 1px solid #282828;
     border-left: 1px solid #555555;
 }
 
-panel-menu.right panel .content {
+panel-menu.right panel.active {
     border-left: 1px solid #282828;
     border-right: 1px solid #282828;
 }
 
-panel-menu.bottom panel .content {
+panel-menu.bottom panel.active {
     border-top: 1px solid #282828;
     border-bottom: 1px solid #282828;
 }
