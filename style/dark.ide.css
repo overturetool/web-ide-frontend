@@ -134,19 +134,28 @@ panel-menu.right .menu {
     border-left: 1px solid #555555;
 }
 
+panel-menu.bottom .menu {
+    border-top: 1px solid #555555;
+}
+
 panel-menu .menu,
-panel .content {
+panel {
     background-color: #3c3f41;
 }
 
-panel-menu.left panel .content {
+panel-menu.left panel.active {
     border-right: 1px solid #282828;
     border-left: 1px solid #555555;
 }
 
-panel-menu.right panel .content {
+panel-menu.right panel.active {
     border-left: 1px solid #282828;
     border-right: 1px solid #282828;
+}
+
+panel-menu.bottom panel.active {
+    border-top: 1px solid #282828;
+    border-bottom: 1px solid #282828;
 }
 
 .CodeMirror-hints {
@@ -207,18 +216,22 @@ button[disabled] {
 }
 
 editor-tabs ul {
+    border-bottom-color: #282828;
+}
+
+editor-tabs {
     background-color: #3c3f41;
-    border-bottom: 4px solid #515658;
+    border-bottom-color: #515658;
 }
 
 editor-tabs li {
     border: 1px solid #282828;
     border-left: 0;
+    border-bottom: 0;
     background-color: #3c3e3f;
 }
 
 editor-tabs li.active {
-    border-bottom: 0;
     background-color: #515658;
 }
 
@@ -261,7 +274,6 @@ directory-node input.ng-invalid {
 }
 
 .list-item {
-    position: relative;
     border-top: 1px solid #555555;
     border-bottom: 1px solid #282828;
     padding: 5px;

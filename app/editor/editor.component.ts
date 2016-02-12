@@ -13,18 +13,21 @@ import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "./EditorService";
 import {File} from "../files/File";
 import {EditorPosition} from "./EditorPosition";
+import {HostBinding} from "angular2/core";
 
 declare var CodeMirror;
 
 @Component({
     selector: 'editor',
-    template: '<div [class.active]="file"></div>'
+    template: ''
 })
 export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
     private file:File = null;
+
+    @HostBinding('class.active') get active() { return !!this.file }
 
     changes$:Observable<string>;
 
@@ -37,7 +40,7 @@ export class EditorComponent {
         this.editorService.currentFile$
             .subscribe(file => this.load(file));
 
-        this.codeMirror = CodeMirror(el.nativeElement.querySelector("div"), {
+        this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,
@@ -63,6 +66,7 @@ export class EditorComponent {
 
         this.setupCodeCompletion();
         this.setupDebugging();
+        this.setupResizing();
     }
 
     highlight(section:EditorSection) {
@@ -159,5 +163,23 @@ export class EditorComponent {
             else
                 this.debugService.setBreakpoint(this.file, line + 1);
         });
+    }
+
+    private setupResizing() {
+        // TODO: Find better solution to detect if the editor is resized.
+        var cm = this.codeMirror;
+        var el = cm.getWrapperElement();
+        var parent = el.parentNode;
+
+        var lastHeight = -1;
+
+        setInterval(() => {
+            if (parent.clientHeight === lastHeight) return;
+
+            lastHeight = parent.clientHeight;
+            el.style.height = `${parent.clientHeight}px`;
+
+            cm.refresh();
+        }, 100);
     }
 }

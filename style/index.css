@@ -1,42 +1,74 @@
+/**************************** Structure ****************************/
+
 body {
     margin: 0;
 }
 
-.CodeMirror {
-    height: 100vh;
-    width: 100%;
-}
-
 ide {
-    position: relative;
+    display:flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+editor {
+    flex-grow: 1;
+}
+
+.center-wrapper {
+    flex-grow: 1;
     display: flex;
 }
 
-ide editor-tabs {
-    flex: auto;
+.center {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-panel-menu {
+panel-menu.left, panel-menu.right {
     display: flex;
 }
 
-panel-menu.right {
+/**************************** Panels ****************************/
+
+panel {
+    flex-grow: 1;
+    display: flex;
+}
+
+panel-menu.left {
     flex-direction: row-reverse;
 }
 
-panel-menu .menu {
-    height: 100vh;
-    width: 22px;
+panel.active {
+    overflow-y: scroll;
+}
+
+panel-menu.left panel > .content,
+panel-menu.right panel > .content {
+    border-width: 0 1px;
+    width: 300px;
+}
+
+panel-menu.bottom panel > .content {
+    border-width: 1px 0;
+    height: 300px;
+    flex-grow: 1;
+}
+
+panel-menu.left .menu,
+panel-menu.right .menu {
+    width: 24px;
     overflow-x: hidden;
 }
 
+panel-menu.bottom .menu {
+    height: 24px;
+}
+
 panel-menu .menu button {
-    margin-bottom: 128px;
     background-color: transparent;
-    transform: rotate(90deg);
-    transform-origin: 11px 11px;
     width: 150px;
-    height: 22px;
     line-height: 22px;
     text-align: center;
     display: inline-block;
@@ -44,17 +76,24 @@ panel-menu .menu button {
     outline: none;
 }
 
+panel-menu.right .menu button {
+    margin-bottom: 128px;
+    transform-origin: 11px 11px;
+    transform: rotate(90deg);
+}
+
 panel-menu.left .menu button {
     margin-top: 128px;
+    transform-origin: 11px 11px;
     transform: rotate(-90deg);
 }
 
-panel > .content {
-    border-width: 0 1px;
-    height: 100vh;
-    width: 300px;
-    overflow: auto;
+
+
+.CodeMirror {
+    height: 100%;
 }
+
 
 .glyph.restart {
     background-position: 0 0;
@@ -118,24 +157,26 @@ tree li span.icon.directory.expanded {
     background-position: -39px -3px;
 }
 
-.breakpoints .file,
-.stack .file {
-    color: black;
-}
-
 editor-tabs ul {
     margin: 0;
     padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+editor-tabs {
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
 }
 
 editor-tabs li {
     height: 24px;
-    line-height: 24px;
     list-style: none;
     display: inline-block;
 }
 
 editor-tabs li.active {
+    margin-bottom: -1px;
     height: 25px;
     line-height: 25px;
 }
@@ -150,12 +191,18 @@ editor-tabs li button.close {
     margin-left: -7px;
 }
 
-editor > div {
+editor {
+    flex-grow: 1;
+    justify-content: stretch;
     display: none;
 }
 
-editor > div.active {
-    display: block;
+editor.active {
+    display: flex;
+}
+
+.CodeMirror {
+    flex-grow: 1;
 }
 
 file-node {
