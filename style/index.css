@@ -104,14 +104,6 @@ tree tree ul {
     padding-left: 17px;
 }
 
-tree .variable .type {
-    color: black;
-}
-
-tree .variable .value {
-    color: #00a8c6;
-}
-
 tree .variable .icon {
     display: inline-block;
     height: 17px;
@@ -158,11 +150,11 @@ editor-tabs li button.close {
     margin-left: -7px;
 }
 
-editor {
+editor > div {
     display: none;
 }
 
-editor.active {
+editor > div.active {
     display: block;
 }
 
@@ -181,13 +173,18 @@ directory-node {
     cursor: pointer;
 }
 
-project-trees {
+workspace {
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
     -moz-user-select: none;      /* Firefox */
     -ms-user-select: none;       /* IE/Edge */
     user-select: none;
     cursor: default;
 }
+
+workspace input {
+    cursor: text;
+}
+
 
 project-node .name,
 file-node .name,
@@ -259,13 +256,4 @@ context-menu .item {
 
 context-menu .item:hover {
     background-color: #2f65ca;
-}
-
-
-proof-obligations .kind {
-    color: black;
-}
-
-proof-obligations .valuetree {
-    color: #00a8c6;
 }

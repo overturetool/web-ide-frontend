@@ -10,40 +10,34 @@ import {OnDestroy} from "angular2/core";
 import {OutlineService} from "../outline/OutlineService";
 import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
 import {WorkspaceService} from "../files/WorkspaceService";
+import {EditorService} from "./EditorService";
+import {File} from "../files/File";
+import {EditorPosition} from "./EditorPosition";
 
 declare var CodeMirror;
 
 @Component({
     selector: 'editor',
-    template: ''
+    template: '<div [class.active]="file"></div>'
 })
-export class EditorComponent implements OnDestroy {
+export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
-
-    private _file;
+    private file:File = null;
 
     changes$:Observable<string>;
 
-    @Input() set file(file) {
-        this._file = file;
-        this.init(file);
-    }
-
-    get file() {
-        return this._file;
-    }
-
     constructor(el:ElementRef,
-                lintService:LintService,
+                private lintService:LintService,
                 private hintService:HintService,
-                private outlineService:OutlineService,
                 private debugService:DebugService,
-                private workspaceService:WorkspaceService,
-                private proofObligationsService:ProofObligationsService) {
+                private editorService:EditorService) {
 
-        this.codeMirror = CodeMirror(el.nativeElement, {
+        this.editorService.currentFile$
+            .subscribe(file => this.load(file));
+
+        this.codeMirror = CodeMirror(el.nativeElement.querySelector("div"), {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,
@@ -51,35 +45,24 @@ export class EditorComponent implements OnDestroy {
             lint: {getAnnotations: (text, callback) => lintService.lint(this.file, callback), async: true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
         });
-    }
 
-    private init(file:File) {
-        file.read().subscribe(content => {
-            this.codeMirror.getDoc().setValue(content);
-            this.codeMirror.clearHistory();
+        // Editor changes
+        this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+            .map(cm => cm.getValue())
+            .debounceTime(300)
+            .distinctUntilChanged();
 
-            // Editor changes
-            this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
-                .map(cm => cm.getValue())
-                .debounceTime(300)
-                .distinctUntilChanged();
-
-            this.setupFileSystem();
-            this.setupCodeCompletion();
-            this.setupDebugging();
-            this.setupOutline();
-            this.setupProofObligations();
+        this.changes$.subscribe(content => {
+            this.editorService.onChange();
+            this.file.save(content);
         });
-    }
 
-    ngOnDestroy() {
-        // Remove CodeMirror editor from DOM when component is destroyed.
-        var element = this.codeMirror.getWrapperElement();
-        element.parentNode.removeChild(element);
-    }
+        this.editorService.highlight$.subscribe(section => this.highlight(section));
+        this.editorService.goto$.subscribe(position => this.goto(position.line, position.char));
+        this.editorService.focus$.subscribe(line => this.focus(line));
 
-    private setupFileSystem() {
-        this.changes$.subscribe(content => this.file.write(content));
+        this.setupCodeCompletion();
+        this.setupDebugging();
     }
 
     highlight(section:EditorSection) {
@@ -94,9 +77,31 @@ export class EditorComponent implements OnDestroy {
         )
     }
 
-    focus(line:number) {
+    focus(line:number, char?:number) {
         // TODO: Doesn't seem to work with lines over 99
-        this.codeMirror.scrollIntoView({line: line - 1, ch: 0}, 500);
+        var position = {line: line - 1};
+        if (char) position.ch = char - 1;
+
+        this.codeMirror.scrollIntoView(position, 500);
+        this.codeMirror.setCursor(position);
+    }
+
+    goto(line:number, char?:number) {
+        this.focus(line, char);
+        this.codeMirror.focus();
+    }
+
+    private load(file:File):void {
+        if (this.file === null)
+            setTimeout(() => this.codeMirror.refresh(), 0);
+
+        this.file = file;
+
+        if (this.file !== null) {
+            this.codeMirror.swapDoc(this.file.document);
+            this.updateBreakpoints();
+            this.updateStackFrames();
+        }
     }
 
     private setupCodeCompletion() {
@@ -106,40 +111,45 @@ export class EditorComponent implements OnDestroy {
         CodeMirror.commands.autocomplete = cm => cm.showHint({hint: hint});
     }
 
+    private updateStackFrames() {
+        var stack = this.debugService.stackChanged.getValue();
+
+        var breakedFrame = stack[0];
+        var frames = stack.filter(frame => frame.file === this.file);
+
+        this.suspendedMarkings.forEach(m => m.clear());
+
+        if (frames.length === 0) return;
+
+        this.focus(breakedFrame.line);
+
+        this.suspendedMarkings = frames
+            .map(frame => this.codeMirror.markText(
+                {line: frame.line - 1, ch: frame.char - 1},
+                {line: frame.line - 1, ch: 1000},
+                {className: frame === breakedFrame ? "CodeMirror-suspended" : "CodeMirror-frame"}
+            ));
+    }
+
+    private updateBreakpoints() {
+        this.codeMirror.clearGutter("CodeMirror-breakpoints");
+
+        var breakpoints = this.debugService.breakpointsChanged.getValue();
+
+        breakpoints
+            .filter(bp => bp.file === this.file)
+            .forEach(bp => {
+                var marker = document.createElement("div");
+                marker.classList.add("CodeMirror-breakpoint");
+                marker.innerHTML = "●";
+
+                this.codeMirror.setGutterMarker(bp.line - 1, "CodeMirror-breakpoints", marker);
+            });
+    }
+
     private setupDebugging() {
-        this.debugService.stackChanged
-            .subscribe((allFrames:Array<StackFrame>) => {
-                var breakedFrame = allFrames[0];
-                var frames = allFrames.filter(frame => frame.$filename === this.file.path);
-
-                this.suspendedMarkings.forEach(m => m.clear());
-
-                if (frames.length === 0) return;
-
-                this.focus(breakedFrame.$lineno);
-
-                this.suspendedMarkings = frames
-                    .map(frame => this.codeMirror.markText(
-                        {line: frame.$lineno - 1, ch: 0},
-                        {line: frame.$lineno - 1, ch: 1000},
-                        {className: frame === breakedFrame ? "CodeMirror-suspended" : "CodeMirror-frame"}
-                    ));
-            });
-
-        this.debugService.breakpointsChanged
-            .subscribe(breakpoints => {
-                this.codeMirror.clearGutter("CodeMirror-breakpoints");
-
-                breakpoints
-                    .filter(bp => bp.file === this.file)
-                    .forEach(bp => {
-                        var marker = document.createElement("div");
-                        marker.classList.add("CodeMirror-breakpoint");
-                        marker.innerHTML = "●";
-
-                        this.codeMirror.setGutterMarker(bp.line - 1, "CodeMirror-breakpoints", marker);
-                    });
-            });
+        this.debugService.stackChanged.subscribe(frames => this.updateStackFrames());
+        this.debugService.breakpointsChanged.subscribe(frames => this.updateBreakpoints());
 
         this.codeMirror.on("gutterClick", (cm, line) => {
             var info = cm.lineInfo(line);
@@ -149,19 +159,5 @@ export class EditorComponent implements OnDestroy {
             else
                 this.debugService.setBreakpoint(this.file, line + 1);
         });
-    }
-
-    private setupOutline() {
-        this.changes$.subscribe(() => this.outlineService.update(this.file));
-
-        this.outlineService.highlight$.subscribe(section => this.highlight(section));
-        this.outlineService.focus$.subscribe(line => this.focus(line));
-    }
-
-    private setupProofObligations() {
-        this.changes$.subscribe(() => this.proofObligationsService.update(this.file));
-
-        this.proofObligationsService.highlight$.subscribe(section => this.highlight(section));
-        this.proofObligationsService.focus$.subscribe(line => this.focus(line));
     }
 }

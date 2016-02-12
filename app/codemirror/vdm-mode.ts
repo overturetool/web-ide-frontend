@@ -243,5 +243,3 @@ CodeMirror.defineMode("vdm", function() {
         blockCommentEnd: "*/"
     };
 });
-
-CodeMirror.defineMIME("text/x-vdm", "vdm");

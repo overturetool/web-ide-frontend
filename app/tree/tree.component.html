@@ -1,10 +1,12 @@
 <ul>
     <li *ngFor="#node of nodes">
-        <div class="variable" (click)="node.__open = !node.__open">
-            <span class="icon" *ngIf="node.property" [class.open]="node.__open" [class.close]="!node.__open"></span>
-            <span class="type">{{ node.$type }} </span>
-            <span class="name">{{ node.$name }} </span>
-            <span class="value">{{ node.keyValue }}</span>
+        <div class="variable list-item" (click)="node.__open = !node.__open">
+            <div class="description">
+                <span class="icon" *ngIf="node.property" [class.open]="node.__open" [class.close]="!node.__open"></span>
+                <code>{{ node.$name }}</code><code class="type"> {{ node.$type }}</code>
+            </div>
+
+            <code class="value">{{ node.keyValue }}</code>
         </div>
         <div *ngIf="node.property && node.__open">
             <tree [nodes]="node.property.length ? node.property : [node.property]"></tree>

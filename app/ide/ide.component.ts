@@ -16,12 +16,14 @@ import {WorkspaceComponent} from "../files/workspace.component";
 import {ProofObligationsComponent} from "../proof-obligations/proof-obligations.component";
 import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
 import {WorkspaceService} from "../files/WorkspaceService";
+import {WorkspaceFactory} from "../files/WorkspaceFactory";
+import {EditorService} from "../editor/EditorService";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
     directives: [ProofObligationsComponent, EditorTabsComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [ProofObligationsService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, HTTP_PROVIDERS]
+    providers: [ProofObligationsService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, EditorService, WorkspaceFactory, HTTP_PROVIDERS]
 })
 export class IdeComponent {
 }

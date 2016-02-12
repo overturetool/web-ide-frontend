@@ -259,3 +259,36 @@ file-node input.ng-invalid,
 directory-node input.ng-invalid {
     border: 1px solid #ac3f3c;
 }
+
+.list-item {
+    position: relative;
+    border-top: 1px solid #555555;
+    border-bottom: 1px solid #282828;
+    padding: 5px;
+}
+
+.list-item.active {
+    background-color: rgba(47,101,202,.3);
+}
+
+.list-item .description {
+    padding-bottom: 5px;
+}
+
+.list-item .type {
+    color: black;
+}
+
+tree .variable {
+    cursor: pointer;
+}
+
+.breakpoint input {
+    position: absolute;
+    top: 5px;
+}
+
+.list-item.interactable:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

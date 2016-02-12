@@ -1,6 +1,8 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {OutlineService} from "./OutlineService";
+import {OutlineItem} from "./OutlineItem";
 import {Observable} from "rxjs/Observable";
+import {EditorService} from "../editor/EditorService";
 
 @Component({
     selector: "outline",
@@ -9,19 +11,20 @@ import {Observable} from "rxjs/Observable";
 export class OutlineComponent {
     items:Array<OutlineItem>;
 
-    constructor(private outlineService:OutlineService) {
+    constructor(private outlineService:OutlineService,
+                private editorService:EditorService) {
         this.outlineService.items$.subscribe(items => this.items = items);
     }
 
     onEnter(item:OutlineItem):void {
-        this.outlineService.highlight(item.location);
+        this.editorService.highlight(item.location);
     }
 
     onLeave():void {
-        this.outlineService.highlight(null);
+        this.editorService.highlight(null);
     }
 
     onSelect(item:OutlineItem):void {
-        this.outlineService.focus(item.location.startLine);
+        this.editorService.focus(item.location.endLine);
     }
 }

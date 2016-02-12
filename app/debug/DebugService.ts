@@ -3,12 +3,18 @@ import {ServerService} from "../server/ServerService"
 import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
 import {DbgpResponse} from "./DbgpResponse";
 import {DbgpConnection} from "./DbgpConnection";
+import {Breakpoint} from "./Breakpoint";
+import {StackFrame} from "./StackFrame";
+import {File} from "../files/File";
+import {WorkspaceService} from "../files/WorkspaceService";
+import {EditorService} from "../editor/EditorService";
 
 @Injectable()
 export class DebugService {
     status:string = "";
     context:Array<any> = [];
     stack:Array<StackFrame> = [];
+    currentFrame:StackFrame;
     stdout:Array<string> = [];
     breakpoints:Array<any> = [];
 
@@ -17,7 +23,9 @@ export class DebugService {
 
     private connection:DbgpConnection;
 
-    constructor(serverService:ServerService) {
+    constructor(serverService:ServerService,
+                private editorService:EditorService,
+                private workspaceService:WorkspaceService) {
         this.connection = new DbgpConnection(serverService);
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
@@ -60,7 +68,7 @@ export class DebugService {
         this.breakpointsChanged.next(this.breakpoints);
     }
 
-    setBreakpoint(file, line):void {
+    setBreakpoint(file:File, line:number):void {
         if (this.connection.connected) {
             var self = this;
 
@@ -69,11 +77,14 @@ export class DebugService {
                 .then(res => {
                     if (!res.response.$id) return;
 
-                    self.breakpoints.push({file: file, line: line, id: res.response.$id});
+                    var breakpoint = self.createBreakpoint(file, line);
+                    breakpoint.id = res.response.$id;
+
+                    self.breakpoints.push(breakpoint);
                     self.breakpointsChanged.next(self.breakpoints);
                 });
         } else {
-            this.breakpoints.push({file: file, line: line});
+            this.breakpoints.push(this.createBreakpoint(file, line));
             this.breakpointsChanged.next(this.breakpoints);
         }
     }
@@ -88,7 +99,10 @@ export class DebugService {
         this.breakpointsChanged.next(this.breakpoints);
     }
 
-    getContext():void {
+    getContext(frame?: StackFrame):void {
+        this.currentFrame = frame;
+        var level = frame ? frame.level : 0;
+
         this.connection
             .send('context_names')
             .then(response => {
@@ -97,7 +111,7 @@ export class DebugService {
                 response.response.context
                     .reverse()
                     .forEach(context => this.connection
-                        .send('context_get', `-c ${context.$id}`)
+                        .send('context_get', `-d ${level} -c ${context.$id}`)
                         .then(res => this.context.push({
                             $name: context.$name,
                             property: res.response.property
@@ -111,14 +125,25 @@ export class DebugService {
 
         this.connection.send('stack_get')
             .then(response => {
-                self.stack = response.response.stack.length ? response.response.stack : [response.response.stack];
+                var stack = response.response.stack.length ? response.response.stack : [response.response.stack];
 
                 // TODO: Remove this mapping
-                self.stack = self.stack.map(frame => {
+                stack = stack.map(frame => {
                     frame.$filename = frame.$filename
                         .replace("file:/home/rsreimer/projects/speciale/web-api/workspace/", "");
                     return frame;
                 });
+
+                self.stack = stack.map(frame => {
+                    var file = this.workspaceService.workspace$.getValue().find(frame.$filename.split("/").slice(1));
+                    var char = parseInt(frame.$cmdbegin.split(":")[1]);
+
+                    return this.createStackFrame(frame.$level, file, frame.$lineno, char);
+                });
+
+                this.currentFrame = self.stack[0];
+                self.stack[0].file.open();
+                this.editorService.focus(self.stack[0].line);
 
                 self.stackChanged.next(self.stack);
             });
@@ -126,6 +151,14 @@ export class DebugService {
 
     getStatus():void {
         this.connection.send('status');
+    }
+
+    createBreakpoint(file:File, line:number):Breakpoint {
+        return new Breakpoint(file, line);
+    }
+
+    createStackFrame(level:number, file:File, line:number, char:number):StackFrame {
+        return new StackFrame(level, file, line, char);
     }
 
     private onMessage(msg) {
@@ -138,15 +171,22 @@ export class DebugService {
         if (msg.response) {
             var status = msg.response.$status;
 
-            if (!status) return;
+            if (status) {
+                this.status = status;
 
-            this.status = status;
+                if (status === "break") {
+                    this.getContext();
+                    this.getStack();
+                } else {
+                    this.stackChanged.next([]);
+                }
+            }
 
-            if (status === "break") {
-                this.getContext();
-                this.getStack();
-            } else {
-                this.stackChanged.next([]);
+            var error = msg.response.error;
+
+            if (error) {
+                this.stop();
+                this.stdout.push(error.message);
             }
         }
     }

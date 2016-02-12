@@ -1,4 +1,4 @@
-<div draggable="true"
+<div [draggable]="!renaming"
      (contextmenu)="onContextMenu($event)"
      (dragstart)="dragstart($event)"
      (drop)="drop($event)"
