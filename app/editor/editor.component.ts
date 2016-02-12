@@ -66,6 +66,7 @@ export class EditorComponent {
 
         this.setupCodeCompletion();
         this.setupDebugging();
+        this.setupResizing();
     }
 
     highlight(section:EditorSection) {
@@ -162,5 +163,23 @@ export class EditorComponent {
             else
                 this.debugService.setBreakpoint(this.file, line + 1);
         });
+    }
+
+    private setupResizing() {
+        // TODO: Find better solution to detect if the editor is resized.
+        var cm = this.codeMirror;
+        var el = cm.getWrapperElement();
+        var parent = el.parentNode;
+
+        var lastHeight = -1;
+
+        setInterval(() => {
+            if (parent.clientHeight === lastHeight) return;
+
+            lastHeight = parent.clientHeight;
+            el.style.height = `${parent.clientHeight}px`;
+
+            cm.refresh();
+        }, 100);
     }
 }

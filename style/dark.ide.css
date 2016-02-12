@@ -216,6 +216,10 @@ button[disabled] {
 }
 
 editor-tabs ul {
+    border-bottom-color: #282828;
+}
+
+editor-tabs {
     background-color: #3c3f41;
     border-bottom-color: #515658;
 }
@@ -223,11 +227,11 @@ editor-tabs ul {
 editor-tabs li {
     border: 1px solid #282828;
     border-left: 0;
+    border-bottom: 0;
     background-color: #3c3e3f;
 }
 
 editor-tabs li.active {
-    border-bottom: 0;
     background-color: #515658;
 }
 

@@ -44,31 +44,31 @@ panel.active {
     overflow-y: scroll;
 }
 
-.left panel > .content,
-.right panel > .content {
+panel-menu.left panel > .content,
+panel-menu.right panel > .content {
     border-width: 0 1px;
     width: 300px;
 }
 
-.bottom panel > .content {
+panel-menu.bottom panel > .content {
     border-width: 1px 0;
     height: 300px;
+    flex-grow: 1;
 }
 
-.left .menu,
-.right .menu {
+panel-menu.left .menu,
+panel-menu.right .menu {
     width: 24px;
     overflow-x: hidden;
 }
 
-.bottom .menu {
+panel-menu.bottom .menu {
     height: 24px;
 }
 
 panel-menu .menu button {
     background-color: transparent;
     width: 150px;
-    height: 22px;
     line-height: 22px;
     text-align: center;
     display: inline-block;
@@ -76,16 +76,22 @@ panel-menu .menu button {
     outline: none;
 }
 
-.right .menu button {
+panel-menu.right .menu button {
     margin-bottom: 128px;
     transform-origin: 11px 11px;
     transform: rotate(90deg);
 }
 
-.left .menu button {
+panel-menu.left .menu button {
     margin-top: 128px;
     transform-origin: 11px 11px;
     transform: rotate(-90deg);
+}
+
+
+
+.CodeMirror {
+    height: 100%;
 }
 
 
@@ -154,17 +160,23 @@ tree li span.icon.directory.expanded {
 editor-tabs ul {
     margin: 0;
     padding: 0;
-    height: 26px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+editor-tabs {
     border-bottom-width: 4px;
     border-bottom-style: solid;
 }
 
 editor-tabs li {
+    height: 24px;
     list-style: none;
     display: inline-block;
 }
 
 editor-tabs li.active {
+    margin-bottom: -1px;
     height: 25px;
     line-height: 25px;
 }

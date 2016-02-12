@@ -19,11 +19,12 @@ import {WorkspaceService} from "../files/WorkspaceService";
 import {WorkspaceFactory} from "../files/WorkspaceFactory";
 import {EditorService} from "../editor/EditorService";
 import {EditorComponent} from "../editor/editor.component";
+import {ReplComponent} from "../repl/repl.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [ProofObligationsComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    directives: [ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     providers: [ProofObligationsService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, EditorService, WorkspaceFactory, HTTP_PROVIDERS]
 })
 export class IdeComponent {
