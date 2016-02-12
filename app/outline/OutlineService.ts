@@ -30,14 +30,6 @@ export class OutlineService {
         }
     }
 
-    highlight(section:EditorSection):void {
-        this.editorService.highlight$.next(section);
-    }
-
-    goto(line:number):void {
-        this.editorService.focus$.next(line);
-    }
-
     createOutlineItem(name:string, type:string, location:EditorSection):OutlineItem {
         return new OutlineItem(name, type, location);
     }

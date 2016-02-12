@@ -51,6 +51,10 @@ export class EditorService {
         this.goto$.next(new EditorPosition(line, char));
     }
 
+    highlight(section:EditorSection) {
+        this.highlight$.next(section);
+    }
+
     focus(line:number) {
         this.focus$.next(line);
     }
