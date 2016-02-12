@@ -257,12 +257,3 @@ context-menu .item {
 context-menu .item:hover {
     background-color: #2f65ca;
 }
-
-
-proof-obligations .kind {
-    color: black;
-}
-
-proof-obligations .valuetree {
-    color: #00a8c6;
-}

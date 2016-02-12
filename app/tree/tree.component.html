@@ -1,9 +1,9 @@
 <ul>
     <li *ngFor="#node of nodes">
-        <div class="variable" (click)="node.__open = !node.__open">
+        <div class="variable list-item" (click)="node.__open = !node.__open">
             <div class="description">
                 <span class="icon" *ngIf="node.property" [class.open]="node.__open" [class.close]="!node.__open"></span>
-                <code class="name">{{ node.$name }}</code><code class="type"> {{ node.$type }}</code>
+                <code>{{ node.$name }}</code><code class="type"> {{ node.$type }}</code>
             </div>
 
             <code class="value">{{ node.keyValue }}</code>

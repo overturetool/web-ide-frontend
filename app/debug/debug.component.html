@@ -8,9 +8,9 @@
 
     <div *ngIf="debug.connection.connected">
         <button (click)="debug.run()" class="glyph run"></button>
-        <button (click)="debug.stepOver()"  [disabled]="debug.status !== 'break'" class="glyph step-over"></button>
-        <button (click)="debug.stepInto()"  [disabled]="debug.status !== 'break'" class="glyph step-into"></button>
-        <button (click)="debug.stepOut()"   [disabled]="debug.status !== 'break'" class="glyph step-out"></button>
+        <button (click)="debug.stepOver()" [disabled]="debug.status !== 'break'" class="glyph step-over"></button>
+        <button (click)="debug.stepInto()" [disabled]="debug.status !== 'break'" class="glyph step-into"></button>
+        <button (click)="debug.stepOut()" [disabled]="debug.status !== 'break'" class="glyph step-out"></button>
         <button (click)="debug.stop()" class="glyph stop"></button>
         <button (click)="connect()" class="glyph restart"></button>
     </div>
@@ -19,8 +19,8 @@
     <div *ngFor="#frame of debug.stack.reverse()"
          (click)="selectFrame(frame)"
          [class.active]="debug.currentFrame === frame"
-         class="frame">
-        <div>{{frame.file.name}}:{{frame.line}}</div>
+         class="frame list-item interactable">
+        <div class="description">{{frame.file.name}}:{{frame.line}}</div>
         <code>{{getLine(frame.file, frame.line)}}.</code>
     </div>
 
@@ -29,12 +29,9 @@
 
     <h2>Breakpoints</h2>
     <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
-        <div class="breakpoint">
-            <input type="checkbox" [(ngModel)]="breakpoint.active">
-            <div class="location" (click)="focus(breakpoint.file, breakpoint.line)">
-                <div>{{breakpoint.file.name}}:{{breakpoint.line}}</div>
-                <code>{{getLine(breakpoint.file, breakpoint.line)}}</code>
-            </div>
+        <div class="breakpoint list-item interactable" (click)="focus(breakpoint.file, breakpoint.line)">
+            <div class="description">{{breakpoint.file.name}}:{{breakpoint.line}}</div>
+            <code>{{getLine(breakpoint.file, breakpoint.line)}}</code>
         </div>
     </div>
 

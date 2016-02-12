@@ -7,6 +7,7 @@ import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs/Rx";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
+import {OutlineItem} from "./OutlineItem";
 
 @Injectable()
 export class OutlineService {
@@ -24,6 +25,7 @@ export class OutlineService {
         } else {
             this.serverService.get(`outline/${file.path}`)
                 .map(res => res.json())
+                .map(items => this._mapItems(items))
                 .subscribe(items => this.items$.next(items));
         }
     }
@@ -32,7 +34,26 @@ export class OutlineService {
         this.editorService.highlight$.next(section);
     }
 
-    focus(line:number):void {
+    goto(line:number):void {
         this.editorService.focus$.next(line);
+    }
+
+    createOutlineItem(name:string, type:string, location:EditorSection):OutlineItem {
+        return new OutlineItem(name, type, location);
+    }
+
+    private _mapItems(items) {
+        return items.map(item => {
+            if (item.parameters && item.expectedResult)
+                return this.createOutlineItem(
+                    `${item.name}(${item.parameters.join(", ")})`,
+                    `→ ${item.expectedResult}`,
+                    item.location);
+
+            if (item.expression)
+                return this.createOutlineItem(item.name, item.type, item.location);
+
+            return this.createOutlineItem(item.name, item.type, item.location);
+        });
     }
 }

@@ -22,6 +22,6 @@ export class OutlineComponent {
     }
 
     onSelect(item:OutlineItem):void {
-        this.outlineService.focus(item.location.startLine);
+        this.outlineService.goto(item.location.startLine);
     }
 }
