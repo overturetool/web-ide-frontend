@@ -304,3 +304,33 @@ context-menu .item {
 context-menu .item:hover {
     background-color: #2f65ca;
 }
+
+
+
+/**************************** REPL ****************************/
+
+repl {
+    font: 12px monospace;
+}
+
+repl input {
+    font: 12px monospace;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+}
+
+repl .item,
+repl .input {
+    padding: 5px;
+}
+
+repl .input {
+    display: flex;
+}
+
+repl .input > input {
+    flex-grow: 1;
+}

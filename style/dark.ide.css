@@ -304,3 +304,8 @@ tree .variable {
     text-decoration: underline;
     cursor: pointer;
 }
+
+
+repl input {
+    color: #bbbbbb;
+}

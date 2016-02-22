@@ -1,2 +1,8 @@
-<h1>REPL</h1>
-<input placeholder="REPL! REPL! REPL!">
+<div *ngFor="#item of replService.items" class="item">
+    <div>&gt; <span class="expression">{{ item.expression }}</span></div>
+    <div class="result">{{ item.result }}</div>
+</div>
+<div class="input">&gt;&nbsp;<input [(ngModel)]="input"
+                                    (keyup.enter)="evaluate()"
+                                    (keyup.arrowup)="selectPrev($event)"
+                                    (keyup.arrowdown)="selectNext($event)"></div>
