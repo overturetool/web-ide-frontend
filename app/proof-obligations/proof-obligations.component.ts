@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {Observable} from "rxjs/Observable";
 import {ProofObligationsService} from "./ProofObligationsService";
+import {EditorService} from "../editor/EditorService";
 
 @Component({
     selector: "proof-obligations",
@@ -9,19 +10,20 @@ import {ProofObligationsService} from "./ProofObligationsService";
 export class ProofObligationsComponent {
     items:Array<ProofObligationsItem>;
 
-    constructor(private proofObligationsService:ProofObligationsService) {
+    constructor(private proofObligationsService:ProofObligationsService,
+                private editorService:EditorService) {
         this.proofObligationsService.items$.subscribe(items => this.items = items);
     }
 
     onEnter(item:ProofObligationsItem):void {
-        this.proofObligationsService.highlight(item.location);
+        this.editorService.highlight(item.location);
     }
 
     onLeave():void {
-        this.proofObligationsService.highlight(null);
+        this.editorService.highlight(null);
     }
 
     onSelect(item:ProofObligationsItem):void {
-        this.proofObligationsService.focus(item.location.startLine);
+        this.editorService.focus(item.location.startLine);
     }
 }

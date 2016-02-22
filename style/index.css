@@ -69,22 +69,23 @@ panel-menu.bottom .menu {
 panel-menu .menu button {
     background-color: transparent;
     width: 150px;
-    line-height: 22px;
+    line-height: 24px;
     text-align: center;
     display: inline-block;
     border: none;
+    padding: 0;
     outline: none;
 }
 
 panel-menu.right .menu button {
-    margin-bottom: 128px;
-    transform-origin: 11px 11px;
+    margin-bottom: 126px;
+    transform-origin: 12px 12px;
     transform: rotate(90deg);
 }
 
 panel-menu.left .menu button {
-    margin-top: 128px;
-    transform-origin: 11px 11px;
+    margin-top: 126px;
+    transform-origin: 12px 12px;
     transform: rotate(-90deg);
 }
 

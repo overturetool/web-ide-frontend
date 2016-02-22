@@ -127,13 +127,6 @@ export class DebugService {
             .then(response => {
                 var stack = response.response.stack.length ? response.response.stack : [response.response.stack];
 
-                // TODO: Remove this mapping
-                stack = stack.map(frame => {
-                    frame.$filename = frame.$filename
-                        .replace("file:/home/rsreimer/projects/speciale/web-api/workspace/", "");
-                    return frame;
-                });
-
                 self.stack = stack.map(frame => {
                     var file = this.workspaceService.workspace$.getValue().find(frame.$filename.split("/").slice(1));
                     var char = parseInt(frame.$cmdbegin.split(":")[1]);
