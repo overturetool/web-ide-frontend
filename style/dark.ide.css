@@ -306,6 +306,10 @@ tree .variable {
 }
 
 
+repl {
+    color: white;
+}
+
 repl input {
     color: #bbbbbb;
 }
