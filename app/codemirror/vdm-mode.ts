@@ -167,6 +167,7 @@ CodeMirror.defineMode("vdm", function() {
         if (ch === "}") return "variable";
         if (ch === "[") return "variable";
         if (ch === "]") return "variable";
+        if (ch === ",") return "variable";
         if (ch === '"') {
             state.tokenize = tokenString;
             return state.tokenize(stream, state);
