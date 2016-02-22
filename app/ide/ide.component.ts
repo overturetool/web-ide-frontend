@@ -21,12 +21,18 @@ import {EditorService} from "../editor/EditorService";
 import {EditorComponent} from "../editor/editor.component";
 import {ReplComponent} from "../repl/repl.component";
 import {ReplService} from "../repl/ReplService";
+import {GuideComponent} from "../guide/guide.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    directives: [GuideComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     providers: [ProofObligationsService, ReplService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, EditorService, WorkspaceFactory, HTTP_PROVIDERS]
 })
 export class IdeComponent {
+    empty: boolean = true;
+
+    constructor(editorService:EditorService) {
+        editorService.currentFile$.subscribe(file => this.empty = !file);
+    }
 }

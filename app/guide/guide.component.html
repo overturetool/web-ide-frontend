@@ -1,0 +1,56 @@
+<div *ngIf="step == 0" class="welcome">
+    <h1>Welcome to the Overture Cloud IDE!</h1>
+    <button (click)="step = 1">Start guide</button>
+</div>
+
+<div *ngIf="step == 1" class="workspace">
+    <img src="images/arrow.png">
+    <div>
+        Manage your projects here. <br>
+        Left-click on files to open them. <br>
+        Right-click for more options. <br>
+        <button (click)="prev()">&lt;</button>
+        <button (click)="next()">&gt;</button>
+    </div>
+</div>
+
+<div *ngIf="step == 2" class="debug">
+    <div>
+        Debug a project here. <br>
+        Step through the code and watch values change. <br>
+        Breakpoints can be set in the editor. <br>
+        <button (click)="prev()">&lt;</button>
+        <button (click)="next()">&gt;</button>
+    </div>
+    <img src="images/arrow.png">
+</div>
+
+<div *ngIf="step == 3" class="outline">
+    <div>
+        Get an overview of a file here. <br>
+        The outline view lists values and functions. <br>
+        Click on an item to navigate to it in the editor. <br>
+        <button (click)="prev()">&lt;</button>
+        <button (click)="next()">&gt;</button>
+    </div>
+    <img src="images/arrow.png">
+</div>
+
+<div *ngIf="step == 4" class="pog">
+    <div>
+        See proof obligations here. <br>
+        Click on an item to navigate to it in the editor. <br>
+        <button (click)="prev()">&lt;</button>
+        <button (click)="next()">&gt;</button>
+    </div>
+    <img src="images/arrow.png">
+</div>
+
+<div *ngIf="step == 5" class="repl">
+    <img src="images/arrow.png">
+    <div>
+        Evaluate VDM expressions here. <br>
+        Expressions are evaluated in the context of the currently open file. <br>
+        <button (click)="step = 0">Finish</button>
+    </div>
+</div>

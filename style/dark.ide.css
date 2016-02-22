@@ -317,3 +317,21 @@ repl input {
 .msg.error {
     color: #ac3f3c;
 }
+
+guide {
+
+}
+
+guide button {
+    border: 1px solid #515151;
+    background-color: #2d2f30;
+    outline: 0;
+    color: #eaeaea;
+    margin: 5px;
+    padding: 5px;
+    min-width: 27px;
+}
+
+guide button:hover {
+    background-color: #353739;
+}

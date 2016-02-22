@@ -4,7 +4,7 @@ import {HostBinding} from "angular2/core";
 
 @Component({
     selector: "panel",
-    template: '<div *ngIf="active" class="content"><ng-content></ng-content></div>',
+    template: '<div *ngIf="active" class="content"><ng-content></ng-content><div class="resizer"></div></div>',
     directives: [NgIf]
 })
 export class PanelComponent {
