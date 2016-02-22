@@ -56,8 +56,8 @@ export class EditorComponent {
             .distinctUntilChanged();
 
         this.changes$.subscribe(content => {
-            this.editorService.onChange();
-            this.file.save(content);
+            this.file.save(content)
+                .subscribe(() => this.editorService.onChange());
         });
 
         this.editorService.highlight$.subscribe(section => this.highlight(section));
