@@ -1,9 +1,11 @@
 import {Component} from "angular2/core";
 import {ReplService} from "./ReplService";
+import {CodeViewComponent} from "../code-view/code-view.component";
 
 @Component({
     selector: "repl",
-    templateUrl: "app/repl/repl.component.html"
+    templateUrl: "app/repl/repl.component.html",
+    directives: [CodeViewComponent]
 })
 export class ReplComponent {
     input:string = "";

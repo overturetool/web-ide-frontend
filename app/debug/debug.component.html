@@ -21,7 +21,7 @@
          [class.active]="debug.currentFrame === frame"
          class="frame list-item interactable">
         <div class="description">{{frame.file.name}}:{{frame.line}}</div>
-        <code>{{getLine(frame.file, frame.line)}}.</code>
+        <code-view [code]="getLine(frame.file, frame.line)"></code-view>
     </div>
 
     <h2>Variables</h2>
@@ -31,10 +31,10 @@
     <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
         <div class="breakpoint list-item interactable" (click)="focus(breakpoint.file, breakpoint.line)">
             <div class="description">{{breakpoint.file.name}}:{{breakpoint.line}}</div>
-            <code>{{getLine(breakpoint.file, breakpoint.line)}}</code>
+            <code-view [code]="getLine(breakpoint.file, breakpoint.line)"></code-view>
         </div>
     </div>
 
     <h2>Stdout</h2>
-    <div *ngFor="#line of debug.stdout"><code>{{line}}</code></div>
+    <div *ngFor="#line of debug.stdout"><code-view [code]="line"></code-view></div>
 </div>

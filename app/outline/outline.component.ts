@@ -3,10 +3,12 @@ import {OutlineService} from "./OutlineService";
 import {OutlineItem} from "./OutlineItem";
 import {Observable} from "rxjs/Observable";
 import {EditorService} from "../editor/EditorService";
+import {CodeViewComponent} from "../code-view/code-view.component";
 
 @Component({
     selector: "outline",
-    templateUrl: "app/outline/outline.component.html"
+    templateUrl: "app/outline/outline.component.html",
+    directives: [CodeViewComponent]
 })
 export class OutlineComponent {
     items:Array<OutlineItem>;

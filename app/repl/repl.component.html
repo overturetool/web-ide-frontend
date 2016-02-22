@@ -1,6 +1,7 @@
 <div *ngFor="#item of replService.items" class="item">
-    <div>&gt; <span class="expression">{{ item.expression }}</span></div>
-    <div class="result">{{ item.result }}</div>
+    <div>&gt; <code-view [code]="item.expression"></code-view></div>
+    <code-view *ngIf="item.type == 'code'" [code]="item.result"></code-view>
+    <div *ngIf="item.type == 'error'" class="msg error">{{item.result}}</div>
 </div>
 <div class="input">&gt;&nbsp;<input [(ngModel)]="input"
                                     (keyup.enter)="evaluate()"

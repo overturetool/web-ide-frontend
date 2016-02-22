@@ -2,10 +2,12 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {Observable} from "rxjs/Observable";
 import {ProofObligationsService} from "./ProofObligationsService";
 import {EditorService} from "../editor/EditorService";
+import {CodeViewComponent} from "../code-view/code-view.component";
 
 @Component({
     selector: "proof-obligations",
-    templateUrl: "app/proof-obligations/proof-obligations.component.html"
+    templateUrl: "app/proof-obligations/proof-obligations.component.html",
+    directives: [CodeViewComponent]
 })
 export class ProofObligationsComponent {
     items:Array<ProofObligationsItem>;

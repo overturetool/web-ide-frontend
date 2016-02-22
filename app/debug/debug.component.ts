@@ -1,15 +1,15 @@
 import {Component, Input} from "angular2/core";
 import {DebugService} from "./DebugService";
-import {NgFor} from "angular2/common";
 import {TreeComponent} from "../tree/tree.component";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
 import {StackFrame} from "./StackFrame";
+import {CodeViewComponent} from "../code-view/code-view.component";
 
 @Component({
     selector: "debug",
     templateUrl: "app/debug/debug.component.html",
-    directives: [NgFor, TreeComponent]
+    directives: [CodeViewComponent, TreeComponent]
 })
 export class DebugComponent {
     file:File;

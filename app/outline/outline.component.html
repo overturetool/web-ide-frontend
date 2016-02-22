@@ -3,6 +3,6 @@
      (mouseenter)="onEnter(item)"
      (mouseleave)="onLeave()"
      class="outline list-item interactable">
-    <div class="description"><code>{{item.name}}</code></div>
-    <code class="type">{{item.type}}</code>
+    <div class="description"><code-view [code]="item.name"></code-view></div>
+    <code-view [code]="item.type"></code-view>
 </div>
