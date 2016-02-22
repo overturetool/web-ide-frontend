@@ -13,7 +13,7 @@ import {CodeViewComponent} from "../code-view/code-view.component";
 })
 export class DebugComponent {
     file:File;
-    entry:string = "BAGTEST`TestBagAll()"; // TODO: Remove this default value
+    entry:string = "Parts(1,bom)"; // TODO: Remove this default value
 
     constructor(private debug:DebugService,
                 private editorService:EditorService) {

@@ -6,7 +6,13 @@ import {Component, Input, ElementRef} from "angular2/core";
 })
 export class CodeViewComponent {
     @Input() set code(code:string) {
-        if (code) CodeMirror.runMode(code, "vdm", this.el.nativeElement);
+        if (code === undefined) return;
+
+        CodeMirror.runMode(
+            typeof code === "string" ? code : code.toString(),
+            "vdm",
+            this.el.nativeElement
+        );
     }
 
     constructor(private el:ElementRef) {

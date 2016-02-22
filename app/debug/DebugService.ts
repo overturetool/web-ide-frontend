@@ -112,10 +112,15 @@ export class DebugService {
                     .reverse()
                     .forEach(context => this.connection
                         .send('context_get', `-d ${level} -c ${context.$id}`)
-                        .then(res => this.context.push({
-                            $name: context.$name,
-                            property: res.response.property
-                        }))
+                        .then(res => {
+                            if (context.$name == "GLOBAL") {
+                                this.context.push({ $name: "Global", property: res.response.property });
+                            }
+
+                            if (context.$name == "LOCAL") {
+                                this.context = this.context.concat(res.response.property);
+                            }
+                        })
                     );
             });
     }
