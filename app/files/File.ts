@@ -25,8 +25,8 @@ export class File {
     find(path:Array<string>):File {
         return this;
     }
-    save(content:string):void {
-        this.serverService.post(`vfs/writeFile/${this.path}`, content).subscribe();
+    save(content:string):Observable {
+        return this.serverService.post(`vfs/writeFile/${this.path}`, content);
     }
 
     open():void {
