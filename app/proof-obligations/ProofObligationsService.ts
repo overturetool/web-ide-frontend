@@ -11,8 +11,6 @@ import {EditorService} from "../editor/EditorService";
 @Injectable()
 export class ProofObligationsService {
     items$:Subject<Array<ProofObligationsItem>> = new Subject();
-    highlight$:Subject<EditorSection> = new Subject();
-    focus$:Subject<number> = new Subject();
 
     constructor(private serverService:ServerService,
                 private editorService:EditorService) {
@@ -27,13 +25,5 @@ export class ProofObligationsService {
                 .map(res => res.json())
                 .subscribe(items => this.items$.next(items));
         }
-    }
-
-    highlight(section:EditorSection):void {
-        this.editorService.highlight$.next(section);
-    }
-
-    focus(line:number):void {
-        this.editorService.focus$.next(line);
     }
 }
