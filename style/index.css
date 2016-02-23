@@ -139,33 +139,30 @@ panel {
     display: flex;
 }
 
-panel .content {
-    display: flex;
-    -webkit-touch-callout: initial; /* iOS Safari */
-    -webkit-user-select: initial;   /* Chrome/Safari/Opera */
-    -moz-user-select: initial;      /* Firefox */
-    -ms-user-select: initial;       /* IE/Edge */
-    user-select: initial;           /* non-prefixed version, currently not supported by any browser */
-}
-
 panel > .wrapper {
-    width: 100%;
     display: flex;
     flex-direction: column;
-}
-
-panel .content > * {
-    overflow-y: scroll;
     flex-grow: 1;
-    width: 100%;
+    position: relative;
 }
 
-panel-menu.left, panel-menu.right {
+panel-menu.left,
+panel-menu.right {
     display: flex;
 }
 
-panel-menu.left .wrapper, panel-menu.right .wrapper {
+panel-menu.left > .wrapper,
+panel-menu.right > .wrapper {
     display: flex;
+}
+
+panel-menu.left panel > .wrapper,
+panel-menu.right panel > .wrapper {
+    width: 300px;
+}
+
+panel-menu.bottom panel > .wrapper {
+    height: 300px;
 }
 
 panel-menu.left {
@@ -175,7 +172,6 @@ panel-menu.left {
 panel-menu.left panel .content,
 panel-menu.right panel .content {
     border-width: 0 1px;
-    width: 300px;
 }
 
 panel-menu.bottom panel .content {
@@ -217,6 +213,41 @@ panel-menu.left .menu button {
     transform: rotate(-90deg);
 }
 
+
+panel .content {
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+/**************************** Resizer ****************************/
+
+right-resizer
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 5px;
+    cursor: col-resize;
+}
+
+left-resizer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 5px;
+    cursor: col-resize;
+}
+
+top-resizer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    width: 100%;
+    cursor: row-resize;
+}
 
 
 .CodeMirror {

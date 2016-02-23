@@ -22,11 +22,14 @@ import {EditorComponent} from "../editor/editor.component";
 import {ReplComponent} from "../repl/repl.component";
 import {ReplService} from "../repl/ReplService";
 import {GuideComponent} from "../guide/guide.component";
+import {RightResizerComponent} from "../panel/right-resizer.component";
+import {LeftResizerComponent} from "../panel/left-resizer.component";
+import {TopResizerComponent} from "../panel/top-resizer.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [GuideComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    directives: [GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
     providers: [ProofObligationsService, ReplService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, DebugService, ServerService, SessionService, EditorService, WorkspaceFactory, HTTP_PROVIDERS]
 })
 export class IdeComponent {

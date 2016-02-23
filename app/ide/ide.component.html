@@ -1,6 +1,9 @@
 <div class="center-wrapper">
     <panel-menu class="left">
-        <panel name="Workspace"><workspace></workspace></panel>
+        <panel name="Workspace">
+            <workspace class="content"></workspace>
+            <right-resizer></right-resizer>
+        </panel>
     </panel-menu>
     <div class="center">
         <editor-tabs></editor-tabs>
@@ -8,11 +11,23 @@
         <guide *ngIf="empty"></guide>
     </div>
     <panel-menu class="right">
-        <panel name="Debug"><debug></debug></panel>
-        <panel name="Outline"><outline></outline></panel>
-        <panel name="Proof Obligations"><proof-obligations></proof-obligations></panel>
+        <panel name="Debug">
+            <debug class="content"></debug>
+            <left-resizer></left-resizer>
+        </panel>
+        <panel name="Outline">
+            <outline class="content"></outline>
+            <left-resizer></left-resizer>
+        </panel>
+        <panel name="Proof Obligations">
+            <proof-obligations class="content"></proof-obligations>
+            <left-resizer></left-resizer>
+        </panel>
     </panel-menu>
 </div>
 <panel-menu class="bottom">
-    <panel name="REPL"><repl></repl></panel>
+    <panel name="REPL">
+        <repl class="content"></repl>
+        <top-resizer></top-resizer>
+    </panel>
 </panel-menu>
