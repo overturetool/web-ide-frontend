@@ -8,7 +8,8 @@
     </div>
     <div class="input">
         <code>&gt;&nbsp;</code>
-        <input [(ngModel)]="input"
+        <input #input
+               [(ngModel)]="expression"
                (keyup.enter)="evaluate()"
                (keyup.arrowup)="selectPrev($event)"
                (keyup.arrowdown)="selectNext($event)">

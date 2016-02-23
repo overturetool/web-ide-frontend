@@ -1,4 +1,7 @@
 import {Component} from "angular2/core";
+import {HostListener} from "angular2/core";
+import {ViewChild} from "angular2/core";
+import {ElementRef} from "angular2/core";
 import {ReplService} from "./ReplService";
 import {CodeViewComponent} from "../code-view/code-view.component";
 
@@ -8,26 +11,38 @@ import {CodeViewComponent} from "../code-view/code-view.component";
     directives: [CodeViewComponent]
 })
 export class ReplComponent {
-    input:string = "";
+    expression:string = "";
     historyPtr:number = 0;
 
-    constructor(private replService:ReplService) {
+    @ViewChild("input") inputElement:ElementRef;
+
+    constructor(private replService:ReplService,
+                private el:ElementRef) {
+    }
+
+    @HostListener('click')
+    focus() {
+        this.inputElement.nativeElement.focus();
+        this.el.nativeElement.scrollTop = this.el.nativeElement.scrollHeight - this.el.nativeElement.clientHeight;
     }
 
     evaluate() {
-        if (!this.replService.evaluate(this.input)) return;
-
-        this.historyPtr = this.replService.items.length +1;
-        this.input = "";
+        this.replService
+            .evaluate(this.expression)
+            .subscribe(() => {
+                this.historyPtr = this.replService.items.length + 1;
+                this.expression = "";
+                setTimeout(() => this.focus(), 0);
+            });
     }
 
     selectPrev(event):void {
         event.preventDefault();
 
         if (this.historyPtr > 0)
-            this.input = this.replService.items[--this.historyPtr].expression;
+            this.expression = this.replService.items[--this.historyPtr].expression;
         else
-            this.input = this.replService.items[this.historyPtr].expression;
+            this.expression = this.replService.items[this.historyPtr].expression;
     }
 
     selectNext(event):void {
@@ -37,8 +52,8 @@ export class ReplComponent {
             this.historyPtr++;
 
         if (this.historyPtr < this.replService.items.length)
-            this.input = this.replService.items[this.historyPtr].expression;
+            this.expression = this.replService.items[this.historyPtr].expression;
         else
-            this.input = "";
+            this.expression = "";
     }
 }

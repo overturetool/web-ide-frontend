@@ -13,20 +13,15 @@ export class ReplService {
 
     }
 
-    evaluate(expression:string):boolean {
-        var parsed = this._parse(expression);
-        if (parsed === "") return false;
-
-        var path = `eval/${btoa(parsed)}`;
+    evaluate(expression:string) {
+        var path = `eval/${btoa(this._parse(expression))}`;
         var file = this.editorService.currentFile$.getValue();
 
         if (file !== null) path += `/${file.path}`;
 
-        this.serverService.get(path)
+        return this.serverService.get(path)
             .map(res => res.text())
-            .subscribe(result => this.items.push(new ReplItem(expression, result)));
-
-        return true;
+            .do(result => this.items.push(new ReplItem(expression, result)));
     }
 
     private _parse(expression:string):string {
