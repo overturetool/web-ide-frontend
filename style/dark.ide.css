@@ -153,11 +153,11 @@ panel {
     background-color: #3c3f41;
 }
 
-panel-menu.left panel.active {
+panel-menu.left panel {
     border-right: 1px solid #282828;
 }
 
-panel-menu.right panel.active {
+panel-menu.right panel {
     border-left: 1px solid #282828;
 }
 

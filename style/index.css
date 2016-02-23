@@ -136,6 +136,10 @@ guide .pog img {
 
 panel {
     flex-grow: 1;
+    display: none;
+}
+
+panel.active {
     display: flex;
 }
 
