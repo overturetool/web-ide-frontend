@@ -25,10 +25,6 @@ editor {
     flex-direction: column;
 }
 
-panel-menu.left, panel-menu.right {
-    display: flex;
-}
-
 /**************************** Guide ****************************/
 
 guide {
@@ -132,21 +128,41 @@ panel {
     display: flex;
 }
 
+panel .content {
+    display: flex;
+}
+
+panel > .wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+panel .content > * {
+    overflow-y: scroll;
+    flex-grow: 1;
+    width: 100%;
+}
+
+panel-menu.left, panel-menu.right {
+    display: flex;
+}
+
+panel-menu.left .wrapper, panel-menu.right .wrapper {
+    display: flex;
+}
+
 panel-menu.left {
     flex-direction: row-reverse;
 }
 
-panel.active {
-    overflow-y: scroll;
-}
-
-panel-menu.left panel > .content,
-panel-menu.right panel > .content {
+panel-menu.left panel .content,
+panel-menu.right panel .content {
     border-width: 0 1px;
     width: 300px;
 }
 
-panel-menu.bottom panel > .content {
+panel-menu.bottom panel .content {
     border-width: 1px 0;
     height: 300px;
     flex-grow: 1;
@@ -261,21 +277,21 @@ editor-tabs ul {
     border-bottom-style: solid;
 }
 
-editor-tabs {
-    border-bottom-width: 4px;
+editor-tabs .wrapper {
+    border-bottom-width: 3px;
     border-bottom-style: solid;
 }
 
 editor-tabs li {
-    height: 24px;
+    height: 23px;
     list-style: none;
     display: inline-block;
 }
 
 editor-tabs li.active {
     margin-bottom: -1px;
-    height: 25px;
-    line-height: 25px;
+    height: 24px;
+    line-height: 24px;
 }
 
 editor-tabs li button {

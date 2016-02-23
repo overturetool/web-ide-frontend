@@ -1,0 +1,8 @@
+{
+  "files": [
+    "style/**/*.css",
+    "app/**/*",
+    "images/**/*",
+    "index.html"
+  ]
+}

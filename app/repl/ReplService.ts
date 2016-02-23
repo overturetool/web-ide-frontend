@@ -14,6 +14,8 @@ export class ReplService {
     }
 
     evaluate(expression:string):void {
+        if (expression === "") return;
+
         var path = `eval/${btoa(expression)}`;
         var file = this.editorService.currentFile$.getValue();
 

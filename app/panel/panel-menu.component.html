@@ -1,8 +1,12 @@
 <ng-content></ng-content>
+<div class="wrapper">
 <div class="menu">
-    <button *ngFor="#panel of panels"
-            (click)="select(panel)"
-            [class.active]="panel.active">
-        {{panel.name}}
-    </button>
+
+        <button *ngFor="#panel of panels"
+                (click)="select(panel)"
+                [class.active]="panel.active">
+            {{panel.name}}
+        </button>
+
+</div>
 </div>

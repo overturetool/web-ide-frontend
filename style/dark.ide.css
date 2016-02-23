@@ -5,6 +5,11 @@ body {
     background-color: #2b2b2b;
 }
 
+button {
+    font-family: "Open Sans Light", sans-serif;
+    font-size: 12px;
+}
+
 .CodeMirror {
     background: #2b2b2b;
     color: #f8f8f2;
@@ -130,12 +135,24 @@ panel-menu.left .menu {
     border-right: 1px solid #282828;
 }
 
+panel-menu.left > .wrapper {
+    border-right: 1px solid #555555;
+}
+
 panel-menu.right .menu {
     border-left: 1px solid #555555;
 }
 
+panel-menu.right > .wrapper {
+    border-left: 1px solid #282828;
+}
+
 panel-menu.bottom .menu {
     border-top: 1px solid #555555;
+}
+
+panel-menu.bottom > .wrapper {
+    border-top: 1px solid #282828;
 }
 
 panel-menu .menu,
@@ -145,17 +162,14 @@ panel {
 
 panel-menu.left panel.active {
     border-right: 1px solid #282828;
-    border-left: 1px solid #555555;
 }
 
 panel-menu.right panel.active {
     border-left: 1px solid #282828;
-    border-right: 1px solid #282828;
 }
 
-panel-menu.bottom panel.active {
-    border-top: 1px solid #282828;
-    border-bottom: 1px solid #282828;
+panel > .wrapper {
+    border-top: 1px solid #262829;
 }
 
 .CodeMirror-hints {
@@ -219,7 +233,7 @@ editor-tabs ul {
     border-bottom-color: #282828;
 }
 
-editor-tabs {
+editor-tabs .wrapper {
     background-color: #3c3f41;
     border-bottom-color: #515658;
 }
@@ -237,6 +251,10 @@ editor-tabs li.active {
 
 editor-tabs li button {
     color: #bbbbbb;
+}
+
+editor {
+    border-top: 1px solid #282828;
 }
 
 .dragged-over {
@@ -308,6 +326,19 @@ tree .variable {
 
 code-view {
     color: white;
+}
+
+panel .header {
+    background-color: #383b3d;
+    border-top: 1px solid #525556;
+    border-bottom: 1px solid #242627;
+    line-height: 22px;
+    padding-left: 5px;
+}
+
+repl {
+    display: block;
+    background-color: #2b2b2b;
 }
 
 repl input {

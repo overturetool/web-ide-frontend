@@ -9,8 +9,8 @@ export class GuideComponent {
 
     constructor() {
         document.addEventListener('keyup', event => {
-            if (event.code == "ArrowLeft") this.prev();
-            if (event.code == "ArrowRight") this.next();
+            if (event.key == "ArrowLeft") this.prev();
+            if (event.key == "ArrowRight") this.next();
         });
     }
 
