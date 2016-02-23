@@ -1,5 +1,3 @@
-<div *ngIf="!file">Open a file to debug</div>
-
 <div *ngIf="file">
     <div *ngIf="!debug.connection.connected">
         <input [(ngModel)]="entry" placeholder="Entry">
