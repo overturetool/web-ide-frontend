@@ -1,13 +1,16 @@
-
-
 <div class="items">
     <div *ngFor="#item of replService.items" class="item">
-        <div>&gt; <code-view [code]="item.expression"></code-view></div>
+        <div>
+            <code>&gt;&nbsp;</code><code-view [code]="item.expression"></code-view>
+        </div>
         <code-view *ngIf="item.type == 'code'" [code]="item.result"></code-view>
         <div *ngIf="item.type == 'error'" class="msg error">{{item.result}}</div>
     </div>
-    <div class="input">&gt;&nbsp;<input [(ngModel)]="input"
-                                        (keyup.enter)="evaluate()"
-                                        (keyup.arrowup)="selectPrev($event)"
-                                        (keyup.arrowdown)="selectNext($event)"></div>
+    <div class="input">
+        <code>&gt;&nbsp;</code>
+        <input [(ngModel)]="input"
+               (keyup.enter)="evaluate()"
+               (keyup.arrowup)="selectPrev($event)"
+               (keyup.arrowdown)="selectNext($event)">
+    </div>
 </div>
