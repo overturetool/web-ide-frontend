@@ -9,32 +9,36 @@ import {CodeViewComponent} from "../code-view/code-view.component";
 })
 export class ReplComponent {
     input:string = "";
-    history:Array<string> = [];
-    historyPtr:number = -1;
+    historyPtr:number = 0;
 
     constructor(private replService:ReplService) {
     }
 
     evaluate() {
-        this.replService.evaluate(this.input);
-        this.history.push(this.input);
-        this.historyPtr = this.history.length;
+        if (!this.replService.evaluate(this.input)) return;
+
+        this.historyPtr = this.replService.items.length +1;
         this.input = "";
     }
 
     selectPrev(event):void {
         event.preventDefault();
 
-        this.historyPtr = this.historyPtr > 0 ? this.historyPtr -1 : 0;
-
-        this.input = this.history[this.historyPtr];
+        if (this.historyPtr > 0)
+            this.input = this.replService.items[--this.historyPtr].expression;
+        else
+            this.input = this.replService.items[this.historyPtr].expression;
     }
 
     selectNext(event):void {
         event.preventDefault();
 
-        this.historyPtr = this.historyPtr < this.history.length ? this.historyPtr +1 : this.history.length;
+        if (this.historyPtr < this.replService.items.length)
+            this.historyPtr++;
 
-        this.input = this.history[this.historyPtr];
+        if (this.historyPtr < this.replService.items.length)
+            this.input = this.replService.items[this.historyPtr].expression;
+        else
+            this.input = "";
     }
 }

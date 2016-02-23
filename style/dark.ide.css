@@ -302,10 +302,6 @@ directory-node input.ng-invalid {
     color: black;
 }
 
-tree .variable {
-    cursor: pointer;
-}
-
 .breakpoint input {
     position: absolute;
     top: 5px;

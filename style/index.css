@@ -11,6 +11,10 @@ body {
     cursor: default;
 }
 
+button {
+    cursor: pointer;
+}
+
 ide {
     display:flex;
     flex-direction: column;
@@ -137,6 +141,11 @@ panel {
 
 panel .content {
     display: flex;
+    -webkit-touch-callout: initial; /* iOS Safari */
+    -webkit-user-select: initial;   /* Chrome/Safari/Opera */
+    -moz-user-select: initial;      /* Firefox */
+    -ms-user-select: initial;       /* IE/Edge */
+    user-select: initial;           /* non-prefixed version, currently not supported by any browser */
 }
 
 panel > .wrapper {
@@ -337,6 +346,10 @@ directory-node {
 
 .new-project-button {
     padding-left: 19px;
+}
+
+.new-project-button:hover {
+    text-decoration: underline;
     cursor: pointer;
 }
 
@@ -404,6 +417,11 @@ file-node .name {
     background-position: -39px -6px;
 }
 
+.icon.open,
+.icon.close {
+    cursor: pointer;
+}
+
 context-menu {
     display: none;
     width: 150px;
@@ -434,6 +452,10 @@ code-view {
 
 
 /**************************** REPL ****************************/
+
+repl {
+    cursor: text;
+}
 
 repl input {
     font: 12px monospace;

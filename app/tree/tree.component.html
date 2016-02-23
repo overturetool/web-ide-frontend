@@ -1,8 +1,8 @@
 <ul>
     <li *ngFor="#node of nodes">
-        <div class="variable list-item" (click)="node.__open = !node.__open">
+        <div class="variable list-item">
             <div class="description">
-                <span class="icon" *ngIf="node.property" [class.open]="node.__open" [class.close]="!node.__open"></span>
+                <span class="icon" (click)="node.__open = !node.__open" *ngIf="node.property" [class.open]="node.__open" [class.close]="!node.__open"></span>
                 <code-view [code]="node.$name"></code-view><code class="type"> {{node.$type}}</code>
             </div>
 
