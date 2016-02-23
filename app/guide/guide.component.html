@@ -9,8 +9,8 @@
         Manage your projects here. <br>
         Left-click on files to open them. <br>
         Right-click for more options. <br>
-        <button (click)="prev()">&lt;</button>
-        <button (click)="next()">&gt;</button>
+        <button (click)="prev()">&#9668;</button>
+        <button (click)="next()">&#9658;</button>
     </div>
 </div>
 
@@ -19,8 +19,8 @@
         Debug a project here. <br>
         Step through the code and watch values change. <br>
         Breakpoints can be set in the editor. <br>
-        <button (click)="prev()">&lt;</button>
-        <button (click)="next()">&gt;</button>
+        <button (click)="prev()">&#9668;</button>
+        <button (click)="next()">&#9658;</button>
     </div>
     <img src="images/arrow.png">
 </div>
@@ -30,8 +30,8 @@
         Get an overview of a file here. <br>
         The outline view lists values and functions. <br>
         Click on an item to navigate to it in the editor. <br>
-        <button (click)="prev()">&lt;</button>
-        <button (click)="next()">&gt;</button>
+        <button (click)="prev()">&#9668;</button>
+        <button (click)="next()">&#9658;</button>
     </div>
     <img src="images/arrow.png">
 </div>
@@ -40,8 +40,8 @@
     <div>
         See proof obligations here. <br>
         Click on an item to navigate to it in the editor. <br>
-        <button (click)="prev()">&lt;</button>
-        <button (click)="next()">&gt;</button>
+        <button (click)="prev()">&#9668;</button>
+        <button (click)="next()">&#9658;</button>
     </div>
     <img src="images/arrow.png">
 </div>
@@ -49,8 +49,13 @@
 <div *ngIf="step == 5" class="repl">
     <img src="images/arrow.png">
     <div>
-        Evaluate VDM expressions here. <br>
-        Expressions are evaluated in the context of the currently open file. <br>
+        Evaluate VDM expressions here.<br>
+        Expressions are evaluated in the context of the currently open file.<br>
+        <ul>
+            <li><code>$$</code> represents the latest result.</li>
+            <li><code>$n</code> represents the n'th latest result. (<code>$0</code> equals <code>$$</code>, <code>$1</code> equals the 2nd latest result.)</li>
+            <li>...</li>
+        </ul>
         <button (click)="step = 0">Finish</button>
     </div>
 </div>
