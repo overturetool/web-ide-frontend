@@ -15,16 +15,9 @@ button {
     color: #f8f8f2;
 }
 
-div.CodeMirror-selected {
+.CodeMirror-selected,
+.CodeMirror-focused .CodeMirror-selected {
     background: #49483E;
-}
-
-.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection {
-    background: rgba(73, 72, 62, .99);
-}
-
-.CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection {
-    background: rgba(73, 72, 62, .99);
 }
 
 .CodeMirror-gutters {
