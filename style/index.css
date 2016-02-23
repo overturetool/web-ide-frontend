@@ -513,3 +513,29 @@ repl .input {
 repl .input > input {
     flex-grow: 1;
 }
+
+
+/**************************** Quick bar ****************************/
+
+quick-bar {
+    position: fixed;
+    top: 30px;
+    width: 100%;
+    display: none;
+    z-index: 10;
+}
+
+quick-bar.active {
+    display: block;
+    width: 100%;
+}
+
+quick-bar input {
+    display: block;
+    width: 100%;
+}
+
+quick-bar .wrapper {
+    width: 500px;
+    margin: 0 auto;
+}

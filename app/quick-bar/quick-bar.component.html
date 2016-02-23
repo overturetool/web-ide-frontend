@@ -1,0 +1,6 @@
+<div class="wrapper">
+    <input #input (blur)="close()" [(ngModel)]="expression">
+    <div class="actions">
+        <div *ngFor="#action of actions" (click)="evaluate(action)">{{action.name}}</div>
+    </div>
+</div>
