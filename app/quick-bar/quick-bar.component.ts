@@ -69,6 +69,7 @@ export class QuickBarComponent {
     }
 
     open() {
+        this.select(0);
         this.active = true;
         setTimeout(() => this.inputElement.nativeElement.focus(), 0);
 
