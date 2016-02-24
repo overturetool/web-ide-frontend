@@ -30,7 +30,7 @@ export class ReplComponent {
         this.replService
             .evaluate(this.expression)
             .subscribe(() => {
-                this.historyPtr = this.replService.items.length + 1;
+                this.historyPtr = this.replService.items.length;
                 this.expression = "";
                 setTimeout(() => this.focus(), 0);
             });

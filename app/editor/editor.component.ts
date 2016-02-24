@@ -83,7 +83,6 @@ export class EditorComponent {
     }
 
     focus(line:number, char?:number) {
-        // TODO: Doesn't seem to work with lines over 99
         var position = {line: line - 1};
         if (char) position.ch = char - 1;
 
@@ -167,7 +166,7 @@ export class EditorComponent {
     }
 
     private setupResizing() {
-        // TODO: Find better solution to detect if the editor is resized.
+        // TODO: Find better solution to resize editor.
         var cm = this.codeMirror;
         var el = cm.getWrapperElement();
         var parent = el.parentNode;

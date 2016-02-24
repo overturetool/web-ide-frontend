@@ -10,7 +10,6 @@ import {Subject} from "rxjs/Subject";
 import {Directory} from "./Directory";
 import {ReplaySubject} from "rxjs/Rx";
 import {EditorService} from "../editor/EditorService";
-import {FilePosition} from "../editor/FilePosition";
 
 export class File {
     parent:Directory;
@@ -29,14 +28,16 @@ export class File {
         return this.serverService.post(`vfs/writeFile/${this.path}`, content);
     }
 
+    load():Observable {
+        return this.serverService.get(`vfs/readFile/${this.path}`)
+            .map(res => res.text())
+            .do(content => this.document = CodeMirror.Doc(content, "vdm"));
+    }
+
     open():void {
         if (this.document === null) {
-            this.serverService.get(`vfs/readFile/${this.path}`)
-                .map(res => res.text())
-                .subscribe(content => {
-                    this.document = CodeMirror.Doc(content, "vdm");
-                    this.editorService.loadFile(this);
-                });
+            this.load()
+                .subscribe(() => this.editorService.loadFile(this));
         } else {
             this.editorService.loadFile(this);
         }
@@ -51,24 +52,24 @@ export class File {
         this.parent.deleteChild(this);
     }
 
-    rename(newName:string):void {
-        this.serverService.put(`vfs/move/${this.path}`, {destination: `${this.parent.path}/${newName}`})
+    rename(name:string):void {
+        this.serverService.put(`vfs/move/${this.path}`, {destination: `${this.parent.path}/${name}`})
             .map(res => res.text())
             .subscribe(newName => {
                 if (this.name === newName) return;
 
                 // Update state in case of name collision
                 this.name = newName;
-                this._updatePath();
+                this.updatePath();
             });
 
-        this.name = newName;
+        this.name = name;
 
         // Update path string of node and subtree
-        this._updatePath();
+        this.updatePath();
     }
 
-    private _updatePath() {
+    updatePath() {
         this.path = `${this.parent.path}/${this.name}`;
     }
 }

@@ -57,10 +57,9 @@ guide .workspace {
 
 guide .workspace div {
     float: right;
-    margin-top: 40px;
-    margin-left: 15px;
+    margin-left: 10px;
+    margin-top: -20px;
 }
-
 
 guide .workspace img {
     transform: rotate(55deg);
@@ -255,6 +254,8 @@ top-resizer {
 
 
 .CodeMirror {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 13px;
     height: 100%;
 }
 
@@ -478,14 +479,6 @@ context-menu .item:hover {
     background-color: #2f65ca;
 }
 
-
-/**************************** Code view ****************************/
-
-code-view {
-    font: 12px monospace;
-}
-
-
 /**************************** REPL ****************************/
 
 repl {
@@ -493,7 +486,6 @@ repl {
 }
 
 repl input {
-    font: 12px monospace;
     background-color: transparent;
     border: 0;
     padding: 0;
@@ -512,4 +504,34 @@ repl .input {
 
 repl .input > input {
     flex-grow: 1;
+}
+
+
+/**************************** Quick bar ****************************/
+
+quick-bar {
+    position: fixed;
+    top: 30px;
+    width: 100%;
+    display: none;
+    z-index: 10;
+}
+
+quick-bar.active {
+    display: block;
+    width: 100%;
+}
+
+quick-bar input {
+    display: block;
+    width: 100%;
+}
+
+quick-bar .wrapper {
+    width: 500px;
+    margin: 0 auto;
+}
+
+quick-bar .files div {
+    cursor: pointer;
 }

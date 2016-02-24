@@ -42,7 +42,7 @@ export class ProjectNodeComponent {
     rename() {
         var name = this.renameForm.controls.name;
 
-        if (name.valid)
+        if (name.valid && name.value !== this.project.name)
             this.project.rename(name.value);
 
         this.renameForm.controls.name.updateValue("");

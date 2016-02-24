@@ -6,7 +6,6 @@ export class ContextMenuService {
     lastMenu:ContextMenuComponent;
 
     constructor() {
-        // TODO: Fix this hack. An Angular2 application should never reference the DOM directly.
         document.addEventListener('click', () => this.close());
 
         document.addEventListener('keyup', event => {

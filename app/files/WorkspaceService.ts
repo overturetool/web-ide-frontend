@@ -35,8 +35,14 @@ export class WorkspaceService {
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();
 
-        // TODO: Use naming collision response
-        this.serverService.post(`vfs/mkFile/${file.path}`, null).subscribe();
+        this.serverService.post(`vfs/mkFile/${file.path}`, null)
+            .map(res => res.text())
+            .subscribe(newName => {
+                if (newName === name) return;
+
+                file.name = newName;
+                file.updatePath();
+            });
     }
 
     newDirectory(parent, name = "new-directory") {
@@ -45,8 +51,14 @@ export class WorkspaceService {
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();
 
-        // TODO: Use naming collision response
-        this.serverService.post(`vfs/mkdir/${directory.path}`, null).subscribe();
+        this.serverService.post(`vfs/mkdir/${directory.path}`, null)
+            .map(res => res.text())
+            .subscribe(newName => {
+                if (newName === name) return;
+
+                directory.name = newName;
+                directory.updatePath();
+            });
     }
 
     newProject(parent, name = "new-project") {
@@ -93,7 +105,10 @@ export class WorkspaceService {
         node.children = node.children
             .map(child => {
                 if (child.type === "file") {
-                    return this.workspaceFactory.createFile(node, child.name, child.path);
+                    // TODO: Maybe stop downloading all files on IDE load.
+                    var file = this.workspaceFactory.createFile(node, child.name, child.path);
+                    file.load().subscribe();
+                    return file;
                 }
 
                 if (child.type === "directory") {
