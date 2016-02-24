@@ -6,9 +6,14 @@
 <div *ngIf="step == 1" class="workspace">
     <img src="images/arrow.png">
     <div>
-        Manage your projects here. <br>
-        Left-click on files to open them. <br>
-        Right-click for more options. <br>
+        <h2>Workspace</h2>
+        <ul>
+            <li>Manage your projects here.</li>
+            <li>Left-click on files to open them.</li>
+            <li>Right-click for more options.</li>
+            <li>Press Ctrl+P to quickly search for and open a file.</li>
+        </ul>
+
         <button (click)="prev()">&#9668;</button>
         <button (click)="next()">&#9658;</button>
     </div>

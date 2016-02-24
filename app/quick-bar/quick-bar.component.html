@@ -1,6 +1,12 @@
 <div class="wrapper">
-    <input #input (blur)="close()" [(ngModel)]="expression">
-    <div class="actions">
-        <div *ngFor="#action of actions" (click)="evaluate(action)">{{action.name}}</div>
+    <input #input
+           [(ngModel)]="expression"
+           (keyup)="onKeyup($event)"
+           (input)="onChange(input.value)">
+
+    <div class="files" *ngIf="files.length > 0">
+        <div *ngFor="#file of files | slice:0:10; #i = index"
+             [class.active]="i === selected"
+             (click)="openFile(file)">{{ file.path }}</div>
     </div>
 </div>

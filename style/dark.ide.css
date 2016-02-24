@@ -367,6 +367,21 @@ quick-bar input {
     padding: 0 5px;
 }
 
+quick-bar .files {
+    background-color: #3c3f41;
+    border: 1px solid #555555;
+    border-top-width: 0;
+    margin-left: 12px;
+}
+
+quick-bar .files div {
+    background-color: #3c3f41;
+    padding: 5px;
+}
+
+quick-bar .files div.active {
+    background-color: rgba(47,101,202,.3);
+}
 
 /**************************** Code font ****************************/
 

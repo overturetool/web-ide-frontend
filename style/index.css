@@ -57,10 +57,9 @@ guide .workspace {
 
 guide .workspace div {
     float: right;
-    margin-top: 40px;
-    margin-left: 15px;
+    margin-left: 10px;
+    margin-top: -20px;
 }
-
 
 guide .workspace img {
     transform: rotate(55deg);
@@ -531,4 +530,8 @@ quick-bar input {
 quick-bar .wrapper {
     width: 500px;
     margin: 0 auto;
+}
+
+quick-bar .files div {
+    cursor: pointer;
 }

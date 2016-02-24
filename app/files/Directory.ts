@@ -25,6 +25,19 @@ export class Directory {
             .find(path.slice(1));
     }
 
+    allFiles() {
+        var files = [];
+
+        this.children.forEach(child => {
+            if (child.children)
+                files = files.concat(child.allFiles());
+            else
+                files.push(child);
+        });
+
+        return files;
+    }
+
     close() {
         this.children.forEach(child => child.close());
     }

@@ -1,4 +1,8 @@
 import {Component, HostBinding, ViewChild, ElementRef} from "angular2/core";
+import {WorkspaceService} from "../files/WorkspaceService";
+import {Control} from "angular2/common";
+
+declare var Fuse;
 
 @Component({
     selector: "quick-bar",
@@ -8,20 +12,22 @@ export class QuickBarComponent {
     @HostBinding("class.active") active:boolean = false;
     @ViewChild("input") inputElement:ElementRef;
     expression:string = "";
-    actions:Array = [];
+    files:Array<File> = [];
+    selected:number = 0;
+    fuse;
 
-    constructor() {
-        document.addEventListener('keyup', this.onKeyup.bind(this));
-        document.addEventListener('keydown', this.onKeydown.bind(this));
+    constructor(private workspaceService:WorkspaceService) {
+        document.addEventListener('keyup', this.onDocKeyup.bind(this));
+        document.addEventListener('keydown', this.onDocKeydown.bind(this));
     }
 
-    onKeydown(event:KeyboardEvent) {
+    onDocKeydown(event:KeyboardEvent) {
         // Ctrl + P
         if (event.ctrlKey && event.keyCode === 80)
             event.preventDefault();
     }
 
-    onKeyup(event:KeyboardEvent):void {
+    onDocKeyup(event:KeyboardEvent):void {
         // Ctrl + P
         if (event.ctrlKey && event.keyCode === 80)
             this.open();
@@ -29,17 +35,38 @@ export class QuickBarComponent {
         // Escape
         if (event.keyCode === 27)
             this.close();
-
-        // Enter
-        if (event.keyCode === 27)
-            this.evaluate();
     }
 
-    open(prefix:string = "") {
-        this.active = true;
-        this.expression = prefix;
+    onKeyup(event:KeyboardEvent) {
+        // Enter
+        if (event.keyCode === 13)
+            this.openFile(this.files[this.selected]);
 
+        // Keyup
+        if (event.keyCode === 38) {
+            event.preventDefault();
+            this.selected = this.selected === 0 ? this.selected = this.files.length -1 : this.selected -1;
+        }
+
+        // Keydown
+        if (event.keyCode === 40) {
+            event.preventDefault();
+            this.selected = (this.selected +1) % this.files.length;
+        }
+    }
+
+    onChange(value:string) {
+        this.selected = 0;
+        this.files = this.fuse.search(value);
+    }
+
+    open() {
+        this.active = true;
         setTimeout(() => this.inputElement.nativeElement.focus(), 0);
+
+        var workspace = this.workspaceService.workspace$.getValue();
+        this.files = workspace.allFiles();
+        this.fuse = new Fuse(this.files, {keys: ["path"]});
     }
 
     close() {
@@ -47,9 +74,10 @@ export class QuickBarComponent {
         this.expression = "";
     }
 
-    evaluate(action) {
-        // TODO: Do stuff
+    openFile(file:File) {
+        if (!file) return;
 
+        file.open();
         this.close();
     }
 }
