@@ -42,6 +42,10 @@ export class QuickBarComponent {
         if (event.keyCode === 13)
             this.openFile(this.files[this.selected]);
 
+        // Escape
+        if (event.keyCode === 27)
+            this.close();
+
         // Keyup
         if (event.keyCode === 38) {
             event.preventDefault();
@@ -58,6 +62,10 @@ export class QuickBarComponent {
     onChange(value:string) {
         this.selected = 0;
         this.files = this.fuse.search(value);
+    }
+
+    select(i:number):void {
+        this.selected = i;
     }
 
     open() {
