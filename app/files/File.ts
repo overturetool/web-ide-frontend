@@ -28,14 +28,16 @@ export class File {
         return this.serverService.post(`vfs/writeFile/${this.path}`, content);
     }
 
+    load():Observable {
+        return this.serverService.get(`vfs/readFile/${this.path}`)
+            .map(res => res.text())
+            .do(content => this.document = CodeMirror.Doc(content, "vdm"));
+    }
+
     open():void {
         if (this.document === null) {
-            this.serverService.get(`vfs/readFile/${this.path}`)
-                .map(res => res.text())
-                .subscribe(content => {
-                    this.document = CodeMirror.Doc(content, "vdm");
-                    this.editorService.loadFile(this);
-                });
+            this.load()
+                .subscribe(() => this.editorService.loadFile(this));
         } else {
             this.editorService.loadFile(this);
         }

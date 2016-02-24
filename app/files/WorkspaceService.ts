@@ -105,7 +105,10 @@ export class WorkspaceService {
         node.children = node.children
             .map(child => {
                 if (child.type === "file") {
-                    return this.workspaceFactory.createFile(node, child.name, child.path);
+                    // TODO: Maybe stop downloading all files on IDE load.
+                    var file = this.workspaceFactory.createFile(node, child.name, child.path);
+                    file.load().subscribe();
+                    return file;
                 }
 
                 if (child.type === "directory") {
