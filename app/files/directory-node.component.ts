@@ -41,7 +41,7 @@ export class DirectoryNodeComponent {
     rename() {
         var name = this.renameForm.controls.name;
 
-        if (name.valid)
+        if (name.valid && name.value !== this.directory.name)
             this.directory.rename(name.value);
 
         this.renameForm.controls.name.updateValue("");

@@ -51,7 +51,7 @@ export class Directory {
 
                 // Update state in case of name collision
                 node.name = newName;
-                node._updatePath();
+                node.updatePath();
             });
 
         var oldParent = node.parent;
@@ -61,7 +61,7 @@ export class Directory {
 
         // Update state
         node.parent = this;
-        node._updatePath();
+        node.updatePath();
 
         // Insert at new position
         this.children.push(node);
@@ -71,26 +71,26 @@ export class Directory {
         this.children = this.children.slice();
     }
 
-    rename(newName:string):void {
-        this.serverService.put(`vfs/move/${this.path}`, {destination: `${this.parent.path}/${newName}`})
+    rename(name:string):void {
+        this.serverService.put(`vfs/move/${this.path}`, {destination: `${this.parent.path}/${name}`})
             .map(res => res.text())
             .subscribe(newName => {
                 if (this.name === newName) return;
 
                 // Update state in case of name collision
                 this.name = newName;
-                this._updatePath();
+                this.updatePath();
             });
 
-        this.name = newName;
+        this.name = name;
 
         // Update path string of node and subtree
-        this._updatePath();
+        this.updatePath();
     }
 
-    private _updatePath() {
+    updatePath() {
         this.path = `${this.parent.path}/${this.name}`;
 
-        this.children.forEach(child => child._updatePath());
+        this.children.forEach(child => child.updatePath());
     }
 }

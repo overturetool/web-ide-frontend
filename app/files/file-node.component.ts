@@ -39,7 +39,7 @@ export class FileNodeComponent {
     rename() {
         var name = this.renameForm.controls.name;
 
-        if (name.valid)
+        if (name.valid && name.value !== this.file.name)
             this.file.rename(name.value);
 
         this.renameForm.controls.name.updateValue("");
