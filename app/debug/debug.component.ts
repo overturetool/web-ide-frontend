@@ -14,13 +14,18 @@ import {Project} from "../files/Project";
 })
 export class DebugComponent {
     project:Project;
+    entry:string;
 
     constructor(private editorService:EditorService) {
-        this.editorService.currentProject$.subscribe(project => this.project = project);
+        this.editorService.currentProject$.subscribe(project => {
+            this.project = project;
+
+            if (this.project) this.entry = this.project.getEntryPoints()[0];
+        });
     }
 
     connect() {
-        this.project.debug.connect();
+        this.project.debug.connect(this.entry);
     }
 
     getLine(file:File, line:number):string {

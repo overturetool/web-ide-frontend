@@ -5,6 +5,8 @@ import {ServerService} from "../server/ServerService";
 export class Project extends Directory {
     debug:DbgpDebugger;
     entry:string;
+    private configFile:File;
+    private config;
 
     constructor(serverService:ServerService,
                 public parent:Directory,
@@ -14,6 +16,16 @@ export class Project extends Directory {
         super(serverService, parent, name, path, children);
 
         this.debug = new DbgpDebugger(serverService, this);
-        this.entry = "Parts(1,bom)";
+    }
+
+    getEntryPoints() {
+        if (!this.configFile) {
+            this.configFile = this.find([".project"]);
+            this.configFile.content$.subscribe(content => this.config = JSON.parse(content));
+
+            this.config = JSON.parse(this.configFile.document.getValue());
+        }
+
+        return this.config.entryPoints;
     }
 }

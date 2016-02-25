@@ -1,6 +1,8 @@
 <div *ngIf="project">
     <div *ngIf="!project.debug.connection.connected">
-        <input [(ngModel)]="project.entry" placeholder="Entry">
+        <select [(ngModel)]="entry">
+            <option *ngFor="#entry of project.getEntryPoints(); #i = index" [selected]="i === 0">{{entry}}</option>
+        </select>
         <button (click)="connect()" [disabled]="project.debug.connection.connecting">Connect</button>
     </div>
 

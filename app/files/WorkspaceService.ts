@@ -113,14 +113,14 @@ export class WorkspaceService {
 
                 // Project
                 else if (child.path.split("/").length === 2) {
-                    var directory = this.workspaceFactory.createProject(
+                    var project = this.workspaceFactory.createProject(
                         node,
                         child.name,
                         child.path,
                         child.children
                     );
 
-                    return this._mapChildren(directory);
+                    return this._mapChildren(project);
                 }
 
                 // Directory

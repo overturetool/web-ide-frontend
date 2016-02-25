@@ -13,6 +13,7 @@ import {EditorService} from "../editor/EditorService";
 
 export class File {
     document = null;
+    content$:Subject<string> = new Subject();
 
     constructor(private serverService:ServerService,
                 private editorService:EditorService,
@@ -22,6 +23,7 @@ export class File {
     }
 
     save(content:string):Observable {
+        this.content$.next(content);
         return this.serverService.post(`vfs/writeFile/${this.path}`, content);
     }
 

@@ -28,14 +28,14 @@ export class DbgpDebugger {
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
 
-    connect():void {
+    connect(entry:string):void {
         this.status = "";
         this.context = [];
         this.stack = [];
         this.stdout = [];
 
         this.connection
-            .connect(this.project, this.project.entry)
+            .connect(this.project, entry)
             .then(() => this.syncBreakpoints());
     }
 
