@@ -8,6 +8,8 @@ import callSignatureElement = ts.ScriptElementKind.callSignatureElement;
 export class CodeViewComponent {
     @Input()
     set code(code:string) {
+        if (code === undefined) return;
+
         code = typeof code === "string" ? code : code.toString();
 
         if (code.indexOf("\n") !== -1) {
@@ -30,5 +32,5 @@ export class CodeViewComponent {
 
     constructor(private el:ElementRef) {
 
-}
+    }
 }

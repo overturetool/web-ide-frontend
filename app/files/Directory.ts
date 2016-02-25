@@ -17,11 +17,9 @@ export class Directory {
     }
 
     find(path:Array<string>):File|Directory {
-        if (path.length === 0) return this;
+        var child = this.children.filter(child => child.name === path[0])[0];
 
-        return this.children
-            .filter(child => child.name === path[0])[0]
-            .find(path.slice(1));
+        return path.length === 1 ? child : child.find(path.slice(1));
     }
 
     allFiles() {

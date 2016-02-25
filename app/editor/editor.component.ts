@@ -17,6 +17,7 @@ import {DbgpConnection} from "../debug/DbgpConnection";
 import {DbgpDebugger} from "../debug/DbgpDebugger";
 import {Breakpoint} from "../debug/Breakpoint";
 import {StackFrame} from "../debug/StackFrame";
+import {Subscription} from "rxjs/Subscription";
 
 declare var CodeMirror;
 
@@ -28,6 +29,8 @@ export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
+    private breakpointSubscription: Subscription;
+    private stackSubscription: Subscription;
     private file:File = null;
 
     @HostBinding('class.active') get active() { return !!this.file }
@@ -97,12 +100,16 @@ export class EditorComponent {
 
         this.file = file;
 
-        if (this.file !== null) {
-            this.codeMirror.swapDoc(this.file.document);
-            var debug = this.editorService.currentProject$.getValue().debug;
-            this.updateBreakpoints(debug.breakpoints$.getValue());
-            this.updateStackFrames(debug.stack$.getValue());
-        }
+        if (this.file === null)  return;
+
+        this.codeMirror.swapDoc(this.file.document);
+        var debug = this.editorService.currentProject$.getValue().debug;
+
+        if (this.breakpointSubscription) this.breakpointSubscription.unsubscribe();
+        if (this.stackSubscription) this.stackSubscription.unsubscribe();
+
+        this.breakpointSubscription = debug.breakpoints$.subscribe(this.updateBreakpoints.bind(this));
+        this.stackSubscription = debug.stack$.subscribe(this.updateStackFrames.bind(this));
     }
 
     private setupCodeCompletion() {

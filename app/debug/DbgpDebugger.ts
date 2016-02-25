@@ -121,23 +121,21 @@ export class DbgpDebugger {
     }
 
     getStack():void {
-        var self = this;
-
         this.connection.send('stack_get')
             .then(response => {
                 var stack = response.response.stack.length ? response.response.stack : [response.response.stack];
 
-                self.stack = stack.map(frame => {
-                    var file = this.project.find(frame.$filename.split("/").slice(1));
+                this.stack = stack.map(frame => {
+                    var file = this.project.find(frame.$filename.split("/").slice(2));
                     var char = parseInt(frame.$cmdbegin.split(":")[1]);
 
                     return this.createStackFrame(frame.$level, file, frame.$lineno, char);
                 });
 
-                this.currentFrame = self.stack[0];
-                self.stack[0].file.open();
+                this.currentFrame = this.stack[0];
+                this.currentFrame.file.open();
 
-                self.stack$.next(self.stack);
+                this.stack$.next(this.stack);
             });
     }
 

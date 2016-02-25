@@ -14,6 +14,6 @@ export class Project extends Directory {
         super(serverService, parent, name, path, children);
 
         this.debug = new DbgpDebugger(serverService, this);
-        this.entry = this.name;
+        this.entry = "Parts(1,bom)";
     }
 }

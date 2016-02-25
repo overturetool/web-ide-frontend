@@ -32,8 +32,7 @@ export class WorkspaceFactory {
     createProject(workspace:Directory, name:string, path:string, children:Array<File|Directory> = []):Project {
         var project = new Project(this.serverService, workspace, name, path, children);
 
-        if (workspace)
-            workspace.children.push(project);
+        workspace.children.push(project);
 
         return project;
     }
