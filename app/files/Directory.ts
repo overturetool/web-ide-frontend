@@ -9,12 +9,11 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 
 export class Directory {
-    parent:Directory;
-    name:string;
-    path:string;
-    children:Array<File|Directory>;
-
-    constructor(private serverService:ServerService) {
+    constructor(private serverService:ServerService,
+                public parent:Directory,
+                public name:string,
+                public path:string,
+                public children:Array<File|Directory>) {
     }
 
     find(path:Array<string>):File|Directory {

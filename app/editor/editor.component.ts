@@ -1,6 +1,5 @@
 import {Component, ElementRef, Input} from "angular2/core"
 import {LintService} from "../lint/LintService"
-import {DebugService} from "../debug/DebugService";
 import {HintService} from "../hint/HintService";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/observable/fromEventPattern";
@@ -14,6 +13,10 @@ import {EditorService} from "./EditorService";
 import {File} from "../files/File";
 import {EditorPosition} from "./EditorPosition";
 import {HostBinding} from "angular2/core";
+import {DbgpConnection} from "../debug/DbgpConnection";
+import {DbgpDebugger} from "../debug/DbgpDebugger";
+import {Breakpoint} from "../debug/Breakpoint";
+import {StackFrame} from "../debug/StackFrame";
 
 declare var CodeMirror;
 
@@ -34,11 +37,7 @@ export class EditorComponent {
     constructor(el:ElementRef,
                 private lintService:LintService,
                 private hintService:HintService,
-                private debugService:DebugService,
                 private editorService:EditorService) {
-
-        this.editorService.currentFile$
-            .subscribe(file => this.load(file));
 
         this.codeMirror = CodeMirror(el.nativeElement, {
             lineNumbers: true,
@@ -51,22 +50,19 @@ export class EditorComponent {
         });
 
         // Editor changes
-        this.changes$ = Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
+        Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
             .map(cm => cm.getValue())
             .debounceTime(300)
-            .distinctUntilChanged();
-
-        this.changes$.subscribe(content => {
-            this.file.save(content)
-                .subscribe(() => this.editorService.onChange());
-        });
+            .distinctUntilChanged()
+            .subscribe(content => this.editorService.onChange(content));
 
         this.editorService.highlight$.subscribe(section => this.highlight(section));
         this.editorService.goto$.subscribe(position => this.goto(position.line, position.char));
         this.editorService.focus$.subscribe(line => this.focus(line));
+        this.editorService.currentFile$.subscribe(file => this.load(file));
 
-        this.setupCodeCompletion();
         this.setupDebugging();
+        this.setupCodeCompletion();
         this.setupResizing();
     }
 
@@ -103,8 +99,9 @@ export class EditorComponent {
 
         if (this.file !== null) {
             this.codeMirror.swapDoc(this.file.document);
-            this.updateBreakpoints();
-            this.updateStackFrames();
+            var debug = this.editorService.currentProject$.getValue().debug;
+            this.updateBreakpoints(debug.breakpoints$.getValue());
+            this.updateStackFrames(debug.stack$.getValue());
         }
     }
 
@@ -115,8 +112,8 @@ export class EditorComponent {
         CodeMirror.commands.autocomplete = cm => cm.showHint({hint: hint});
     }
 
-    private updateStackFrames() {
-        var stack = this.debugService.stackChanged.getValue();
+    private updateStackFrames(stack:Array<StackFrame>) {
+        if (stack.length > 0) this.focus(stack[0].line);
 
         var breakedFrame = stack[0];
         var frames = stack.filter(frame => frame.file === this.file);
@@ -135,10 +132,8 @@ export class EditorComponent {
             ));
     }
 
-    private updateBreakpoints() {
+    private updateBreakpoints(breakpoints:Array<Breakpoint>) {
         this.codeMirror.clearGutter("CodeMirror-breakpoints");
-
-        var breakpoints = this.debugService.breakpointsChanged.getValue();
 
         breakpoints
             .filter(bp => bp.file === this.file)
@@ -152,16 +147,14 @@ export class EditorComponent {
     }
 
     private setupDebugging() {
-        this.debugService.stackChanged.subscribe(frames => this.updateStackFrames());
-        this.debugService.breakpointsChanged.subscribe(frames => this.updateBreakpoints());
-
         this.codeMirror.on("gutterClick", (cm, line) => {
+            var debug = this.editorService.currentProject$.getValue().debug;
             var info = cm.lineInfo(line);
 
             if (info.gutterMarkers && info.gutterMarkers['CodeMirror-breakpoints'])
-                this.debugService.removeBreakpoint(this.file, line + 1);
+                debug.removeBreakpoint(this.file, line + 1);
             else
-                this.debugService.setBreakpoint(this.file, line + 1);
+                debug.setBreakpoint(this.file, line + 1);
         });
     }
 

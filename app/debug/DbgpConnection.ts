@@ -16,12 +16,10 @@ export class DbgpConnection {
     constructor(private server:ServerService) {
     }
 
-    connect(file, entry:string):Promise<Object> {
+    connect(project, entry:string):Promise<void> {
         this.close();
 
-        var [workspace, project] = file.path.split('/');
-
-        this.socket = this.server.connect(`debug/${workspace}/${project}?entry=${btoa(entry)}&type=vdmsl`);
+        this.socket = this.server.connect(`debug/${project.path}?entry=${btoa(entry)}&type=vdmsl`);
         this.socket.addEventListener("message", e => this.onMessage(e.data));
         this.socket.addEventListener("close", e => this.onClose());
 
@@ -36,7 +34,20 @@ export class DbgpConnection {
         });
     }
 
-    onClose():void {
+    send(cmd:string, params:string = ""):Promise {
+        this.cmdCount = (this.cmdCount + 1) % 10000;
+
+        this.socket.send(`${cmd} -i ${this.cmdCount} ${params}`);
+
+        return new Promise(resolve => this.requests[this.cmdCount] = resolve);
+    }
+
+    close():void {
+        if (this.socket)
+            this.socket.close();
+    }
+
+    private onClose():void {
         this.connected = false;
     }
 
@@ -59,18 +70,5 @@ export class DbgpConnection {
                 this.requests[id] = undefined;
             }
         }
-    }
-
-    public send(cmd:string, params:string = ""):Promise<Object> {
-        this.cmdCount = (this.cmdCount + 1) % 10000;
-
-        this.socket.send(`${cmd} -i ${this.cmdCount} ${params}`);
-
-        return new Promise(resolve => this.requests[this.cmdCount] = resolve);
-    }
-
-    close():void {
-        if (this.socket)
-            this.socket.close();
     }
 }

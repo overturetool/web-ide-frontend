@@ -12,13 +12,13 @@ import {ReplaySubject} from "rxjs/Rx";
 import {EditorService} from "../editor/EditorService";
 
 export class File {
-    parent:Directory;
-    name:string;
-    path:string;
     document = null;
 
     constructor(private serverService:ServerService,
-                private editorService:EditorService) {
+                private editorService:EditorService,
+                public parent:Directory,
+                public name:string,
+                public path:string) {
     }
 
     find(path:Array<string>):File {

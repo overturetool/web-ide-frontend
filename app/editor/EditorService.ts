@@ -3,11 +3,13 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {Injectable} from "angular2/core";
 import {EditorPosition} from "./EditorPosition";
+import {Project} from "../files/Project";
 
 @Injectable()
 export class EditorService {
     openFiles$:BehaviorSubject<Array<File>> = new BehaviorSubject([]);
     currentFile$:BehaviorSubject<File> = new BehaviorSubject(null);
+    currentProject$:BehaviorSubject<Project> = new BehaviorSubject(null);
     changes$:Subject<File> = new Subject();
 
     highlight$:Subject<EditorSection> = new Subject();
@@ -15,15 +17,26 @@ export class EditorService {
     focus$:Subject<number> = new Subject();
 
     loadFile(file:File):void {
-        var currentFile = this.currentFile$.getValue();
+        if (this.currentFile$.getValue() === file) return;
 
-        if (currentFile === file) return;
+        if (file) {
+            // Find files project
+            var project = file.parent;
+            while (!(project instanceof Project)) {
+                project = project.parent;
+            }
 
-        this.currentFile$.next(file);
+            this.currentProject$.next(project);
+            this.currentFile$.next(file);
 
-        var openFiles = this.openFiles$.getValue();
-        if (openFiles.indexOf(file) === -1)
-            this.openFiles$.next([...openFiles, file]);
+            // Add file to list of open files
+            var openFiles = this.openFiles$.getValue();
+            if (openFiles.indexOf(file) === -1)
+                this.openFiles$.next([...openFiles, file]);
+        } else {
+            this.currentProject$.next(null);
+            this.currentFile$.next(null);
+        }
     }
 
     closeFile(file:File):void {
@@ -34,17 +47,20 @@ export class EditorService {
 
             if (index > 0)
             // Open file to the left
-                this.currentFile$.next(openFiles[index - 1]);
+                this.loadFile(openFiles[index - 1]);
             else
             // Open file to the right or no file
-                this.currentFile$.next(index + 1 < openFiles.length ? openFiles[index + 1] : null);
+                this.loadFile(index + 1 < openFiles.length ? openFiles[index + 1] : null);
         }
 
         this.openFiles$.next(openFiles.filter(f => f !== file));
     }
 
-    onChange() {
-        this.changes$.next(this.currentFile$.getValue());
+    onChange(content:string):void {
+        var file = this.currentFile$.getValue();
+
+        file.save(content)
+            .subscribe(() => this.changes$.next(file));
     }
 
     goto(line:number, char?:number) {

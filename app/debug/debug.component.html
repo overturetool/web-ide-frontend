@@ -1,32 +1,32 @@
-<div *ngIf="file">
-    <div *ngIf="!debug.connection.connected">
-        <input [(ngModel)]="entry" placeholder="Entry">
-        <button (click)="connect()" [disabled]="debug.connection.connecting">Connect</button>
+<div *ngIf="project">
+    <div *ngIf="!project.debug.connection.connected">
+        <input [(ngModel)]="project.entry" placeholder="Entry">
+        <button (click)="connect()" [disabled]="project.debug.connection.connecting">Connect</button>
     </div>
 
-    <div *ngIf="debug.connection.connected">
-        <button (click)="debug.run()" class="glyph run"></button>
-        <button (click)="debug.stepOver()" [disabled]="debug.status !== 'break'" class="glyph step-over"></button>
-        <button (click)="debug.stepInto()" [disabled]="debug.status !== 'break'" class="glyph step-into"></button>
-        <button (click)="debug.stepOut()" [disabled]="debug.status !== 'break'" class="glyph step-out"></button>
-        <button (click)="debug.stop()" class="glyph stop"></button>
+    <div *ngIf="project.debug.connection.connected">
+        <button (click)="project.debug.run()" class="glyph run"></button>
+        <button (click)="project.debug.stepOver()" [disabled]="project.debug.status !== 'break'" class="glyph step-over"></button>
+        <button (click)="project.debug.stepInto()" [disabled]="project.debug.status !== 'break'" class="glyph step-into"></button>
+        <button (click)="project.debug.stepOut()" [disabled]="project.debug.status !== 'break'" class="glyph step-out"></button>
+        <button (click)="project.debug.stop()" class="glyph stop"></button>
         <button (click)="connect()" class="glyph restart"></button>
     </div>
 
     <h2>Call stack</h2>
-    <div *ngFor="#frame of debug.stack.reverse()"
+    <div *ngFor="#frame of project.debug.stack.reverse()"
          (click)="selectFrame(frame)"
-         [class.active]="debug.currentFrame === frame"
+         [class.active]="project.debug.currentFrame === frame"
          class="frame list-item interactable">
         <div class="description">{{frame.file.name}}:{{frame.line}}</div>
         <code-view [code]="getLine(frame.file, frame.line)"></code-view>
     </div>
 
     <h2>Variables</h2>
-    <tree [nodes]="debug.context"></tree>
+    <tree [nodes]="project.debug.context"></tree>
 
     <h2>Breakpoints</h2>
-    <div class="breakpoints" *ngFor="#breakpoint of debug.breakpoints">
+    <div class="breakpoints" *ngFor="#breakpoint of project.debug.breakpoints">
         <div class="breakpoint list-item interactable" (click)="focus(breakpoint.file, breakpoint.line)">
             <div class="description">{{breakpoint.file.name}}:{{breakpoint.line}}</div>
             <code-view [code]="getLine(breakpoint.file, breakpoint.line)"></code-view>
@@ -34,5 +34,5 @@
     </div>
 
     <h2>Stdout</h2>
-    <div *ngFor="#line of debug.stdout"><code-view [code]="line"></code-view></div>
+    <div *ngFor="#line of project.debug.stdout"><code-view [code]="line"></code-view></div>
 </div>
