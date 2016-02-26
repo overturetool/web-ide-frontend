@@ -18,6 +18,7 @@ import {DbgpDebugger} from "../debug/DbgpDebugger";
 import {Breakpoint} from "../debug/Breakpoint";
 import {StackFrame} from "../debug/StackFrame";
 import {Subscription} from "rxjs/Subscription";
+import {NgZone} from "angular2/core";
 
 declare var CodeMirror;
 
@@ -29,15 +30,18 @@ export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array = [];
     private highlightMarking;
-    private breakpointSubscription: Subscription;
-    private stackSubscription: Subscription;
+    private breakpointSubscription:Subscription;
+    private stackSubscription:Subscription;
     private file:File = null;
 
-    @HostBinding('class.active') get active() { return !!this.file }
+    @HostBinding('class.active') get active() {
+        return !!this.file
+    }
 
     changes$:Observable<string>;
 
     constructor(el:ElementRef,
+                private ngZone:NgZone,
                 private lintService:LintService,
                 private hintService:HintService,
                 private editorService:EditorService) {
@@ -173,13 +177,15 @@ export class EditorComponent {
 
         var lastHeight = -1;
 
-        setInterval(() => {
-            if (parent.clientHeight === lastHeight) return;
+        this.ngZone.runOutsideAngular(() => {
+            setInterval(() => {
+                if (parent.clientHeight === lastHeight) return;
 
-            lastHeight = parent.clientHeight;
-            el.style.height = `${parent.clientHeight}px`;
+                lastHeight = parent.clientHeight;
+                el.style.height = `${parent.clientHeight}px`;
 
-            cm.refresh();
-        }, 100);
+                cm.refresh();
+            }, 100);
+        });
     }
 }
