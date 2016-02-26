@@ -6,7 +6,7 @@ export class Project extends Directory {
     debug:DbgpDebugger;
     entry:string;
     private configFile:File;
-    private config;
+    private config = {};
 
     constructor(serverService:ServerService,
                 public parent:Directory,
@@ -19,13 +19,18 @@ export class Project extends Directory {
     }
 
     getEntryPoints() {
-        if (!this.configFile) {
-            this.configFile = this.find([".project"]);
-            this.configFile.content$.subscribe(content => this.config = JSON.parse(content));
+        if (!this.configFile) this.loadConfigFile();
 
-            this.config = JSON.parse(this.configFile.document.getValue());
-        }
+        return this.config.entryPoints || [];
+    }
 
-        return this.config.entryPoints;
+    private loadConfigFile() {
+        this.configFile = this.find([".project"]);
+
+        if (!this.configFile) return;
+
+        this.configFile.content$.subscribe(content => this.config = JSON.parse(content));
+
+        this.config = JSON.parse(this.configFile.document.getValue());
     }
 }
