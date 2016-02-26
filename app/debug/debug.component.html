@@ -1,9 +1,10 @@
 <div *ngIf="project">
-    <div *ngIf="!project.debug.connection.connected">
-        <select [(ngModel)]="entry">
-            <option *ngFor="#entry of project.getEntryPoints(); #i = index" [selected]="i === 0">{{entry}}</option>
-        </select>
-        <button (click)="connect()" [disabled]="project.debug.connection.connecting">Connect</button>
+    <div class="entry" *ngIf="!project.debug.connection.connected">
+        <h2>Entry point</h2>
+        <div class="input"><input [(ngModel)]="entry"><button (click)="connect()" [disabled]="project.debug.connection.connecting">Connect</button></div>
+        <div class="default-entry" *ngFor="#entryPoint of project.getEntryPoints()">
+            <button (click)="entry = entryPoint">{{entryPoint}}</button>
+        </div>
     </div>
 
     <div *ngIf="project.debug.connection.connected">
