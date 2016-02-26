@@ -30,7 +30,6 @@ export class Project extends Directory {
         if (!this.configFile) return;
 
         this.configFile.content$.subscribe(content => this.config = JSON.parse(content));
-
         this.config = JSON.parse(this.configFile.document.getValue());
     }
 }
