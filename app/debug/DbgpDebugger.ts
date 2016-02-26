@@ -1,43 +1,46 @@
-import {Injectable} from "angular2/core"
-import {ServerService} from "../server/ServerService"
-import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
-import {DbgpResponse} from "./DbgpResponse";
-import {DbgpConnection} from "./DbgpConnection";
 import {Breakpoint} from "./Breakpoint";
 import {StackFrame} from "./StackFrame";
-import {File} from "../files/File";
+import {DbgpConnection} from "./DbgpConnection";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
+import {ServerService} from "../server/ServerService";
+import {BehaviorSubject} from "rxjs/Rx";
+import {Injectable} from "angular2/core";
+import {Project} from "../files/Project";
 
-@Injectable()
-export class DebugService {
+export class DbgpDebugger {
+    connection:DbgpConnection;
     status:string = "";
     context:Array<any> = [];
     stack:Array<StackFrame> = [];
     currentFrame:StackFrame;
     stdout:Array<string> = [];
-    breakpoints:Array<any> = [];
+    breakpoints:Array<Breakpoint> = [];
 
-    breakpointsChanged:BehaviorSubject<Array> = new BehaviorSubject([]);
-    stackChanged:BehaviorSubject<Array<StackFrame>> = new BehaviorSubject([]);
+    breakpoints$:BehaviorSubject<Array<Breakpoint>> = new BehaviorSubject([]);
+    stack$:BehaviorSubject<Array<StackFrame>> = new BehaviorSubject([]);
 
     private connection:DbgpConnection;
 
-    constructor(serverService:ServerService,
-                private editorService:EditorService,
-                private workspaceService:WorkspaceService) {
+    constructor(private serverService:ServerService,
+                private project:Project) {
         this.connection = new DbgpConnection(serverService);
         this.connection.messages.subscribe(res => this.onMessage(res));
     }
 
-    connect(file, entry:string):void {
+    connect(entry:string):void {
         this.status = "";
         this.context = [];
         this.stack = [];
         this.stdout = [];
 
-        this.connection.connect(file, entry)
+        this.connection
+            .connect(this.project, entry)
             .then(() => this.syncBreakpoints());
+    }
+
+    close() {
+        this.connection.close();
     }
 
     run():void {
@@ -60,14 +63,6 @@ export class DebugService {
         this.connection.send('step_out');
     }
 
-    private syncBreakpoints() {
-        var breakpoints = this.breakpoints.slice();
-        this.breakpoints = [];
-
-        breakpoints.forEach(bp => this.setBreakpoint(bp.file, bp.line));
-        this.breakpointsChanged.next(this.breakpoints);
-    }
-
     setBreakpoint(file:File, line:number):void {
         if (this.connection.connected) {
             var self = this;
@@ -81,11 +76,11 @@ export class DebugService {
                     breakpoint.id = res.response.$id;
 
                     self.breakpoints.push(breakpoint);
-                    self.breakpointsChanged.next(self.breakpoints);
+                    self.breakpoints$.next(self.breakpoints);
                 });
         } else {
             this.breakpoints.push(this.createBreakpoint(file, line));
-            this.breakpointsChanged.next(this.breakpoints);
+            this.breakpoints$.next(this.breakpoints);
         }
     }
 
@@ -96,10 +91,10 @@ export class DebugService {
             this.connection.send('breakpoint_remove', `-d ${breakpoint.id}`);
 
         this.breakpoints = this.breakpoints.filter(bp => bp.file !== file || bp.line !== line);
-        this.breakpointsChanged.next(this.breakpoints);
+        this.breakpoints$.next(this.breakpoints);
     }
 
-    getContext(frame?: StackFrame):void {
+    getContext(frame?:StackFrame):void {
         this.currentFrame = frame;
         var level = frame ? frame.level : 0;
 
@@ -114,7 +109,7 @@ export class DebugService {
                         .send('context_get', `-d ${level} -c ${context.$id}`)
                         .then(res => {
                             if (context.$name == "GLOBAL") {
-                                this.context.push({ $name: "Global", property: res.response.property });
+                                this.context.push({$name: "Global", property: res.response.property});
                             }
 
                             if (context.$name == "LOCAL") {
@@ -126,24 +121,21 @@ export class DebugService {
     }
 
     getStack():void {
-        var self = this;
-
         this.connection.send('stack_get')
             .then(response => {
                 var stack = response.response.stack.length ? response.response.stack : [response.response.stack];
 
-                self.stack = stack.map(frame => {
-                    var file = this.workspaceService.workspace$.getValue().find(frame.$filename.split("/").slice(1));
+                this.stack = stack.map(frame => {
+                    var file = this.project.find(frame.$filename.split("/").slice(2));
                     var char = parseInt(frame.$cmdbegin.split(":")[1]);
 
                     return this.createStackFrame(frame.$level, file, frame.$lineno, char);
                 });
 
-                this.currentFrame = self.stack[0];
-                self.stack[0].file.open();
-                this.editorService.focus(self.stack[0].line);
+                this.currentFrame = this.stack[0];
+                this.currentFrame.file.open();
 
-                self.stackChanged.next(self.stack);
+                this.stack$.next(this.stack);
             });
     }
 
@@ -176,7 +168,7 @@ export class DebugService {
                     this.getContext();
                     this.getStack();
                 } else {
-                    this.stackChanged.next([]);
+                    this.stack$.next([]);
                 }
             }
 
@@ -187,5 +179,13 @@ export class DebugService {
                 this.stdout.push(error.message);
             }
         }
+    }
+
+    private syncBreakpoints() {
+        var breakpoints = this.breakpoints.slice();
+        this.breakpoints = [];
+
+        breakpoints.forEach(bp => this.setBreakpoint(bp.file, bp.line));
+        this.breakpoints$.next(this.breakpoints);
     }
 }

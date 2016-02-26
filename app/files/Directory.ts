@@ -9,20 +9,17 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 
 export class Directory {
-    parent:Directory;
-    name:string;
-    path:string;
-    children:Array<File|Directory>;
-
-    constructor(private serverService:ServerService) {
+    constructor(private serverService:ServerService,
+                public parent:Directory,
+                public name:string,
+                public path:string,
+                public children:Array<File|Directory>) {
     }
 
     find(path:Array<string>):File|Directory {
-        if (path.length === 0) return this;
+        var child = this.children.filter(child => child.name === path[0])[0];
 
-        return this.children
-            .filter(child => child.name === path[0])[0]
-            .find(path.slice(1));
+        return path.length === 1 ? child : child.find(path.slice(1));
     }
 
     allFiles() {

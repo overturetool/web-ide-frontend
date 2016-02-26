@@ -3,6 +3,7 @@ import {File} from "./File";
 import {EditorService} from "../editor/EditorService";
 import {ServerService} from "../server/ServerService";
 import {Injectable} from "angular2/core";
+import {Project} from "./Project";
 
 @Injectable()
 export class WorkspaceFactory {
@@ -12,11 +13,7 @@ export class WorkspaceFactory {
     }
 
     createFile(parent:Directory, name:string, path:string):File {
-        var file = new File(this.serverService, this.editorService);
-
-        file.parent = parent;
-        file.name = name;
-        file.path = path;
+        var file = new File(this.serverService, this.editorService, parent, name, path);
 
         parent.children.push(file);
 
@@ -24,16 +21,19 @@ export class WorkspaceFactory {
     }
 
     createDirectory(parent:Directory, name:string, path:string, children:Array<File|Directory> = []):Directory {
-        var directory = new Directory(this.serverService);
-
-        directory.parent = parent;
-        directory.name = name;
-        directory.path = path;
-        directory.children = children;
+        var directory = new Directory(this.serverService, parent, name, path, children);
 
         if (parent)
             parent.children.push(directory);
 
         return directory;
+    }
+
+    createProject(workspace:Directory, name:string, path:string, children:Array<File|Directory> = []):Project {
+        var project = new Project(this.serverService, workspace, name, path, children);
+
+        workspace.children.push(project);
+
+        return project;
     }
 }

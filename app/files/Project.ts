@@ -1,0 +1,42 @@
+import {Directory} from "./Directory";
+import {DbgpDebugger} from "../debug/DbgpDebugger";
+import {ServerService} from "../server/ServerService";
+
+export class Project extends Directory {
+    debug:DbgpDebugger;
+    entry:string;
+    private configFile:File;
+    private config = {};
+
+    constructor(serverService:ServerService,
+                public parent:Directory,
+                public name:string,
+                public path:string,
+                public children:Array<File|Directory>) {
+        super(serverService, parent, name, path, children);
+
+        this.debug = new DbgpDebugger(serverService, this);
+    }
+
+    getEntryPoints() {
+        if (!this.configFile) this.loadConfigFile();
+
+        return this.config.entryPoints || [];
+    }
+
+    private loadConfigFile() {
+        this.configFile = this.find([".project"]);
+
+        if (!this.configFile) return;
+
+        this.configFile.content$.subscribe(content => {
+            try {
+                this.config = JSON.parse(content);
+            } catch(e) {}
+        });
+
+        try {
+            this.config = JSON.parse(this.configFile.document.getValue());
+        } catch(e) {}
+    }
+}

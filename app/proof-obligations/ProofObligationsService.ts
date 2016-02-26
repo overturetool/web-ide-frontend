@@ -15,6 +15,7 @@ export class ProofObligationsService {
     constructor(private serverService:ServerService,
                 private editorService:EditorService) {
         this.editorService.currentFile$.subscribe(file => this.update(file));
+        this.editorService.changes$.subscribe(file => this.update(file));
     }
 
     update(file) {

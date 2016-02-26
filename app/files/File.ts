@@ -12,19 +12,18 @@ import {ReplaySubject} from "rxjs/Rx";
 import {EditorService} from "../editor/EditorService";
 
 export class File {
-    parent:Directory;
-    name:string;
-    path:string;
     document = null;
+    content$:Subject<string> = new Subject();
 
     constructor(private serverService:ServerService,
-                private editorService:EditorService) {
+                private editorService:EditorService,
+                public parent:Directory,
+                public name:string,
+                public path:string) {
     }
 
-    find(path:Array<string>):File {
-        return this;
-    }
     save(content:string):Observable {
+        this.content$.next(content);
         return this.serverService.post(`vfs/writeFile/${this.path}`, content);
     }
 

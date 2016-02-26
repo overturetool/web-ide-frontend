@@ -9,7 +9,6 @@ import 'rxjs/add/operator/toPromise';
 import {Observable} from "rxjs/Observable";
 import {Directory} from "./Directory";
 import {File} from "./File";
-import {DebugService} from "../debug/DebugService";
 import {EditorService} from "../editor/EditorService";
 import {WorkspaceFactory} from "./WorkspaceFactory";
 
@@ -104,6 +103,7 @@ export class WorkspaceService {
     private _mapChildren(node) {
         node.children = node.children
             .map(child => {
+                // File
                 if (child.type === "file") {
                     // TODO: Maybe stop downloading all files on IDE load.
                     var file = this.workspaceFactory.createFile(node, child.name, child.path);
@@ -111,7 +111,20 @@ export class WorkspaceService {
                     return file;
                 }
 
-                if (child.type === "directory") {
+                // Project
+                else if (child.path.split("/").length === 2) {
+                    var project = this.workspaceFactory.createProject(
+                        node,
+                        child.name,
+                        child.path,
+                        child.children
+                    );
+
+                    return this._mapChildren(project);
+                }
+
+                // Directory
+                else if (child.type === "directory") {
                     var directory = this.workspaceFactory.createDirectory(
                         node,
                         child.name,

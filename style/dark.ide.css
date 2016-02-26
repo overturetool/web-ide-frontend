@@ -383,10 +383,37 @@ quick-bar .files div.active {
     background-color: rgba(47,101,202,.3);
 }
 
+
 /**************************** Code font ****************************/
 
 code-view,
 repl input,
 code {
     font: 13px 'Source Code Pro', monospace;
+}
+
+
+/**************************** Debug panel ****************************/
+debug .input {
+    display: flex;
+}
+
+debug .input input {
+    flex-grow: 1;
+}
+
+debug .input button,
+debug .entry {
+    margin-left: 8px;
+}
+
+debug .default-entry button {
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    color: #bbbbbb;
+}
+
+debug .default-entry button:hover {
+    text-decoration: underline;
 }
