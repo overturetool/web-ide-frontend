@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/">
     <meta charset="UTF-8">
+
     <title>Overture Online</title>
 
     <!-- Fonts -->
@@ -9,11 +11,15 @@
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
 
     <!-- Styles -->
-    <link href="node_modules/codemirror/lib/codemirror.css" rel="stylesheet" />
-    <link href="node_modules/codemirror/addon/lint/lint.css" rel="stylesheet" />
-    <link href="node_modules/codemirror/addon/hint/show-hint.css" rel="stylesheet" />
-    <link href="style/dark.ide.css" rel="stylesheet" />
-    <link href="style/index.css" rel="stylesheet" />
+    <link href="node_modules/codemirror/lib/codemirror.css" rel="stylesheet"/>
+    <link href="node_modules/codemirror/addon/lint/lint.css" rel="stylesheet"/>
+    <link href="node_modules/codemirror/addon/hint/show-hint.css" rel="stylesheet"/>
+    <link href="style/index.css" rel="stylesheet"/>
+    <link href="style/dark.ide.css" rel="stylesheet"/>
+
+    <!-- Google Auth -->
+    <script type="text/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
+    <link type="text/css" rel="stylesheet" href="//www.gstatic.com/authtoolkit/css/gitkit.css"/>
 
     <!-- Libraries -->
     <script src="node_modules/fuse.js/src/fuse.min.js"></script>
@@ -34,6 +40,7 @@
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
 
     <script>
@@ -50,6 +57,6 @@
     </script>
 </head>
 <body>
-    <ide class="ide"></ide>
+<app></app>
 </body>
 </html>
