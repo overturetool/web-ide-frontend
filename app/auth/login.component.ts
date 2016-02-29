@@ -7,8 +7,12 @@ import {AfterViewInit} from "angular2/core";
     templateUrl: "app/auth/login.component.html"
 })
 export class LoginComponent implements AfterViewInit {
-    constructor(private authService:AuthService) {
+    loggedin:boolean;
 
+    constructor(private authService:AuthService) {
+        this.authService.loggedin$.subscribe(loggedin => {
+            this.loggedin = loggedin
+        });
     }
 
     ngAfterViewInit() {

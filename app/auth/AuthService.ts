@@ -2,6 +2,8 @@ import {ElementRef} from "angular2/core";
 import {NgZone} from "angular2/core";
 import {Injectable} from "angular2/core";
 import {Profile} from "./Profile";
+import {Subject} from "rxjs/Subject";
+import {BehaviorSubject} from "rxjs/Rx";
 
 declare var gapi;
 
@@ -29,7 +31,7 @@ declare type AuthResponse = {
 
 @Injectable()
 export class AuthService {
-    loggedin:boolean = false;
+    loggedin$:BehaviorSubject<boolean> = new BehaviorSubject(false);
     profile:Profile;
     accessToken:AuthResponse;
 
@@ -44,7 +46,7 @@ export class AuthService {
     }
 
     signOut() {
-        this.loggedin = false;
+        this.loggedin$.next(false);
         this.profile = null;
         this.accessToken = null;
         this.authInstance.signOut();
@@ -62,12 +64,13 @@ export class AuthService {
 
     private onSuccess(googleUser) {
         this.zone.run(() => {
-            this.loggedin = true;
             var basicProfile:BasicProfile = googleUser.getBasicProfile();
             var authResponse = googleUser.getAuthResponse();
 
             this.profile = new Profile(basicProfile.getId(), basicProfile.getName());
             this.accessToken = authResponse.access_token;
+
+            this.loggedin$.next(true);
         });
     }
 }

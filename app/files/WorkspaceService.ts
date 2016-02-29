@@ -24,8 +24,12 @@ export class WorkspaceService {
     constructor(private serverService:ServerService,
                 private authService:AuthService,
                 private workspaceFactory:WorkspaceFactory) {
-
-        this._loadWorkspace();
+        this.authService.loggedin$.subscribe(loggedin => {
+            if (loggedin)
+                this._loadWorkspace();
+            else
+                this.workspace$.next(null);
+        });
     }
 
     newFile(parent, name = "new-file") {
@@ -86,8 +90,6 @@ export class WorkspaceService {
     }
 
     private _loadWorkspace():void {
-        if (!this.authService.loggedin) return;
-
         this.serverService
             .get(`vfs/readdir/${this.authService.profile.id}?depth=-1`)
             .map(res => res.json())
