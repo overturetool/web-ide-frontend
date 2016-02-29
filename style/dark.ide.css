@@ -163,10 +163,6 @@ panel-menu.right panel {
     border-left: 1px solid #282828;
 }
 
-panel > .wrapper {
-    border-top: 1px solid #262829;
-}
-
 .CodeMirror-hints {
     min-width: 145px;
     background-color: #3c3f41;
@@ -419,4 +415,20 @@ debug .default-entry button {
 
 debug .default-entry button:hover {
     text-decoration: underline;
+}
+
+
+/**************************** Menu ****************************/
+
+menu {
+    background-color: #3c3f41;
+    border-bottom: 1px solid #282828;
+}
+
+menu button {
+    color: #bbbbbb;
+}
+
+menu button:hover {
+    background-color: #353739;
 }

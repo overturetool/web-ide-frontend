@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
 import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
@@ -11,6 +10,7 @@ import {Directory} from "./Directory";
 import {File} from "./File";
 import {EditorService} from "../editor/EditorService";
 import {WorkspaceFactory} from "./WorkspaceFactory";
+import {AuthService} from "../auth/AuthService";
 
 @Injectable()
 export class WorkspaceService {
@@ -22,7 +22,7 @@ export class WorkspaceService {
     movingNode;
 
     constructor(private serverService:ServerService,
-                private sessionService:SessionService,
+                private authService:AuthService,
                 private workspaceFactory:WorkspaceFactory) {
 
         this._loadWorkspace();
@@ -86,13 +86,15 @@ export class WorkspaceService {
     }
 
     private _loadWorkspace():void {
+        if (!this.authService.loggedin) return;
+
         this.serverService
-            .get(`vfs/readdir/${this.sessionService.account}?depth=-1`)
+            .get(`vfs/readdir/${this.authService.profile.id}?depth=-1`)
             .map(res => res.json())
             .map(projects => this.workspaceFactory.createDirectory(
                 null,
-                this.sessionService.account,
-                this.sessionService.account,
+                this.authService.profile.id,
+                this.authService.profile.id,
                 projects))
             .map(workspace => this._mapChildren(workspace))
             .subscribe(workspace => {
