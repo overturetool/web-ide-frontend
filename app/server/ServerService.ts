@@ -2,12 +2,29 @@ import {Injectable} from "angular2/core"
 import {Http} from "angular2/http";
 import {Observable} from "rxjs/Observable";
 import {Headers} from "angular2/http";
+import {RequestOptions} from "angular2/http";
 
 @Injectable()
 export class ServerService {
     private root:string = "localhost:9000";
+    private headers:Headers;
+    private jsonHeaders:Headers;
 
     constructor(private http:Http) {
+    }
+
+    registerAccessToken(token:string) {
+        if (token)
+            localStorage.setItem('access_token', token);
+        else
+            token = localStorage.getItem('access_token');
+
+        this.headers = new Headers();
+        this.jsonHeaders = new Headers();
+
+        this.headers.append('Authorization', `Bearer ${token}`);
+        this.jsonHeaders.append('Authorization', `Bearer ${token}`);
+        this.jsonHeaders.append('Content-Type', 'application/json');
     }
 
     connect(path:string):WebSocket {
@@ -15,30 +32,24 @@ export class ServerService {
     }
 
     get(path:string):Observable {
-        return this.http.get(`http://${this.root}/${path}`);
+        return this.http.get(`http://${this.root}/${path}`, {headers: this.headers});
     }
 
     post(path:string, body:any):Observable {
         if (typeof(body) !== "object")
-            return this.http.post(`http://${this.root}/${path}`, body);
+            return this.http.post(`http://${this.root}/${path}`, body, {headers: this.headers});
 
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        return this.http.post(`http://${this.root}/${path}`, JSON.stringify(body), {headers: headers});
+        return this.http.post(`http://${this.root}/${path}`, JSON.stringify(body), {headers: this.jsonHeaders});
     }
 
     put(path:string, body:any):Observable {
         if (typeof(body) !== "object")
-            return this.http.put(`http://${this.root}/${path}`, body);
+            return this.http.put(`http://${this.root}/${path}`, body, {headers: this.headers});
 
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        return this.http.put(`http://${this.root}/${path}`, JSON.stringify(body), {headers: headers});
+        return this.http.put(`http://${this.root}/${path}`, JSON.stringify(body),  {headers: this.jsonHeaders});
     }
 
     delete(path:string):Observable {
-        return this.http.delete(`http://${this.root}/${path}`);
+        return this.http.delete(`http://${this.root}/${path}`, {headers: this.headers});
     }
 }

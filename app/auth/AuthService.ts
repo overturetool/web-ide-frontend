@@ -4,6 +4,7 @@ import {Injectable} from "angular2/core";
 import {Profile} from "./Profile";
 import {Subject} from "rxjs/Subject";
 import {BehaviorSubject} from "rxjs/Rx";
+import {ServerService} from "../server/ServerService";
 
 declare var gapi;
 
@@ -33,11 +34,10 @@ declare type AuthResponse = {
 export class AuthService {
     loggedin$:BehaviorSubject<boolean> = new BehaviorSubject(false);
     profile:Profile;
-    accessToken:AuthResponse;
 
     private authInstance;
 
-    constructor(private zone:NgZone) {
+    constructor(private zone:NgZone, private serverService:ServerService) {
         gapi.load('auth2', () => {
             this.authInstance = gapi.auth2.init({
                 client_id: '915544938368-etbmhsu4bk7illn6eriesf60v6q059kh.apps.googleusercontent.com'
@@ -47,8 +47,6 @@ export class AuthService {
 
     signOut() {
         this.loggedin$.next(false);
-        this.profile = null;
-        this.accessToken = null;
         this.authInstance.signOut();
     }
 
@@ -68,9 +66,10 @@ export class AuthService {
             var authResponse = googleUser.getAuthResponse();
 
             this.profile = new Profile(basicProfile.getId(), basicProfile.getName());
-            this.accessToken = authResponse.access_token;
 
-            this.loggedin$.next(true);
+            this.serverService.registerAccessToken(authResponse.access_token);
+            this.serverService.get(`verify?tokenId=${authResponse.id_token}`)
+                .subscribe(() => this.loggedin$.next(true));
         });
     }
 }
