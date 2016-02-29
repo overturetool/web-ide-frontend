@@ -1,8 +1,7 @@
 import {Component} from "angular2/core";
-import {OnInit} from "angular2/core";
 import {ServerService} from "../server/ServerService";
 import {LoginService} from "./LoginService";
-import {ElementRef} from "angular2/core";
+import {OnInit} from "angular2/core";
 
 @Component({
     selector: 'homepage',
@@ -14,7 +13,7 @@ export class HomepageComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loginService.render("google-auth-container");
+        this.loginService.render("google-auth-button");
     }
 
     signOut() {
