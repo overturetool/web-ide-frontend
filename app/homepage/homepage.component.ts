@@ -1,18 +1,23 @@
 import {Component} from "angular2/core";
 import {OnInit} from "angular2/core";
-
-declare var google;
+import {ServerService} from "../server/ServerService";
+import {LoginService} from "./LoginService";
+import {ElementRef} from "angular2/core";
 
 @Component({
     selector: 'homepage',
     templateUrl: `app/homepage/homepage.component.html`
 })
 export class HomepageComponent implements OnInit {
+    constructor(private loginService:LoginService) {
+
+    }
+
     ngOnInit() {
-        google.identitytoolkit.signInButton('#login-button-container', {
-                widgetUrl: "http://localhost:3000/login",
-                signOutUrl: "/"
-            }
-        );
+        this.loginService.render("google-auth-container");
+    }
+
+    signOut() {
+        this.loginService.signOut();
     }
 }

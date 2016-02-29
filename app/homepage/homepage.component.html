@@ -1,3 +1,6 @@
-<h1>Welcome!</h1>
-
-<div id="login-button-container"></div>
+<h1>Welcome {{loginService.profile?.getName()}}</h1>
+<div>{{loginService.profile?.getEmail()}}</div>
+<div>{{loginService.profile?.getId()}}</div>
+<img [src]="loginService.profile?.getImageUrl()">
+<div id="google-auth-container"></div>
+<button (click)="signOut()">Sign out</button>

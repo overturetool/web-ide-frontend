@@ -7,7 +7,6 @@ import {ContextMenuService} from "../contextmenu/ContextMenuService";
 import {LintService} from "../lint/LintService";
 import {HintService} from "../hint/HintService";
 import {OutlineService} from "../outline/OutlineService";
-import {ServerService} from "../server/ServerService";
 import {SessionService} from "../auth/SessionService";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
@@ -30,7 +29,7 @@ import {QuickBarComponent} from "../quick-bar/quick-bar.component";
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
     directives: [GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [ProofObligationsService, ReplService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, ServerService, SessionService, EditorService, WorkspaceFactory, HTTP_PROVIDERS]
+    providers: [ProofObligationsService, ReplService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, SessionService, EditorService, WorkspaceFactory]
 })
 export class IdeComponent {
     empty: boolean = true;

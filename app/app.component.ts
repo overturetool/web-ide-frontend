@@ -1,14 +1,15 @@
 import {Component} from "angular2/core";
 import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
-import {LoginComponent} from "./auth/login.component";
-import {LoggedInComponent} from "./auth/logged-in.component";
 import {IdeComponent} from "./ide/ide.component";
 import {HomepageComponent} from "./homepage/homepage.component";
+import {ServerService} from "./server/ServerService";
+import {HTTP_PROVIDERS} from "angular2/http";
+import {LoginService} from "./homepage/LoginService";
 
 @Component({
     selector: "app",
     templateUrl: `app/app.component.html`,
-    providers: [ROUTER_PROVIDERS],
+    providers: [HTTP_PROVIDERS, ROUTER_PROVIDERS, ServerService, LoginService],
     directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
@@ -16,23 +17,7 @@ import {HomepageComponent} from "./homepage/homepage.component";
         path: '/',
         name: 'Homepage',
         component: HomepageComponent
-    }
-])
-@RouteConfig([
-    {
-        path: '/login',
-        name: 'Login',
-        component: LoginComponent
-    }
-])
-@RouteConfig([
-    {
-        path: '/logged-in',
-        name: 'Logged-in',
-        component: LoggedInComponent
-    }
-])
-@RouteConfig([
+    },
     {
         path: '/ide',
         name: 'IDE',
@@ -40,4 +25,5 @@ import {HomepageComponent} from "./homepage/homepage.component";
     }
 ])
 export class AppComponent {
+
 }
