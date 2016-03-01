@@ -48,6 +48,7 @@ export class AuthService {
     signOut() {
         this.loggedin$.next(false);
         this.authInstance.signOut();
+        this.serverService.get('signout').subscribe();
     }
 
     renderLoginButton(id:string) {
