@@ -17,10 +17,10 @@
     <link href="style/index.css" rel="stylesheet"/>
     <link href="style/dark.ide.css" rel="stylesheet"/>
 
-    <!-- Google login -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
     <!-- Libraries -->
+    <meta name="google-signin-client_id" content="915544938368-etbmhsu4bk7illn6eriesf60v6q059kh.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js"></script>
+
     <script src="node_modules/fuse.js/src/fuse.min.js"></script>
 
     <script src="node_modules/codemirror/lib/codemirror.js"></script>
@@ -39,6 +39,7 @@
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
 
     <script>
@@ -55,6 +56,6 @@
     </script>
 </head>
 <body>
-<ide></ide>
+    <app></app>
 </body>
 </html>

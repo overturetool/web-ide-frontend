@@ -11,9 +11,10 @@ import {File} from "./File";
 import {EditorService} from "../editor/EditorService";
 import {WorkspaceFactory} from "./WorkspaceFactory";
 import {AuthService} from "../auth/AuthService";
+import {OnInit} from "angular2/core";
 
 @Injectable()
-export class WorkspaceService {
+export class WorkspaceService implements OnInit {
     workspace$:BehaviorSubject<Directory> = new BehaviorSubject(null);
 
     selectedComponent;
@@ -24,12 +25,11 @@ export class WorkspaceService {
     constructor(private serverService:ServerService,
                 private authService:AuthService,
                 private workspaceFactory:WorkspaceFactory) {
-        this.authService.loggedin$.subscribe(loggedin => {
-            if (loggedin)
-                this._loadWorkspace();
-            else
-                this.workspace$.next(null);
-        });
+
+    }
+
+    ngOnInit() {
+        this._loadWorkspace();
     }
 
     newFile(parent, name = "new-file") {

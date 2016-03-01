@@ -1,66 +1,70 @@
-<div *ngIf="step == 0" class="welcome">
-    <h1>Welcome to the Overture Cloud IDE!</h1>
-    <button (click)="step = 1">Start guide</button>
-</div>
-
-<div *ngIf="step == 1" class="workspace">
-    <img src="images/arrow.png">
-    <div>
-        <h2>Workspace</h2>
-        <ul>
-            <li>Manage your projects here.</li>
-            <li>Left-click on files to open them.</li>
-            <li>Right-click for more options.</li>
-            <li>Press Ctrl+P to quickly search for and open a file.</li>
-        </ul>
-
-        <button (click)="prev()">&#9668;</button>
-        <button (click)="next()">&#9658;</button>
+<div *ngIf="active">
+    <div *ngIf="step == 0" class="welcome">
+        <h1>Welcome to the Overture Cloud IDE!</h1>
+        <button (click)="step = 1">Start guide</button>
     </div>
-</div>
 
-<div *ngIf="step == 2" class="debug">
-    <div>
-        Debug a project here. <br>
-        Step through the code and watch values change. <br>
-        Breakpoints can be set in the editor. <br>
-        <button (click)="prev()">&#9668;</button>
-        <button (click)="next()">&#9658;</button>
+    <div *ngIf="step == 1" class="workspace">
+        <img src="images/arrow.png">
+        <div>
+            <h2>Workspace</h2>
+            <ul>
+                <li>Manage your projects here.</li>
+                <li>Left-click on files to open them.</li>
+                <li>Right-click for more options.</li>
+                <li>Press Ctrl+P to quickly search for and open a file.</li>
+            </ul>
+
+            <button (click)="prev()">&#9668;</button>
+            <button (click)="next()">&#9658;</button>
+        </div>
     </div>
-    <img src="images/arrow.png">
-</div>
 
-<div *ngIf="step == 3" class="outline">
-    <div>
-        Get an overview of a file here. <br>
-        The outline view lists values and functions. <br>
-        Click on an item to navigate to it in the editor. <br>
-        <button (click)="prev()">&#9668;</button>
-        <button (click)="next()">&#9658;</button>
+    <div *ngIf="step == 2" class="debug">
+        <div>
+            Debug a project here. <br>
+            Step through the code and watch values change. <br>
+            Breakpoints can be set in the editor. <br>
+            <button (click)="prev()">&#9668;</button>
+            <button (click)="next()">&#9658;</button>
+        </div>
+        <img src="images/arrow.png">
     </div>
-    <img src="images/arrow.png">
-</div>
 
-<div *ngIf="step == 4" class="pog">
-    <div>
-        See proof obligations here. <br>
-        Click on an item to navigate to it in the editor. <br>
-        <button (click)="prev()">&#9668;</button>
-        <button (click)="next()">&#9658;</button>
+    <div *ngIf="step == 3" class="outline">
+        <div>
+            Get an overview of a file here. <br>
+            The outline view lists values and functions. <br>
+            Click on an item to navigate to it in the editor. <br>
+            <button (click)="prev()">&#9668;</button>
+            <button (click)="next()">&#9658;</button>
+        </div>
+        <img src="images/arrow.png">
     </div>
-    <img src="images/arrow.png">
-</div>
 
-<div *ngIf="step == 5" class="repl">
-    <img src="images/arrow.png">
-    <div>
-        Evaluate VDM expressions here.<br>
-        Expressions are evaluated in the context of the currently open file.<br>
-        <ul>
-            <li><code>$$</code> represents the latest result.</li>
-            <li><code>$n</code> represents the n'th latest result. (<code>$0</code> equals <code>$$</code>, <code>$1</code> equals the 2nd latest result.)</li>
-            <li>...</li>
-        </ul>
-        <button (click)="step = 0">Finish</button>
+    <div *ngIf="step == 4" class="pog">
+        <div>
+            See proof obligations here. <br>
+            Click on an item to navigate to it in the editor. <br>
+            <button (click)="prev()">&#9668;</button>
+            <button (click)="next()">&#9658;</button>
+        </div>
+        <img src="images/arrow.png">
+    </div>
+
+    <div *ngIf="step == 5" class="repl">
+        <img src="images/arrow.png">
+        <div>
+            Evaluate VDM expressions here.<br>
+            Expressions are evaluated in the context of the currently open file.<br>
+            <ul>
+                <li><code>$$</code> represents the latest result.</li>
+                <li><code>$n</code> represents the n'th latest result. (<code>$0</code> equals <code>$$</code>,
+                    <code>$1</code> equals the 2nd latest result.)
+                </li>
+                <li>...</li>
+            </ul>
+            <button (click)="step = 0">Finish</button>
+        </div>
     </div>
 </div>

@@ -25,19 +25,17 @@ import {TopResizerComponent} from "../panel/top-resizer.component";
 import {QuickBarComponent} from "../quick-bar/quick-bar.component";
 import {AuthService} from "../auth/AuthService";
 import {ServerService} from "../server/ServerService";
-import {LoginComponent} from "../auth/login.component";
 import {MenuComponent} from "../menu/menu.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [MenuComponent, GuideComponent, LoginComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [HTTP_PROVIDERS, ServerService, ProofObligationsService, ReplService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, AuthService, EditorService, WorkspaceFactory]
+    directives: [MenuComponent, GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    providers: [WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
 })
 export class IdeComponent {
-    empty: boolean = true;
-
-    constructor(editorService:EditorService, private authService:AuthService) {
-        editorService.currentFile$.subscribe(file => this.empty = !file);
+    constructor(authService:AuthService) {
+        if (!authService.signedIn)
+            authService.forceSignIn();
     }
 }
