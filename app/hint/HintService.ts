@@ -20,7 +20,7 @@ export class HintService {
 
         this.serverService
             .get(`codecompletion/${file.path}?line=${cur.line}&column=${cur.ch}`)
-            .map(res => res.json().map(hint => hint.replacementString))
+            .map(res => res.json().map((hint:any) => hint.replacementString))
             .subscribe(hints => callback({
                 list: hints,
                 from: CodeMirror.Pos(cur.line, start),

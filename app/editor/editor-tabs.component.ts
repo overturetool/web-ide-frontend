@@ -5,7 +5,7 @@ import {EventEmitter} from "angular2/core";
 import {EditorComponent} from "./editor.component";
 import {OnInit} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
-import {DebugService} from "../debug/DebugService";
+import {File} from "../files/File";
 import "rxjs/add/operator/filter";
 import {EditorService} from "./EditorService";
 

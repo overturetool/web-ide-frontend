@@ -1,6 +1,7 @@
 import {Component, HostBinding, ViewChild, ElementRef} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {Control} from "angular2/common";
+import {File} from "../files/File";
 
 declare var Fuse;
 

@@ -28,10 +28,10 @@ declare var CodeMirror;
 })
 export class EditorComponent {
     private codeMirror;
-    private suspendedMarkings:Array = [];
-    private highlightMarking;
-    private breakpointSubscription:Subscription;
-    private stackSubscription:Subscription;
+    private suspendedMarkings:Array<any> = [];
+    private highlightMarking:any;
+    private breakpointSubscription:Subscription<any>;
+    private stackSubscription:Subscription<any>;
     private file:File = null;
 
     @HostBinding('class.active') get active() {
@@ -58,10 +58,10 @@ export class EditorComponent {
 
         // Editor changes
         Observable.fromEventPattern(h => this.codeMirror.on("change", h), h => this.codeMirror.off("change", h))
-            .map(cm => cm.getValue())
+            .map((cm:any) => cm.getValue())
             .debounceTime(300)
             .distinctUntilChanged()
-            .subscribe(content => this.editorService.onChange(content));
+            .subscribe((content:string) => this.editorService.onChange(content));
 
         this.editorService.highlight$.subscribe(section => this.highlight(section));
         this.editorService.goto$.subscribe(position => this.goto(position.line, position.char));
@@ -86,7 +86,7 @@ export class EditorComponent {
     }
 
     focus(line:number, char?:number) {
-        var position = {line: line - 1};
+        var position = {line: line - 1, ch:undefined};
         if (char) position.ch = char - 1;
 
         this.codeMirror.scrollIntoView(position, 500);
@@ -117,7 +117,7 @@ export class EditorComponent {
     }
 
     private setupCodeCompletion() {
-        var hint = (editor, callback) => this.hintService.hint(editor, callback, this.file);
+        var hint:any = (editor, callback) => this.hintService.hint(editor, callback, this.file);
         hint.async = true;
 
         CodeMirror.commands.autocomplete = cm => cm.showHint({hint: hint});

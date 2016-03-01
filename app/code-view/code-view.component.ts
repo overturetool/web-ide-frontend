@@ -1,5 +1,4 @@
 import {Component, Input, ElementRef} from "angular2/core";
-import callSignatureElement = ts.ScriptElementKind.callSignatureElement;
 
 @Component({
     selector: "code-view",

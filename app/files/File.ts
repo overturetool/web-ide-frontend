@@ -9,6 +9,7 @@ import {Subject} from "rxjs/Subject";
 import {Directory} from "./Directory";
 import {ReplaySubject} from "rxjs/Rx";
 import {EditorService} from "../editor/EditorService";
+import {Response} from "angular2/http";
 
 export class File {
     document = null;
@@ -24,15 +25,16 @@ export class File {
         this.load().subscribe();
     }
 
-    save(content:string):Observable {
+    save(content:string):Observable<string> {
         this.content$.next(content);
-        return this.serverService.post(`vfs/writeFile/${this.path}`, content);
+        return this.serverService.post(`vfs/writeFile/${this.path}`, content)
+            .map(res => res.text());
     }
 
-    load():Observable {
+    load():Observable<string> {
         return this.serverService.get(`vfs/readFile/${this.path}`)
             .map(res => res.text())
-            .do(content => this.document = CodeMirror.Doc(content, "vdm"));
+            .do((content:string) => this.document = CodeMirror.Doc(content, "vdm"));
     }
 
     open():void {

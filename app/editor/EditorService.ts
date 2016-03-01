@@ -4,6 +4,8 @@ import {Subject} from "rxjs/Subject";
 import {Injectable} from "angular2/core";
 import {EditorPosition} from "./EditorPosition";
 import {Project} from "../files/Project";
+import {File} from "../files/File";
+import {Directory} from "../files/Directory";
 
 @Injectable()
 export class EditorService {

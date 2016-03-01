@@ -14,7 +14,7 @@ import {AuthService} from "../auth/AuthService";
 
 @Injectable()
 export class WorkspaceService {
-    workspace$:BehaviorSubject = new BehaviorSubject(null);
+    workspace$:BehaviorSubject<Directory> = new BehaviorSubject(null);
 
     selectedComponent;
     renamingComponent;
