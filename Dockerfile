@@ -5,6 +5,6 @@ WORKDIR /app
 
 RUN node docker-build.js
 RUN npm install
-RUN npm run tsc
+RUN npm run tsc; exit 0
 
 CMD npm run serve
