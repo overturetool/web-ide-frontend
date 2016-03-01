@@ -65,7 +65,19 @@ export class WorkspaceService {
     }
 
     newProject(parent, name = "new-project") {
-        this.newDirectory(parent, name);
+        var project = this.workspaceFactory.createProject(parent, name, `${parent.path}/${name}`);
+
+        // TODO: Fix this hack-ish solution to trigger change detection.
+        parent.children = parent.children.slice();
+
+        this.serverService.post(`vfs/mkdir/${project.path}`, null)
+            .map(res => res.text())
+            .subscribe(newName => {
+                if (newName === name) return;
+
+                project.name = newName;
+                project.updatePath();
+            });
     }
 
     startRename(component, node) {
