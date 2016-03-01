@@ -1,3 +1,5 @@
+import {File} from "../files/File";
+
 export class Breakpoint {
     public id:number;
 

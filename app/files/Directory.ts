@@ -1,6 +1,6 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
+import {File} from "../files/File";
 import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
@@ -16,17 +16,19 @@ export class Directory {
                 public children:Array<File|Directory>) {
     }
 
-    find(path:Array<string>):File|Directory {
+    findFile(path:Array<string>):File {
         var child = this.children.filter(child => child.name === path[0])[0];
 
-        return path.length === 1 ? child : child.find(path.slice(1));
+        if (!child) return;
+
+        return child instanceof File ? child : child.findFile(path.slice(1));
     }
 
     allFiles() {
         var files = [];
 
         this.children.forEach(child => {
-            if (child.children)
+            if (child instanceof Directory)
                 files = files.concat(child.allFiles());
             else
                 files.push(child);

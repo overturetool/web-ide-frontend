@@ -3,6 +3,7 @@ import {ServerService} from "../server/ServerService";
 import {Subject} from "rxjs/Subject";
 import {EditorService} from "../editor/EditorService";
 import {ReplItem} from "./ReplItem";
+import {File} from "../files/File";
 
 @Injectable()
 export class ReplService {

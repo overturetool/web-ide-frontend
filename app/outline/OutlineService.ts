@@ -1,6 +1,5 @@
 import {Output, Injectable, EventEmitter} from "angular2/core";
 import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
 import {Observable} from "rxjs/Observable";
 import {OnInit} from "angular2/core";
 import {Subject} from "rxjs/Subject";

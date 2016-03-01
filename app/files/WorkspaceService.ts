@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
 import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
@@ -11,10 +10,12 @@ import {Directory} from "./Directory";
 import {File} from "./File";
 import {EditorService} from "../editor/EditorService";
 import {WorkspaceFactory} from "./WorkspaceFactory";
+import {AuthService} from "../auth/AuthService";
+import {OnInit} from "angular2/core";
 
 @Injectable()
 export class WorkspaceService {
-    workspace$:BehaviorSubject = new BehaviorSubject(null);
+    workspace$:BehaviorSubject<Directory> = new BehaviorSubject(null);
 
     selectedComponent;
     renamingComponent;
@@ -22,10 +23,9 @@ export class WorkspaceService {
     movingNode;
 
     constructor(private serverService:ServerService,
-                private sessionService:SessionService,
+                private authService:AuthService,
                 private workspaceFactory:WorkspaceFactory) {
 
-        this._loadWorkspace();
     }
 
     newFile(parent, name = "new-file") {
@@ -61,7 +61,19 @@ export class WorkspaceService {
     }
 
     newProject(parent, name = "new-project") {
-        this.newDirectory(parent, name);
+        var project = this.workspaceFactory.createProject(parent, name, `${parent.path}/${name}`);
+
+        // TODO: Fix this hack-ish solution to trigger change detection.
+        parent.children = parent.children.slice();
+
+        this.serverService.post(`vfs/mkdir/${project.path}`, null)
+            .map(res => res.text())
+            .subscribe(newName => {
+                if (newName === name) return;
+
+                project.name = newName;
+                project.updatePath();
+            });
     }
 
     startRename(component, node) {
@@ -85,19 +97,17 @@ export class WorkspaceService {
         this.selectedComponent.active = true;
     }
 
-    private _loadWorkspace():void {
+    loadWorkspace():void {
         this.serverService
-            .get(`vfs/readdir/${this.sessionService.account}?depth=-1`)
+            .get(`vfs/readdir/${this.authService.profile.id}?depth=-1`)
             .map(res => res.json())
             .map(projects => this.workspaceFactory.createDirectory(
                 null,
-                this.sessionService.account,
-                this.sessionService.account,
+                this.authService.profile.id,
+                this.authService.profile.id,
                 projects))
             .map(workspace => this._mapChildren(workspace))
-            .subscribe(workspace => {
-                this.workspace$.next(workspace);
-            });
+            .subscribe(workspace => this.workspace$.next(workspace));
     }
 
     private _mapChildren(node) {
@@ -105,10 +115,7 @@ export class WorkspaceService {
             .map(child => {
                 // File
                 if (child.type === "file") {
-                    // TODO: Maybe stop downloading all files on IDE load.
-                    var file = this.workspaceFactory.createFile(node, child.name, child.path);
-                    file.load().subscribe();
-                    return file;
+                    return this.workspaceFactory.createFile(node, child.name, child.path);
                 }
 
                 // Project

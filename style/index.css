@@ -2,13 +2,6 @@
 
 body {
     margin: 0;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none;   /* Chrome/Safari/Opera */
-    -moz-user-select: none;      /* Firefox */
-    -ms-user-select: none;       /* IE/Edge */
-    user-select: none;           /* non-prefixed version, currently
-                                  not supported by any browser */
-    cursor: default;
 }
 
 button {
@@ -19,6 +12,21 @@ ide {
     display:flex;
     flex-direction: column;
     height: 100vh;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* IE/Edge */
+    user-select: none;           /* non-prefixed version, currently
+                                  not supported by any browser */
+    cursor: default;
+}
+
+auth {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 editor {
@@ -39,7 +47,12 @@ editor {
 /**************************** Guide ****************************/
 
 guide {
+    display: none;
+}
+
+guide.active {
     position: relative;
+    display: block;
     flex-grow: 1;
 }
 
@@ -47,7 +60,6 @@ guide .welcome {
     text-align: center;
     padding-top: 200px;
 }
-
 
 guide .workspace {
     position: absolute;
@@ -513,13 +525,11 @@ quick-bar {
     position: fixed;
     top: 30px;
     width: 100%;
-    display: none;
     z-index: 10;
 }
 
-quick-bar.active {
+quick-bar .wrapper.active {
     display: block;
-    width: 100%;
 }
 
 quick-bar input {
@@ -530,8 +540,46 @@ quick-bar input {
 quick-bar .wrapper {
     width: 500px;
     margin: 0 auto;
+    display: none;
 }
 
 quick-bar .files div {
     cursor: pointer;
+}
+
+
+/**************************** Auth ****************************/
+
+login .wrapper {
+    font-family: 'Source Code Pro';
+    color: black;
+    margin: 200px auto;
+    width: 240px;
+}
+
+
+/**************************** Menu ****************************/
+
+menu,
+menu ul,
+menu button,
+menu li {
+    margin: 0;
+    padding: 0;
+}
+
+menu button {
+    padding: 0 15px;
+    line-height: 21px;
+    background: none;
+    border: 0;
+    outline: 0;
+}
+
+menu li {
+    display: inline-block;
+}
+
+menu li.right {
+    float: right;
 }

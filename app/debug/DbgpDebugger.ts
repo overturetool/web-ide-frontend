@@ -7,6 +7,7 @@ import {ServerService} from "../server/ServerService";
 import {BehaviorSubject} from "rxjs/Rx";
 import {Injectable} from "angular2/core";
 import {Project} from "../files/Project";
+import {File} from "../files/File";
 
 export class DbgpDebugger {
     connection:DbgpConnection;
@@ -19,8 +20,6 @@ export class DbgpDebugger {
 
     breakpoints$:BehaviorSubject<Array<Breakpoint>> = new BehaviorSubject([]);
     stack$:BehaviorSubject<Array<StackFrame>> = new BehaviorSubject([]);
-
-    private connection:DbgpConnection;
 
     constructor(private serverService:ServerService,
                 private project:Project) {
@@ -84,7 +83,7 @@ export class DbgpDebugger {
         }
     }
 
-    removeBreakpoint(file, line):void {
+    removeBreakpoint(file:File, line:number):void {
         var breakpoint = this.breakpoints.filter(bp => bp.file === file && bp.line === line)[0];
 
         if (this.connection.connected)
@@ -126,7 +125,7 @@ export class DbgpDebugger {
                 var stack = response.response.stack.length ? response.response.stack : [response.response.stack];
 
                 this.stack = stack.map(frame => {
-                    var file = this.project.find(frame.$filename.split("/").slice(2));
+                    var file = this.project.findFile(frame.$filename.split("/").slice(2));
                     var char = parseInt(frame.$cmdbegin.split(":")[1]);
 
                     return this.createStackFrame(frame.$level, file, frame.$lineno, char);

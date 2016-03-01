@@ -1,12 +1,13 @@
 import {Directory} from "./Directory";
 import {DbgpDebugger} from "../debug/DbgpDebugger";
 import {ServerService} from "../server/ServerService";
+import {File} from "../files/File";
 
 export class Project extends Directory {
     debug:DbgpDebugger;
     entry:string;
     private configFile:File;
-    private config = {};
+    private config:any = {};
 
     constructor(serverService:ServerService,
                 public parent:Directory,
@@ -25,7 +26,7 @@ export class Project extends Directory {
     }
 
     private loadConfigFile() {
-        this.configFile = this.find([".project"]);
+        this.configFile = this.findFile([".project"]);
 
         if (!this.configFile) return;
 

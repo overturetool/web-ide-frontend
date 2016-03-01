@@ -7,8 +7,6 @@ import {ContextMenuService} from "../contextmenu/ContextMenuService";
 import {LintService} from "../lint/LintService";
 import {HintService} from "../hint/HintService";
 import {OutlineService} from "../outline/OutlineService";
-import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
 import {WorkspaceComponent} from "../files/workspace.component";
@@ -25,17 +23,19 @@ import {RightResizerComponent} from "../panel/right-resizer.component";
 import {LeftResizerComponent} from "../panel/left-resizer.component";
 import {TopResizerComponent} from "../panel/top-resizer.component";
 import {QuickBarComponent} from "../quick-bar/quick-bar.component";
+import {AuthService} from "../auth/AuthService";
+import {ServerService} from "../server/ServerService";
+import {MenuComponent} from "../menu/menu.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [ProofObligationsService, ReplService, ContextMenuService, WorkspaceService, LintService, HintService, OutlineService, ServerService, SessionService, EditorService, WorkspaceFactory, HTTP_PROVIDERS]
+    directives: [MenuComponent, GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    providers: [WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
 })
 export class IdeComponent {
-    empty: boolean = true;
-
-    constructor(editorService:EditorService) {
-        editorService.currentFile$.subscribe(file => this.empty = !file);
+    constructor(authService:AuthService) {
+        if (!authService.signedIn)
+            authService.forceSignIn();
     }
 }

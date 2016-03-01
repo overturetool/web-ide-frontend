@@ -16,7 +16,7 @@ export class DbgpConnection {
     constructor(private server:ServerService) {
     }
 
-    connect(project, entry:string):Promise<void> {
+    connect(project, entry:string):Promise<any> {
         this.close();
 
         this.socket = this.server.connect(`debug/${project.path}?entry=${btoa(entry)}&type=vdmsl`);
@@ -34,7 +34,7 @@ export class DbgpConnection {
         });
     }
 
-    send(cmd:string, params:string = ""):Promise {
+    send(cmd:string, params:string = ""):Promise<any> {
         this.cmdCount = (this.cmdCount + 1) % 10000;
 
         this.socket.send(`${cmd} -i ${this.cmdCount} ${params}`);

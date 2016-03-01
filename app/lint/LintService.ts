@@ -22,7 +22,7 @@ export class LintService {
 
     }
 
-    lint(file, callback:(data:[Marker])=>void):void {
+    lint(file, callback:(data:Array<Marker>)=>void):void {
         if (!file) {
             callback([]);
         }

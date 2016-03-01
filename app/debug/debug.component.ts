@@ -6,6 +6,7 @@ import {StackFrame} from "./StackFrame";
 import {CodeViewComponent} from "../code-view/code-view.component";
 import {DbgpDebugger} from "./DbgpDebugger";
 import {Project} from "../files/Project";
+import {File} from "../files/File";
 
 @Component({
     selector: "debug",

@@ -6,9 +6,12 @@
     "postinstall": "npm run typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "serve": "http-server -s -p 80 -d false -c-1",
     "lite": "lite-server",
     "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
-    "typings": "typings"
+    "typings": "typings",
+    "docker-build": "docker build -t kdsaaby/overture_frontend .",
+    "docker-push": "docker push kdsaaby/overture_frontend"
   },
   "dependencies": {
     "angular2": "2.0.0-beta.6",
@@ -23,7 +26,9 @@
   },
   "devDependencies": {
     "concurrently": "^1.0.0",
+    "http-server": "^0.9.0",
     "lite-server": "^2.0.1",
+    "tslint": "^3.5.0",
     "typescript": "^1.7.5",
     "typings": "^0.6.8"
   }

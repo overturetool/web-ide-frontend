@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
 import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
@@ -10,6 +9,7 @@ import {Subject} from "rxjs/Subject";
 import {Directory} from "./Directory";
 import {ReplaySubject} from "rxjs/Rx";
 import {EditorService} from "../editor/EditorService";
+import {Response} from "angular2/http";
 
 export class File {
     document = null;
@@ -20,17 +20,21 @@ export class File {
                 public parent:Directory,
                 public name:string,
                 public path:string) {
+
+        // TODO: Load file content on demand instead.
+        this.load().subscribe();
     }
 
-    save(content:string):Observable {
+    save(content:string):Observable<string> {
         this.content$.next(content);
-        return this.serverService.post(`vfs/writeFile/${this.path}`, content);
+        return this.serverService.post(`vfs/writeFile/${this.path}`, content)
+            .map(res => res.text());
     }
 
-    load():Observable {
+    load():Observable<string> {
         return this.serverService.get(`vfs/readFile/${this.path}`)
             .map(res => res.text())
-            .do(content => this.document = CodeMirror.Doc(content, "vdm"));
+            .do((content:string) => this.document = CodeMirror.Doc(content, "vdm"));
     }
 
     open():void {
