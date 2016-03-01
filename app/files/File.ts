@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
-import {SessionService} from "../auth/SessionService";
 import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
@@ -20,6 +19,9 @@ export class File {
                 public parent:Directory,
                 public name:string,
                 public path:string) {
+
+        // TODO: Load file content on demand instead.
+        this.load().subscribe();
     }
 
     save(content:string):Observable {

@@ -63,9 +63,9 @@ export class AuthService {
     private onSuccess(googleUser) {
         this.zone.run(() => {
             var basicProfile:BasicProfile = googleUser.getBasicProfile();
-            var authResponse = googleUser.getAuthResponse();
+            var authResponse:AuthResponse = googleUser.getAuthResponse();
 
-            this.profile = new Profile(basicProfile.getId(), basicProfile.getName());
+            this.profile = new Profile(basicProfile.getId(), basicProfile.getGivenName());
 
             this.serverService.registerAccessToken(authResponse.access_token);
             this.serverService.get(`verify?tokenId=${authResponse.id_token}`)

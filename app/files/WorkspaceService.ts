@@ -109,10 +109,7 @@ export class WorkspaceService {
             .map(child => {
                 // File
                 if (child.type === "file") {
-                    // TODO: Maybe stop downloading all files on IDE load.
-                    var file = this.workspaceFactory.createFile(node, child.name, child.path);
-                    file.load().subscribe();
-                    return file;
+                    return this.workspaceFactory.createFile(node, child.name, child.path);
                 }
 
                 // Project
