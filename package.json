@@ -6,6 +6,7 @@
     "postinstall": "npm run typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "serve": "http-server -s -p 80 -d false -c-1",
     "lite": "lite-server",
     "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
     "typings": "typings",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "concurrently": "^1.0.0",
+    "http-server": "^0.9.0",
     "lite-server": "^2.0.1",
     "typescript": "^1.7.5",
     "typings": "^0.6.8"
