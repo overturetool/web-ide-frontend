@@ -19,6 +19,8 @@ export class Directory {
     findFile(path:Array<string>):File {
         var child = this.children.filter(child => child.name === path[0])[0];
 
+        if (!child) return;
+
         return child instanceof File ? child : child.findFile(path.slice(1));
     }
 

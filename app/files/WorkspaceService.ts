@@ -14,7 +14,7 @@ import {AuthService} from "../auth/AuthService";
 import {OnInit} from "angular2/core";
 
 @Injectable()
-export class WorkspaceService implements OnInit {
+export class WorkspaceService {
     workspace$:BehaviorSubject<Directory> = new BehaviorSubject(null);
 
     selectedComponent;
@@ -26,10 +26,6 @@ export class WorkspaceService implements OnInit {
                 private authService:AuthService,
                 private workspaceFactory:WorkspaceFactory) {
 
-    }
-
-    ngOnInit() {
-        this._loadWorkspace();
     }
 
     newFile(parent, name = "new-file") {
@@ -101,7 +97,7 @@ export class WorkspaceService implements OnInit {
         this.selectedComponent.active = true;
     }
 
-    private _loadWorkspace():void {
+    loadWorkspace():void {
         this.serverService
             .get(`vfs/readdir/${this.authService.profile.id}?depth=-1`)
             .map(res => res.json())
@@ -111,9 +107,7 @@ export class WorkspaceService implements OnInit {
                 this.authService.profile.id,
                 projects))
             .map(workspace => this._mapChildren(workspace))
-            .subscribe(workspace => {
-                this.workspace$.next(workspace);
-            });
+            .subscribe(workspace => this.workspace$.next(workspace));
     }
 
     private _mapChildren(node) {

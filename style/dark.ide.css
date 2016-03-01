@@ -231,9 +231,7 @@ editor-tabs .wrapper {
 }
 
 editor-tabs li {
-    border: 1px solid #282828;
-    border-left: 0;
-    border-bottom: 0;
+    border-right: 1px solid #282828;
     background-color: #3c3e3f;
 }
 

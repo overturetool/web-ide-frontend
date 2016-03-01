@@ -2,16 +2,18 @@ import {Component, HostBinding, ViewChild, ElementRef} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {Control} from "angular2/common";
 import {File} from "../files/File";
+import {PathPipe} from "../files/path.pipe";
 
 declare var Fuse;
 
 @Component({
     selector: "quick-bar",
-    templateUrl: "app/quick-bar/quick-bar.component.html"
+    templateUrl: "app/quick-bar/quick-bar.component.html",
+    pipes: [PathPipe]
 })
 export class QuickBarComponent {
-    @HostBinding("class.active") active:boolean = false;
     @ViewChild("input") inputElement:ElementRef;
+    active:boolean = false;
     expression:string = "";
     files:Array<File> = [];
     selected:number = 0;
@@ -44,8 +46,10 @@ export class QuickBarComponent {
             this.openFile(this.files[this.selected]);
 
         // Escape
-        if (event.keyCode === 27)
+        if (event.keyCode === 27) {
+            event.preventDefault();
             this.close();
+        }
 
         // Keyup
         if (event.keyCode === 38) {
@@ -70,11 +74,13 @@ export class QuickBarComponent {
     }
 
     open() {
+        var workspace = this.workspaceService.workspace$.getValue();
+        if (!workspace) return;
+
         this.select(0);
         this.active = true;
         setTimeout(() => this.inputElement.nativeElement.focus(), 0);
 
-        var workspace = this.workspaceService.workspace$.getValue();
         this.files = workspace.allFiles();
         this.fuse = new Fuse(this.files, {keys: ["path"]});
     }

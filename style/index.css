@@ -47,7 +47,12 @@ editor {
 /**************************** Guide ****************************/
 
 guide {
+    display: none;
+}
+
+guide.active {
     position: relative;
+    display: block;
     flex-grow: 1;
 }
 
@@ -55,7 +60,6 @@ guide .welcome {
     text-align: center;
     padding-top: 200px;
 }
-
 
 guide .workspace {
     position: absolute;
@@ -521,13 +525,11 @@ quick-bar {
     position: fixed;
     top: 30px;
     width: 100%;
-    display: none;
     z-index: 10;
 }
 
-quick-bar.active {
+quick-bar .wrapper.active {
     display: block;
-    width: 100%;
 }
 
 quick-bar input {
@@ -538,6 +540,7 @@ quick-bar input {
 quick-bar .wrapper {
     width: 500px;
     margin: 0 auto;
+    display: none;
 }
 
 quick-bar .files div {
