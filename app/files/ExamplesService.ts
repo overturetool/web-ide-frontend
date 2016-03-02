@@ -35,7 +35,7 @@ The algorithm is in the public domain and is in wide use today. It is specified 
         ]);
     }
 
-    import(example:Example) {
+    importExample(example:Example) {
         var workspace = this.workspaceService.workspace$.getValue();
     }
 

@@ -460,6 +460,16 @@ examples-selector .details {
     border-left: 1px solid #555555;
 }
 
+examples-selector .author {
+    font-style: italic;
+    color: #888;
+}
+
+examples-selector .version {
+    float:right;
+    color: #888;
+}
+
 examples-selector .details button {
     margin: 5px auto 0;
     float: right;

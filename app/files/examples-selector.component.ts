@@ -1,6 +1,7 @@
 import {ExamplesService} from "./ExamplesService";
 import {Component} from "angular2/core";
 import {Example} from "./Example";
+import {OnInit} from "angular2/core";
 
 @Component({
     selector: "examples-selector",
@@ -12,17 +13,20 @@ export class ExamplesSelectorComponent {
 
     constructor(private examplesService:ExamplesService) {
         this.examplesService.examples$
-            .subscribe(examples => {
-                this.examples = examples
-            });
+            .subscribe(examples => this.examples = examples);
     }
 
     select(example:Example) {
         this.current = example;
     }
 
-    import() {
-        this.examplesService.import(this.current);
+    importCurrent() {
+        this.examplesService.importExample(this.current);
         this.examplesService.close();
+    }
+
+    onBackgroundClick(event) {
+        if (event.target.matches('.background'))
+            this.examplesService.close();
     }
 }

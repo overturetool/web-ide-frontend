@@ -592,9 +592,11 @@ menu li.open ul {
 
 /**************************** Menu ****************************/
 
-examples-selector {
+examples-selector .background {
     position: fixed;
-    top: 100px;
+    left:0;
+    top:0;
+    height:100vh;
     width: 100%;
     z-index: 10;
 }
@@ -602,7 +604,7 @@ examples-selector {
 examples-selector .wrapper {
     width: 600px;
     height: 400px;
-    margin: 0 auto;
+    margin: 100px auto 0;
     display: flex;
 }
 
