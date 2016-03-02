@@ -98,6 +98,20 @@ export class WorkspaceService {
         this.selectedComponent.active = true;
     }
 
+    loadProject(name:string):void {
+        var workspace = this.workspace$.getValue();
+        var path = `${workspace.path}/${name}`;
+
+        this.serverService
+            .get(`vfs/readdir/${path}?depth=-1`)
+            .map(res => res.json())
+            .subscribe(children => {
+                var project = this.workspaceFactory.createProject(workspace, name, path, children);
+                this._mapChildren(project);
+                this.workspace$.next(workspace);
+            });
+    }
+
     loadWorkspace():void {
         this.serverService
             .get(`vfs/readdir/${this.authService.profile.id}?depth=-1`)

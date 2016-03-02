@@ -5,8 +5,9 @@
                  *ngFor="#example of examples"
                  [class.active]="example === current"
                  (click)="select(example)">
-                <div class="name">{{example.name}} <div class="version">{{example.version}}</div></div>
-
+                <div class="name">{{example.name}}
+                    <div class="version">{{example.version}}</div>
+                </div>
             </div>
         </div>
         <div class="details" *ngIf="current">
