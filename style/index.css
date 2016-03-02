@@ -602,8 +602,8 @@ examples-selector .background {
 }
 
 examples-selector .wrapper {
-    width: 600px;
-    height: 400px;
+    width: 700px;
+    height: 500px;
     margin: 100px auto 0;
     display: flex;
 }
