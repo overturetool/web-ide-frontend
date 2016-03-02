@@ -107,6 +107,8 @@ export class EditorComponent {
         if (this.file === null)  return;
 
         this.codeMirror.swapDoc(this.file.document);
+        this.codeMirror.performLint();
+
         var debug = this.editorService.currentProject$.getValue().debug;
 
         if (this.breakpointSubscription) this.breakpointSubscription.unsubscribe();
