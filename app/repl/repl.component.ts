@@ -13,6 +13,7 @@ import {CodeViewComponent} from "../code-view/code-view.component";
 export class ReplComponent {
     expression:string = "";
     historyPtr:number = 0;
+    evaluating:boolean = false;
 
     @ViewChild("input") inputElement:ElementRef;
 
@@ -27,9 +28,14 @@ export class ReplComponent {
     }
 
     evaluate() {
+        if (this.evaluating || this.expression === "") return;
+
+        this.evaluating = true;
+
         this.replService
             .evaluate(this.expression)
             .subscribe(() => {
+                this.evaluating = false;
                 this.historyPtr = this.replService.items.length;
                 this.expression = "";
                 setTimeout(() => this.focus(), 0);
