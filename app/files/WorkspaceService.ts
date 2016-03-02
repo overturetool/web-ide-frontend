@@ -60,7 +60,8 @@ export class WorkspaceService {
             });
     }
 
-    newProject(parent, name = "new-project") {
+    newProject(name = "new-project") {
+        var parent = this.workspace$.getValue();
         var project = this.workspaceFactory.createProject(parent, name, `${parent.path}/${name}`);
 
         // TODO: Fix this hack-ish solution to trigger change detection.

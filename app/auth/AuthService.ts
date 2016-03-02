@@ -63,7 +63,7 @@ export class AuthService {
         this.serverService
             .get(`verify?tokenId=${authResponse.id_token}`)
             .subscribe(() => {
-                this.profile = new Profile(basicProfile.getId(), basicProfile.getGivenName());
+                this.profile = new Profile(basicProfile.getId(), basicProfile.getName());
 
                 this.signedIn = true;
                 this.router.navigate(["Ide"]);

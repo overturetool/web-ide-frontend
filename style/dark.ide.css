@@ -182,7 +182,7 @@ li.CodeMirror-hint-active {
 }
 
 .CodeMirror-suspended {
-    background: rgba(47,101,202,1);
+    background: rgb(47,101,202);
 }
 
 .CodeMirror-frame {
@@ -427,6 +427,17 @@ menu button {
     color: #bbbbbb;
 }
 
-menu button:hover {
-    background-color: #353739;
+menu ul.active li.open > button,
+menu ul.active li.open ul button:hover {
+    background-color: rgb(47,101,202);
+}
+
+menu li.open ul {
+    background-color: #3c3f41;
+    border: 1px solid #515151;
+}
+
+menu li.open li button {
+    text-align: left;
+    width: 150px;
 }

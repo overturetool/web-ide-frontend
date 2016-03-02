@@ -392,15 +392,6 @@ directory-node {
     display: block;
 }
 
-.new-project-button {
-    padding-left: 19px;
-}
-
-.new-project-button:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 workspace {
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
     -moz-user-select: none;      /* Firefox */
@@ -568,6 +559,10 @@ menu li {
     padding: 0;
 }
 
+menu li {
+    list-style: none;
+}
+
 menu button {
     padding: 0 15px;
     line-height: 21px;
@@ -576,10 +571,20 @@ menu button {
     outline: 0;
 }
 
-menu li {
+menu > ul > li {
     display: inline-block;
 }
 
-menu li.right {
-    float: right;
+menu ul {
+    position: relative;
+}
+
+menu ul ul {
+    display: none;
+}
+
+menu li.open ul {
+    position: absolute;
+    display: block;
+    z-index: 1000;
 }
