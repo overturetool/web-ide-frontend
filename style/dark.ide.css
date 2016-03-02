@@ -441,3 +441,26 @@ menu li.open li button {
     text-align: left;
     width: 150px;
 }
+
+
+/**************************** Menu ****************************/
+
+examples-selector .wrapper {
+    background-color: #3c3f41;
+    border: 1px solid #282828;
+    box-shadow: 0 0 15px black;
+}
+
+examples-selector .list {
+    border-right: 1px solid #282828;
+}
+
+examples-selector .details {
+    padding: 5px;
+    border-left: 1px solid #555555;
+}
+
+examples-selector .details button {
+    margin: 5px auto 0;
+    float: right;
+}

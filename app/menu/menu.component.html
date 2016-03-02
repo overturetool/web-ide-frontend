@@ -3,7 +3,7 @@
         <button (mouseenter)="onMouseEnter('files')" (click)="onClick('files')">Files</button>
         <ul>
             <li><button (click)="workspaceService.newProject()">New project</button></li>
-            <li><button>Import example</button></li>
+            <li><button (click)="examplesService.open()">Import example</button></li>
         </ul>
     </li>
     <li [class.open]="current === 'profile'" class="right">

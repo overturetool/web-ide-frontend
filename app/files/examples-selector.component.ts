@@ -1,0 +1,28 @@
+import {ExamplesService} from "./ExamplesService";
+import {Component} from "angular2/core";
+import {Example} from "./Example";
+
+@Component({
+    selector: "examples-selector",
+    templateUrl: "/app/files/examples-selector.component.html"
+})
+export class ExamplesSelectorComponent {
+    examples:Array<Example> = [];
+    current:Example = null;
+
+    constructor(private examplesService:ExamplesService) {
+        this.examplesService.examples$
+            .subscribe(examples => {
+                this.examples = examples
+            });
+    }
+
+    select(example:Example) {
+        this.current = example;
+    }
+
+    import() {
+        this.examplesService.import(this.current);
+        this.examplesService.close();
+    }
+}

@@ -26,12 +26,14 @@ import {QuickBarComponent} from "../quick-bar/quick-bar.component";
 import {AuthService} from "../auth/AuthService";
 import {ServerService} from "../server/ServerService";
 import {MenuComponent} from "../menu/menu.component";
+import {ExamplesService} from "../files/ExamplesService";
+import {ExamplesSelectorComponent} from "../files/examples-selector.component";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
-    directives: [MenuComponent, GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
+    directives: [ExamplesSelectorComponent, MenuComponent, GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
+    providers: [ExamplesService, WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
 })
 export class IdeComponent {
     constructor(authService:AuthService) {

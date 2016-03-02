@@ -588,3 +588,45 @@ menu li.open ul {
     display: block;
     z-index: 1000;
 }
+
+
+/**************************** Menu ****************************/
+
+examples-selector {
+    position: fixed;
+    top: 100px;
+    width: 100%;
+    z-index: 10;
+}
+
+examples-selector .wrapper {
+    width: 600px;
+    height: 400px;
+    margin: 0 auto;
+    display: flex;
+}
+
+examples-selector .list {
+    width: 50%;
+    overflow-y: auto;
+}
+
+examples-selector .details {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+examples-selector .details h2 {
+    margin: 5px 0;
+}
+
+examples-selector .description {
+    flex-grow: 1;
+    overflow-y: auto;
+    white-space: pre-line;
+}
+
+examples-selector .example {
+    cursor: pointer;
+}

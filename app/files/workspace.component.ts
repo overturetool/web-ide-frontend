@@ -2,6 +2,7 @@ import {ElementRef, Component} from "angular2/core";
 import {ProjectNodeComponent} from "./project-node.component";
 import {WorkspaceService} from "./WorkspaceService";
 import {OnInit} from "angular2/core";
+import {ExamplesService} from "./ExamplesService";
 
 @Component({
     selector: "workspace",

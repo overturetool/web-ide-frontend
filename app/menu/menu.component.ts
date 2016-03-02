@@ -2,6 +2,7 @@ import {Component} from "angular2/core";
 import {AuthService} from "../auth/AuthService";
 import {ElementRef} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
+import {ExamplesService} from "../files/ExamplesService";
 
 @Component({
     selector: "menu",
@@ -12,7 +13,8 @@ export class MenuComponent {
     active:boolean = false;
 
     constructor(private authService:AuthService,
-    private workspaceService:WorkspaceService) {
+                private workspaceService:WorkspaceService,
+                private examplesService:ExamplesService) {
         document.addEventListener('click', event => {
             if (!event.target.matches('menu .open > button'))
                 this.close();
