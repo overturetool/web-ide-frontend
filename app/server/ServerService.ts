@@ -12,6 +12,8 @@ export class ServerService {
     private jsonHeaders:Headers;
 
     constructor(private http:Http) {
+        var token = localStorage.getItem('access_token');
+        if (token) this.registerAccessToken(token);
     }
 
     registerAccessToken(token:string) {
