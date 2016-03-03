@@ -1,3 +1,9 @@
 <div *ngIf="workspace">
+    <div *ngIf="workspace.children.length === 0">
+        <ul>
+            <li>Import example projects from the Files menu.</li>
+            <li>Create a new project from the Files menu.</li>
+        </ul>
+    </div>
     <project-node *ngFor="#project of workspace.children" [project]="project"></project-node>
 </div>

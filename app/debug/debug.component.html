@@ -1,3 +1,7 @@
+<div *ngIf="!project">
+    Open a file to enable debugging.
+</div>
+
 <div *ngIf="project">
     <div class="entry" *ngIf="!project.debug.connection.connected">
         <h2>Entry point</h2>
