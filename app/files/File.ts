@@ -12,6 +12,7 @@ import {EditorService} from "../editor/EditorService";
 import {Response} from "angular2/http";
 
 export class File {
+    mode:Object;
     document = null;
     content$:Subject<string> = new Subject();
 
@@ -20,6 +21,8 @@ export class File {
                 public parent:Directory,
                 public name:string,
                 public path:string) {
+
+        this.setMode();
 
         // TODO: Load file content on demand instead.
         this.load().subscribe();
@@ -56,7 +59,10 @@ export class File {
     }
 
     rename(name:string):void {
-        this.serverService.put(`vfs/move/${this.path}`, {destination: `${this.parent.path}/${name}`})
+        this.serverService.put(`vfs/move/${this.path}`, {
+                destination: `${this.parent.path}/${name}`.split("/").slice(1).join("/"),
+                collisionPolicy: "KeepBoth"
+            })
             .map(res => res.text())
             .subscribe(newName => {
                 if (this.name === newName) return;
@@ -64,15 +70,26 @@ export class File {
                 // Update state in case of name collision
                 this.name = newName;
                 this.updatePath();
+                this.setMode();
             });
 
         this.name = name;
 
         // Update path string of node and subtree
         this.updatePath();
+        this.setMode();
     }
 
     updatePath() {
         this.path = `${this.parent.path}/${this.name}`;
+    }
+
+    private setMode() {
+        if (this.name === ".project")
+            this.mode = {name: "javascript", json: true};
+        else if (this.name.split(".").pop() === "vdmsl")
+            this.mode = {name: "vdm"};
+        else
+            this.mode = null;
     }
 }

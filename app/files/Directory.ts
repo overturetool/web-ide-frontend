@@ -56,7 +56,10 @@ export class Directory {
     }
 
     move(node):void {
-        this.serverService.put(`vfs/move/${node.path}`, {destination: `${this.path}/${node.name}`})
+        this.serverService.put(`vfs/move/${node.path}`, {
+                destination: `${this.parent.path}/${name}`.split("/").slice(1).join("/"),
+                collisionPolicy: "KeepBoth"
+            })
             .map(res => res.text())
             .subscribe(newName => {
                 if (node.name === newName) return;
@@ -84,7 +87,10 @@ export class Directory {
     }
 
     rename(name:string):void {
-        this.serverService.put(`vfs/move/${this.path}`, {destination: `${this.parent.path}/${name}`})
+        this.serverService.put(`vfs/move/${this.path}`, {
+                destination: `${this.parent.path}/${name}`.split("/").slice(1).join("/"),
+                collisionPolicy: "KeepBoth"
+            })
             .map(res => res.text())
             .subscribe(newName => {
                 if (this.name === newName) return;
