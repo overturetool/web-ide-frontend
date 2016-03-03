@@ -14,7 +14,6 @@
                 <li>Right-click for more options.</li>
                 <li>Press Ctrl+P to quickly search for and open a file.</li>
             </ul>
-
             <button (click)="prev()">&#9668;</button>
             <button (click)="next()">&#9658;</button>
         </div>
@@ -22,9 +21,12 @@
 
     <div *ngIf="step == 2" class="debug">
         <div>
-            Debug a project here. <br>
-            Step through the code and watch values change. <br>
-            Breakpoints can be set in the editor. <br>
+            <h2>Debug</h2>
+            <ul>
+                <li>Step through the code.</li>
+                <li>Breakpoints can be set in the editor.</li>
+                <li>See values of variables.</li>
+            </ul>
             <button (click)="prev()">&#9668;</button>
             <button (click)="next()">&#9658;</button>
         </div>
@@ -33,9 +35,11 @@
 
     <div *ngIf="step == 3" class="outline">
         <div>
-            Get an overview of a file here. <br>
-            The outline view lists values and functions. <br>
-            Click on an item to navigate to it in the editor. <br>
+            <h2>Overview</h2>
+            <ul>
+                <li>The outline view lists values and functions.</li>
+                <li>Click on an item to navigate to it in the editor.</li>
+            </ul>
             <button (click)="prev()">&#9668;</button>
             <button (click)="next()">&#9658;</button>
         </div>
@@ -44,8 +48,10 @@
 
     <div *ngIf="step == 4" class="pog">
         <div>
-            See proof obligations here. <br>
-            Click on an item to navigate to it in the editor. <br>
+            <h2>Proof Obligations</h2>
+            <ul>
+                <li>Click on an item to navigate to it in the editor.</li>
+            </ul>
             <button (click)="prev()">&#9668;</button>
             <button (click)="next()">&#9658;</button>
         </div>
@@ -55,14 +61,16 @@
     <div *ngIf="step == 5" class="repl">
         <img src="images/arrow.png">
         <div>
+            <h2>Read-Eval-Print-Loop</h2>
             Evaluate VDM expressions here.<br>
-            Expressions are evaluated in the context of the currently open file.<br>
             <ul>
+                <li>Expressions are evaluated against the currently open file.</li>
                 <li><code>$$</code> represents the latest result.</li>
                 <li><code>$n</code> represents the n'th latest result. (<code>$0</code> equals <code>$$</code>,
                     <code>$1</code> equals the 2nd latest result.)
                 </li>
-                <li>...</li>
+                <li>Define a variable with <code>:=</code> (<code>n := 42</code> defines <code>n</code> and sets its value to <code>42</code>.)</li>
+                <li>See the entire list of commands by evaluating <code>&help</code>.</li>
             </ul>
             <button (click)="step = 0">Finish</button>
         </div>

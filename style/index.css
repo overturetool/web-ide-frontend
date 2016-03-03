@@ -91,6 +91,7 @@ guide .repl div {
 }
 
 guide .repl img {
+    margin-top: 100px;
     transform: rotate(340deg);
 }
 
