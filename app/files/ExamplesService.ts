@@ -17,7 +17,16 @@ export class ExamplesService {
 
     importExample(example:Example) {
         this.serverService.get(`import?projectName=${example.name}`)
-            .subscribe(() => this.workspaceService.loadProject(example.name));
+            .subscribe(() => {
+                var workspace = this.workspaceService.workspace$.getValue();
+
+                this.serverService.post(
+                    `vfs/writeFile/${workspace.path}/${example.name}/.project`,
+                    JSON.stringify({entryPoints: example.entryPoints})
+                ).subscribe(() => {
+                    this.workspaceService.loadProject(example.name);
+                });
+            });
     }
 
     open() {
@@ -28,12 +37,13 @@ export class ExamplesService {
         this.active = false;
     }
 
-    private mapExamples(examples: Array<any>) {
+    private mapExamples(examples:Array<any>) {
         return examples.map(example => new Example(
             example.name,
             example.description,
             example.author,
-            example.languageVersion
+            example.languageVersion,
+            example.entryPoints
         ));
     }
 }
