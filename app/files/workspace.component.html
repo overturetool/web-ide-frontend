@@ -1,7 +1,3 @@
 <div *ngIf="workspace">
-    <span class="new-project-button" (click)="createProject()">
-        <span class="icon new-project">&nbsp;</span>
-        <em>New project</em>
-    </span>
     <project-node *ngFor="#project of workspace.children" [project]="project"></project-node>
 </div>

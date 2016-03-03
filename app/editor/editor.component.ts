@@ -107,13 +107,10 @@ export class EditorComponent {
         if (this.file === null)  return;
 
         this.codeMirror.swapDoc(this.file.document);
-        var debug = this.editorService.currentProject$.getValue().debug;
+        this.codeMirror.performLint();
+        this.codeMirror.setOption("mode", this.file.mode);
 
-        if (this.breakpointSubscription) this.breakpointSubscription.unsubscribe();
-        if (this.stackSubscription) this.stackSubscription.unsubscribe();
-
-        this.breakpointSubscription = debug.breakpoints$.subscribe(this.updateBreakpoints.bind(this));
-        this.stackSubscription = debug.stack$.subscribe(this.updateStackFrames.bind(this));
+        this.setupDebugListener();
     }
 
     private setupCodeCompletion() {
@@ -121,6 +118,16 @@ export class EditorComponent {
         hint.async = true;
 
         CodeMirror.commands.autocomplete = cm => cm.showHint({hint: hint});
+    }
+
+    private setupDebugListener() {
+        var debug = this.editorService.currentProject$.getValue().debug;
+
+        if (this.breakpointSubscription) this.breakpointSubscription.unsubscribe();
+        if (this.stackSubscription) this.stackSubscription.unsubscribe();
+
+        this.breakpointSubscription = debug.breakpoints$.subscribe(this.updateBreakpoints.bind(this));
+        this.stackSubscription = debug.stack$.subscribe(this.updateStackFrames.bind(this));
     }
 
     private updateStackFrames(stack:Array<StackFrame>) {

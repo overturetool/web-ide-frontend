@@ -1,3 +1,15 @@
-<ul>
-    <li class="right"><button (click)="authService.signOut()">Sign out {{authService.profile?.name}}</button></li>
+<ul [class.active]="active">
+    <li [class.open]="current === 'files'">
+        <button (mouseenter)="onMouseEnter('files')" (click)="onClick('files')">Files</button>
+        <ul>
+            <li><button (click)="workspaceService.newProject()">New project</button></li>
+            <li><button (click)="examplesService.open()">Import example</button></li>
+        </ul>
+    </li>
+    <li [class.open]="current === 'profile'" class="right">
+        <button (mouseenter)="onMouseEnter('profile')" (click)="onClick('profile')">{{authService.profile?.name}}</button>
+        <ul>
+            <li><button (click)="authService.signOut()">Sign out</button></li>
+        </ul>
+    </li>
 </ul>

@@ -182,7 +182,7 @@ li.CodeMirror-hint-active {
 }
 
 .CodeMirror-suspended {
-    background: rgba(47,101,202,1);
+    background: rgb(47,101,202);
 }
 
 .CodeMirror-frame {
@@ -427,6 +427,51 @@ menu button {
     color: #bbbbbb;
 }
 
-menu button:hover {
-    background-color: #353739;
+menu ul.active li.open > button,
+menu ul.active li.open ul button:hover {
+    background-color: rgb(47,101,202);
+}
+
+menu li.open ul {
+    background-color: #3c3f41;
+    border: 1px solid #515151;
+}
+
+menu li.open li button {
+    text-align: left;
+    width: 150px;
+}
+
+
+/**************************** Menu ****************************/
+
+examples-selector .wrapper {
+    background-color: #3c3f41;
+    border: 1px solid #282828;
+    box-shadow: 0 0 15px black;
+}
+
+examples-selector .list {
+    border-right: 1px solid #282828;
+}
+
+examples-selector .details {
+    padding: 5px;
+    border-left: 1px solid #555555;
+}
+
+examples-selector .author {
+    font-style: italic;
+    color: #888;
+    padding-bottom: 10px;
+}
+
+examples-selector .version {
+    float:right;
+    color: #888;
+}
+
+examples-selector .details button {
+    margin: 5px auto 0;
+    float: right;
 }

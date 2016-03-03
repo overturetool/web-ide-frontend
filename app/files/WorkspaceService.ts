@@ -60,7 +60,8 @@ export class WorkspaceService {
             });
     }
 
-    newProject(parent, name = "new-project") {
+    newProject(name = "new-project") {
+        var parent = this.workspace$.getValue();
         var project = this.workspaceFactory.createProject(parent, name, `${parent.path}/${name}`);
 
         // TODO: Fix this hack-ish solution to trigger change detection.
@@ -95,6 +96,20 @@ export class WorkspaceService {
 
         this.selectedComponent = component;
         this.selectedComponent.active = true;
+    }
+
+    loadProject(name:string):void {
+        var workspace = this.workspace$.getValue();
+        var path = `${workspace.path}/${name}`;
+
+        this.serverService
+            .get(`vfs/readdir/${path}?depth=-1`)
+            .map(res => res.json())
+            .subscribe(children => {
+                var project = this.workspaceFactory.createProject(workspace, name, path, children);
+                this._mapChildren(project);
+                this.workspace$.next(workspace);
+            });
     }
 
     loadWorkspace():void {

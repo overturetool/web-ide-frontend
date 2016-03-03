@@ -23,7 +23,7 @@ export class FileNodeComponent {
     constructor(private workspaceService:WorkspaceService,
                 private fb:FormBuilder) {
         this.renameForm = this.fb.group({
-            name: ['', RegexValidator.regex(/^[\w\-. ]+$/)]
+            name: ['', RegexValidator.regex(/^[A-Za-z_\-\.][A-Za-z0-9_\-\.]+$/)]
         });
     }
 

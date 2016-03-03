@@ -1,0 +1,22 @@
+<div class="background" (click)="onBackgroundClick($event)" *ngIf="examplesService.active">
+    <div class="wrapper">
+        <div class="list">
+            <div class="example list-item"
+                 *ngFor="#example of examples"
+                 [class.active]="example === current"
+                 (click)="select(example)">
+                <div class="name">{{example.name}}
+                    <div class="version">{{example.version}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="details" *ngIf="current">
+            <h2>{{current.name}}</h2>
+            <div class="author">Author: {{current.author}}</div>
+            <div class="description">{{current.description}}</div>
+            <div>
+                <button (click)="importCurrent()">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
