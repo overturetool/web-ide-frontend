@@ -29,6 +29,11 @@ export class ExamplesService {
     }
 
     private mapExamples(examples: Array<any>) {
-        return examples.map(example => new Example(example.name, example.description, example.author[0], "TODO"));
+        return examples.map(example => new Example(
+            example.name,
+            example.description,
+            example.author,
+            example.languageVersion
+        ));
     }
 }

@@ -463,6 +463,7 @@ examples-selector .details {
 examples-selector .author {
     font-style: italic;
     color: #888;
+    padding-bottom: 10px;
 }
 
 examples-selector .version {
