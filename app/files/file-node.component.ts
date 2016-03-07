@@ -6,6 +6,7 @@ import {Validators} from "angular2/common";
 import {RegexValidator} from "../misc/validators/RegexValidator";
 import {ViewChild} from "angular2/core";
 import {WorkspaceService} from "./WorkspaceService";
+import {File} from "./File";
 
 @Component({
     selector: "file-node",
@@ -13,8 +14,26 @@ import {WorkspaceService} from "./WorkspaceService";
     directives: [ContextMenuComponent]
 })
 export class FileNodeComponent {
-    @Input() file;
-    @ViewChild(ContextMenuComponent) contextMenu:ContextMenuComponent;
+    private _file;
+
+    @Input()
+    set file(f:File) {
+        this._file = f;
+
+        if (f.shouldRename)
+            this.startRename();
+    };
+    get file() {
+        return this._file;
+    }
+
+    @ViewChild(ContextMenuComponent)
+    contextMenu:ContextMenuComponent;
+
+    @ViewChild("renameInput")
+    set renameInput(el:ElementRef) {
+        if (el) el.nativeElement.select();
+    }
 
     active:boolean = false;
     renaming:boolean = false;
@@ -38,6 +57,8 @@ export class FileNodeComponent {
 
     rename() {
         var name = this.renameForm.controls.name;
+
+        this.file.shouldRename = false;
 
         if (name.valid && name.value !== this.file.name)
             this.file.rename(name.value);

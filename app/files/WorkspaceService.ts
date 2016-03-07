@@ -30,6 +30,7 @@ export class WorkspaceService {
 
     newFile(parent, name = "new-file") {
         var file = this.workspaceFactory.createFile(parent, name, `${parent.path}/${name}`);
+        file.shouldRename = true;
 
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();
@@ -46,6 +47,7 @@ export class WorkspaceService {
 
     newDirectory(parent, name = "new-directory") {
         var directory = this.workspaceFactory.createDirectory(parent, name, `${parent.path}/${name}`);
+        directory.shouldRename = true;
 
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();
@@ -63,6 +65,7 @@ export class WorkspaceService {
     newProject(name = "new-project") {
         var parent = this.workspace$.getValue();
         var project = this.workspaceFactory.createProject(parent, name, `${parent.path}/${name}`);
+        project.shouldRename = true;
 
         // TODO: Fix this hack-ish solution to trigger change detection.
         parent.children = parent.children.slice();

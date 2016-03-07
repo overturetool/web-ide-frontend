@@ -9,6 +9,8 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 
 export class Directory {
+    shouldRename:boolean = false;
+
     constructor(private serverService:ServerService,
                 public parent:Directory,
                 public name:string,
@@ -87,6 +89,8 @@ export class Directory {
     }
 
     rename(name:string):void {
+        this.shouldRename = false;
+
         this.serverService.put(`vfs/move/${this.path}`, {
                 destination: `${this.parent.path}/${name}`.split("/").slice(1).join("/"),
                 collisionPolicy: "KeepBoth"

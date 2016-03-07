@@ -9,6 +9,7 @@ import {ViewChild} from "angular2/core";
 import {RegexValidator} from "../misc/validators/RegexValidator";
 import {FormBuilder} from "angular2/common";
 import {WorkspaceService} from "./WorkspaceService";
+import {Directory} from "./Directory";
 
 @Component({
     selector: "directory-node",
@@ -17,7 +18,24 @@ import {WorkspaceService} from "./WorkspaceService";
     pipes: [DirectoriesPipe, FilesPipe]
 })
 export class DirectoryNodeComponent {
-    @Input() directory;
+    private _directory;
+
+    @Input()
+    set directory(d:Directory) {
+        this._directory = d;
+
+        if (d.shouldRename)
+            this.startRename();
+    }
+    get directory() {
+        return this._directory;
+    }
+
+    @ViewChild("renameInput")
+    set renameInput(el:ElementRef) {
+        if (el) el.nativeElement.select();
+    }
+
     @ViewChild(ContextMenuComponent) contextMenu:ContextMenuComponent;
 
     private open:boolean = false;
@@ -40,6 +58,8 @@ export class DirectoryNodeComponent {
 
     rename() {
         var name = this.renameForm.controls.name;
+
+        this.directory.shouldRename = false;
 
         if (name.valid && name.value !== this.directory.name)
             this.directory.rename(name.value);

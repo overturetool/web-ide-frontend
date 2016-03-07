@@ -10,6 +10,8 @@ import {ViewChild} from "angular2/core";
 import {FormBuilder} from "angular2/common";
 import {RegexValidator} from "../misc/validators/RegexValidator";
 import {WorkspaceService} from "./WorkspaceService";
+import {ElementRef} from "angular2/core";
+import {Project} from "./Project";
 
 @Component({
     selector: "project-node",
@@ -18,7 +20,24 @@ import {WorkspaceService} from "./WorkspaceService";
     pipes: [DirectoriesPipe, FilesPipe]
 })
 export class ProjectNodeComponent {
-    @Input() project;
+    private _project;
+
+    @Input()
+    set project(d:Project) {
+        this._project = d;
+
+        if (d.shouldRename)
+            this.startRename();
+    }
+    get project() {
+        return this._project;
+    }
+
+    @ViewChild("renameInput")
+    set renameInput(el:ElementRef) {
+        if (el) el.nativeElement.select();
+    }
+
     @ViewChild(ContextMenuComponent) contextMenu:ContextMenuComponent;
 
     private open:boolean = false;
@@ -41,6 +60,8 @@ export class ProjectNodeComponent {
 
     rename() {
         var name = this.renameForm.controls.name;
+
+        this.project.shouldRename = false;
 
         if (name.valid && name.value !== this.project.name)
             this.project.rename(name.value);

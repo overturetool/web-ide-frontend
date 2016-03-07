@@ -15,6 +15,7 @@ export class File {
     mode:BehaviorSubject<Object> = new BehaviorSubject(null);
     document = null;
     content$:Subject<string> = new Subject();
+    shouldRename:boolean = false;
 
     constructor(private serverService:ServerService,
                 private editorService:EditorService,

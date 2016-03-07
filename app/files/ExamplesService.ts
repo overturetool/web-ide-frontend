@@ -22,7 +22,10 @@ export class ExamplesService {
 
                 this.serverService.post(
                     `vfs/writeFile/${workspace.path}/${example.name}/.project`,
-                    JSON.stringify({entryPoints: example.entryPoints})
+                    JSON.stringify({
+                        entryPoints: example.entryPoints,
+                        release: example.languageVersion
+                    })
                 ).subscribe(() => {
                     this.workspaceService.loadProject(example.name);
                 });
