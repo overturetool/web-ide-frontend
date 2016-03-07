@@ -420,6 +420,12 @@ directory-node .active {
     background-color: #0d293e;
 }
 
+project-node .wrapper,
+file-node .wrapper,
+directory-node .wrapper {
+    white-space: nowrap;
+}
+
 file-node .name {
     cursor: pointer;
 }
