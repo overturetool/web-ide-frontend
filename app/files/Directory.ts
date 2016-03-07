@@ -59,7 +59,7 @@ export class Directory {
 
     move(node):void {
         this.serverService.put(`vfs/move/${node.path}`, {
-                destination: `${this.parent.path}/${name}`.split("/").slice(1).join("/"),
+                destination: `${this.path}/${node.name}`.split("/").slice(1).join("/"),
                 collisionPolicy: "KeepBoth"
             })
             .map(res => res.text())
