@@ -162,6 +162,15 @@ panel > .wrapper {
     position: relative;
 }
 
+panel .header {
+    overflow: hidden;
+}
+
+panel .content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
 panel-menu.left,
 panel-menu.right {
     display: flex;
@@ -229,11 +238,6 @@ panel-menu.left .menu button {
     transform: rotate(-90deg);
 }
 
-
-panel .content {
-    flex-grow: 1;
-    overflow-y: scroll;
-}
 
 /**************************** Resizer ****************************/
 
