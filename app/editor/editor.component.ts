@@ -30,9 +30,11 @@ export class EditorComponent {
     private codeMirror;
     private suspendedMarkings:Array<any> = [];
     private highlightMarking:any;
+    private file:File = null;
+
+    private modeSubscription:Subscription<any>;
     private breakpointSubscription:Subscription<any>;
     private stackSubscription:Subscription<any>;
-    private file:File = null;
 
     @HostBinding('class.active') get active() {
         return !!this.file
@@ -108,7 +110,10 @@ export class EditorComponent {
 
         this.codeMirror.swapDoc(this.file.document);
         this.codeMirror.performLint();
-        this.codeMirror.setOption("mode", this.file.mode);
+        this.codeMirror.setOption("mode", this.file.mode.getValue());
+
+        if (this.modeSubscription) this.modeSubscription.unsubscribe();
+        this.file.mode.subscribe(mode => this.codeMirror.setOption("mode", mode));
 
         this.setupDebugListener();
     }

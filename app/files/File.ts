@@ -12,7 +12,7 @@ import {EditorService} from "../editor/EditorService";
 import {Response} from "angular2/http";
 
 export class File {
-    mode:Object;
+    mode:BehaviorSubject<Object> = new BehaviorSubject(null);
     document = null;
     content$:Subject<string> = new Subject();
 
@@ -86,10 +86,10 @@ export class File {
 
     private setMode() {
         if (this.name === ".project")
-            this.mode = {name: "javascript", json: true};
+            this.mode.next({name: "javascript", json: true});
         else if (this.name.split(".").pop() === "vdmsl")
-            this.mode = {name: "vdm"};
+            this.mode.next({name: "vdm"});
         else
-            this.mode = null;
+            this.mode.next(null);
     }
 }
