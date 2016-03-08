@@ -53,6 +53,8 @@ export class EditorComponent {
             styleActiveLine: true,
             lineWrapping: true,
             theme: "",
+            matchBrackets: true,
+            autoCloseBrackets: true,
             extraKeys: {"Ctrl-Space": "autocomplete"},
             lint: {getAnnotations: (text, callback) => lintService.lint(this.file, callback), async: true},
             gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints", "CodeMirror-lint-markers"]
