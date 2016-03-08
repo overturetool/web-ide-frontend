@@ -1,11 +1,13 @@
 <div class="wrapper"
+     [class.active]="active"
      [draggable]="!renaming"
      (contextmenu)="onContextMenu($event)"
      (dragstart)="dragstart($event)"
-     [class.active]="active">
+     (click)="onClick($event)"
+     (dblclick)="onDblClick($event)">
     <span class="icon file">&nbsp;</span>
     <span *ngIf="renaming" [ngFormModel]="renameForm"><input #renameInput ngControl="name" (blur)="rename()" (keyup)="onKeyup($event)"></span>
-    <span *ngIf="!renaming" class="name" (click)="click($event)">{{file.name}}</span>
+    <span *ngIf="!renaming" class="name">{{file.name}}</span>
 </div>
 
 <context-menu>

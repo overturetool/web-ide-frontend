@@ -87,11 +87,6 @@ export class ProjectNodeComponent {
         this.workspaceService.newDirectory(this.project);
     }
 
-    private onContextMenu(event) {
-        this.workspaceService.select(this);
-        this.contextMenu.open(event);
-    }
-
     private toggle() {
         this.open = !this.open;
     }
@@ -106,6 +101,20 @@ export class ProjectNodeComponent {
 
         event.preventDefault();
         this.draggedOver = true;
+    }
+
+    private onContextMenu(event) {
+        this.workspaceService.select(this);
+        this.contextMenu.open(event);
+    }
+
+    private onClick() {
+        this.workspaceService.select(this);
+    }
+
+    private onDblClick() {
+        this.workspaceService.select(this);
+        this.toggle();
     }
 
     private dragleave() {

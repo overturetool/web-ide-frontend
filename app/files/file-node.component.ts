@@ -77,11 +77,15 @@ export class FileNodeComponent {
         this.contextMenu.open(event);
     }
 
-    private click(event) {
+    private onClick() {
+        this.workspaceService.select(this);
+    }
+
+    private onDblClick(event) {
+        this.workspaceService.select(this);
+
         if (event.button === 0)
             this.file.open();
-
-        this.workspaceService.select(this);
     }
 
     private dragstart(event) {

@@ -409,6 +409,14 @@ workspace input {
     cursor: text;
 }
 
+workspace {
+    display: flex;
+}
+
+workspace > .wrapper {
+    width: 100%;
+}
+
 
 project-node .name,
 file-node .name,

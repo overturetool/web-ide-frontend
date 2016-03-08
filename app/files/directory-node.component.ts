@@ -77,11 +77,6 @@ export class DirectoryNodeComponent {
         this.directory.delete();
     }
 
-    private onContextMenu(event) {
-        this.workspaceService.select(this);
-        this.contextMenu.open(event);
-    }
-
     private createFile() {
         this.workspaceService.newFile(this.directory);
     }
@@ -113,5 +108,19 @@ export class DirectoryNodeComponent {
 
     private dragleave() {
         this.draggedOver = false;
+    }
+
+    private onContextMenu(event) {
+        this.workspaceService.select(this);
+        this.contextMenu.open(event);
+    }
+
+    private onClick() {
+        this.workspaceService.select(this);
+    }
+
+    private onDblClick() {
+        this.workspaceService.select(this);
+        this.toggle();
     }
 }

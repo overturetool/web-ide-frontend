@@ -1,4 +1,4 @@
-<div *ngIf="workspace">
+<div class="wrapper" (contextmenu)="onContextMenu($event)" *ngIf="workspace">
     <div *ngIf="workspace.children.length === 0">
         <ul>
             <li>Import example projects from the Files menu.</li>
@@ -7,3 +7,7 @@
     </div>
     <project-node *ngFor="#project of workspace.children" [project]="project"></project-node>
 </div>
+<context-menu>
+    <div (click)="workspaceService.newProject()" class="item">New project</div>
+    <div (click)="examplesService.open()" class="item">Import example</div>
+</context-menu>

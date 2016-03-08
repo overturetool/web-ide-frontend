@@ -1,10 +1,12 @@
 <div class="wrapper"
+     [class.dragged-over]="draggedOver"
+     [class.active]="active"
      (contextmenu)="onContextMenu($event)"
      (drop)="drop($event)"
      (dragover)="dragover($event)"
      (dragleave)="dragleave($event)"
-     [class.dragged-over]="draggedOver"
-     [class.active]="active">
+     (click)="onClick($event)"
+     (dblclick)="onDblClick($event)">
     <span class="icon" [class.open]="open" [class.close]="!open" (click)="toggle()">&nbsp;</span>
     <span class="icon sl-project">&nbsp;</span>
     <span *ngIf="renaming" [ngFormModel]="renameForm"><input #renameInput ngControl="name" (blur)="rename()" (keyup)="onKeyup($event)"></span>
