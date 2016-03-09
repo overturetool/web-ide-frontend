@@ -446,6 +446,7 @@ menu .feedback a {
     color: black;
     background-color: orange;
     line-height: 21px;
+    height: 21px;
     display: inline-block;
     text-decoration: none;
     padding: 0 5px;

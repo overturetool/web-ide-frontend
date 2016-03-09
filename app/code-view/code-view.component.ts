@@ -2,7 +2,7 @@ import {Component, Input, ElementRef} from "angular2/core";
 
 @Component({
     selector: "code-view",
-    template: ""
+    template: ''
 })
 export class CodeViewComponent {
     @Input()
@@ -12,7 +12,7 @@ export class CodeViewComponent {
         code = typeof code === "string" ? code : code.toString();
 
         if (code.indexOf("\n") !== -1) {
-            var pre = document.createElement('pre');
+            var pre = document.createElement('code');
 
             CodeMirror.runMode(code, "vdm", (text, type) => {
                 var span = document.createElement('span');

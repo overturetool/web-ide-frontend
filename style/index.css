@@ -8,6 +8,13 @@ button {
     cursor: pointer;
 }
 
+iframe {
+    width: 0 !important;
+    height: 0 !important;
+    border: 0;
+    outline: 0;
+}
+
 ide {
     display:flex;
     flex-direction: column;
@@ -36,6 +43,7 @@ editor {
 .center-wrapper {
     flex-grow: 1;
     display: flex;
+    min-height: 0;
 }
 
 .center {
@@ -162,10 +170,6 @@ panel > .wrapper {
     position: relative;
 }
 
-panel .header {
-    overflow: hidden;
-}
-
 panel .content {
     flex-grow: 1;
     overflow-y: auto;
@@ -218,7 +222,8 @@ panel-menu.bottom .menu {
 panel-menu .menu button {
     background-color: transparent;
     width: 150px;
-    line-height: 24px;
+    line-height: 23px;
+    height: 23px;
     text-align: center;
     display: inline-block;
     border: none;
@@ -367,6 +372,7 @@ editor-tabs li button {
     background: transparent;
     border: 0;
     outline: 0;
+    vertical-align: middle;
 }
 
 editor-tabs li button.close {
@@ -585,6 +591,7 @@ menu li {
 menu button {
     padding: 0 15px;
     line-height: 21px;
+    height: 21px;
     background: none;
     border: 0;
     outline: 0;
