@@ -36,14 +36,10 @@ auth {
     justify-content: center;
 }
 
-editor {
-    flex-grow: 1;
-}
-
 .center-wrapper {
     flex-grow: 1;
     display: flex;
-    min-height: 0;
+        min-height: 0;
 }
 
 .center {
@@ -381,7 +377,7 @@ editor-tabs li button.close {
 
 editor {
     flex-grow: 1;
-    justify-content: stretch;
+    min-height: 0;
     display: none;
 }
 

@@ -42,13 +42,13 @@ export class EditorComponent {
 
     changes$:Observable<string>;
 
-    constructor(el:ElementRef,
+    constructor(private el:ElementRef,
                 private ngZone:NgZone,
                 private lintService:LintService,
                 private hintService:HintService,
                 private editorService:EditorService) {
 
-        this.codeMirror = CodeMirror(el.nativeElement, {
+        this.codeMirror = CodeMirror(this.el.nativeElement, {
             lineNumbers: true,
             styleActiveLine: true,
             lineWrapping: true,
@@ -186,17 +186,17 @@ export class EditorComponent {
     private setupResizing() {
         // TODO: Find better solution to resize editor.
         var cm = this.codeMirror;
-        var el = cm.getWrapperElement();
-        var parent = el.parentNode;
+        var style = cm.getWrapperElement().style;
+        var container = this.el.nativeElement;
 
         var lastHeight = -1;
 
         this.ngZone.runOutsideAngular(() => {
             setInterval(() => {
-                if (parent.clientHeight === lastHeight) return;
+                if (container.clientHeight === lastHeight) return;
 
-                lastHeight = parent.clientHeight;
-                el.style.height = `${parent.clientHeight}px`;
+                lastHeight = container.clientHeight;
+                style.height = `${container.clientHeight}px`;
 
                 cm.refresh();
             }, 100);
