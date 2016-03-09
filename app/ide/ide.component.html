@@ -10,7 +10,7 @@
     </panel-menu>
     <div class="center">
         <editor-tabs></editor-tabs>
-        <editor></editor>
+        <editor #editor></editor>
         <guide></guide>
     </div>
     <panel-menu class="right">
@@ -28,9 +28,9 @@
         </panel>
     </panel-menu>
 </div>
-<panel-menu class="bottom">
+<panel-menu class="bottom" (change)="editor.resize()">
     <panel name="REPL">
         <repl class="content"></repl>
-        <top-resizer></top-resizer>
+        <top-resizer (resize)="editor.resize()"></top-resizer>
     </panel>
 </panel-menu>

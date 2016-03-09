@@ -368,7 +368,6 @@ editor-tabs li button {
     background: transparent;
     border: 0;
     outline: 0;
-    vertical-align: middle;
 }
 
 editor-tabs li button.close {

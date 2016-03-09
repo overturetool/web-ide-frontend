@@ -19,6 +19,7 @@ import {Breakpoint} from "../debug/Breakpoint";
 import {StackFrame} from "../debug/StackFrame";
 import {Subscription} from "rxjs/Subscription";
 import {NgZone} from "angular2/core";
+import {AfterViewInit} from "angular2/core";
 
 declare var CodeMirror;
 
@@ -43,7 +44,6 @@ export class EditorComponent {
     changes$:Observable<string>;
 
     constructor(private el:ElementRef,
-                private ngZone:NgZone,
                 private lintService:LintService,
                 private hintService:HintService,
                 private editorService:EditorService) {
@@ -74,7 +74,6 @@ export class EditorComponent {
 
         this.setupDebugging();
         this.setupCodeCompletion();
-        this.setupResizing();
     }
 
     highlight(section:EditorSection) {
@@ -118,6 +117,8 @@ export class EditorComponent {
         this.file.mode.subscribe(mode => this.codeMirror.setOption("mode", mode));
 
         this.setupDebugListener();
+
+        setTimeout(() => this.resize(), 0);
     }
 
     private setupCodeCompletion() {
@@ -183,23 +184,8 @@ export class EditorComponent {
         });
     }
 
-    private setupResizing() {
-        // TODO: Find better solution to resize editor.
-        var cm = this.codeMirror;
-        var style = cm.getWrapperElement().style;
-        var container = this.el.nativeElement;
-
-        var lastHeight = -1;
-
-        this.ngZone.runOutsideAngular(() => {
-            setInterval(() => {
-                if (container.clientHeight === lastHeight) return;
-
-                lastHeight = container.clientHeight;
-                style.height = `${container.clientHeight}px`;
-
-                cm.refresh();
-            }, 100);
-        });
+    resize():void {
+        this.codeMirror.getWrapperElement().style.height = `${this.el.nativeElement.clientHeight}px`;
+        this.codeMirror.refresh();
     }
 }
