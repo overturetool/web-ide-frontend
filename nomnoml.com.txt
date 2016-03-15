@@ -42,12 +42,12 @@
 [EditorTabsCmp]->[Editor]
 
 [ProjectNodeCmp]->[DirectoryNodeCmp]
-[ProjectNodeCmp]->FileNodeCmp]
+[ProjectNodeCmp]->[FileNodeCmp]
 [ProjectNodeCmp]->[ContextMenuCmp]
 [ProjectNodeCmp]->[Workspace]
 
 [DirectoryNodeCmp]->[DirectoryNodeCmp]
-[DirectoryNodeCmp]->FileNodeCmp]
+[DirectoryNodeCmp]->[FileNodeCmp]
 [DirectoryNodeCmp]->[ContextMenuCmp]
 [DirectoryNodeCmp]->[Workspace]
 
