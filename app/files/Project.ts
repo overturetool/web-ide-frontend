@@ -15,6 +15,8 @@ export class Project extends Directory {
                 public path:string,
                 public children:Array<File|Directory>) {
         super(serverService, parent, name, path, children);
+
+        this.debug.registerProject(this);
     }
 
     getEntryPoints() {

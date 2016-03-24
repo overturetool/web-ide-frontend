@@ -1,10 +1,7 @@
-import {ElementRef, Component} from "angular2/core";
-import {Input} from "angular2/core";
-import {ContextMenuComponent} from "../contextmenu/context-menu.component";
+import {ElementRef, Component, Input, ViewChild} from "angular2/core";
 import {FormBuilder} from "angular2/common";
-import {Validators} from "angular2/common";
+import {ContextMenuComponent} from "../contextmenu/context-menu.component";
 import {RegexValidator} from "../misc/validators/RegexValidator";
-import {ViewChild} from "angular2/core";
 import {WorkspaceService} from "./WorkspaceService";
 import {File} from "./File";
 

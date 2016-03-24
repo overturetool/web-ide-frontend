@@ -1,11 +1,8 @@
 import {Breakpoint} from "./Breakpoint";
 import {StackFrame} from "./StackFrame";
 import {DbgpConnection} from "./DbgpConnection";
-import {WorkspaceService} from "../files/WorkspaceService";
-import {EditorService} from "../editor/EditorService";
 import {ServerService} from "../server/ServerService";
 import {BehaviorSubject} from "rxjs/Rx";
-import {Injectable} from "angular2/core";
 import {Project} from "../files/Project";
 import {File} from "../files/File";
 

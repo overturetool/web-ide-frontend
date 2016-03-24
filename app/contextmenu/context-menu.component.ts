@@ -1,17 +1,17 @@
 import {ContextMenuService} from "./ContextMenuService";
-import {Component} from "angular2/core";
-import {ElementRef} from "angular2/core";
-import {HostBinding} from "angular2/core";
+import {Component, HostBinding, ElementRef} from "angular2/core";
 
 @Component({
     selector: "context-menu",
     template: `<ng-content *ngIf="opened"></ng-content>`
 })
 export class ContextMenuComponent {
-    @HostBinding("class.open") opened:boolean = false;
+    @HostBinding("class.open")
+    opened:boolean = false;
 
-    constructor(private contextMenuService:ContextMenuService, private element: ElementRef) {
-        
+    constructor(private contextMenuService:ContextMenuService,
+                private element:ElementRef) {
+
     }
 
     open(event) {

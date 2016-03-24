@@ -1,6 +1,5 @@
-import {Injectable} from "angular2/core"
+import {Injectable, EventEmitter} from "angular2/core"
 import {ServerService} from "../server/ServerService"
-import {EventEmitter} from "angular2/core";
 import {DbgpResponse} from "./DbgpResponse";
 
 @Injectable()

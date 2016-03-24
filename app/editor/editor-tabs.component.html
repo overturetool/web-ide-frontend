@@ -1,8 +1,0 @@
-<div class="wrapper" *ngIf="files.length > 0">
-    <ul>
-        <li *ngFor="#file of files"
-            [class.active]="file === current">
-            <button (click)="click($event, file)">{{file.name}}</button><button (click)="close(file)" class="glyph close"></button>
-        </li>
-    </ul>
-</div>

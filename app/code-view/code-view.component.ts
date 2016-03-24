@@ -2,7 +2,7 @@ import {Component, Input, ElementRef} from "angular2/core";
 
 @Component({
     selector: "code-view",
-    template: ''
+    template: ``
 })
 export class CodeViewComponent {
     @Input()

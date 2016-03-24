@@ -1,16 +1,12 @@
-import {Input} from "angular2/core";
-import {Component} from "angular2/core";
+import {Input, Component, ViewChild, ElementRef} from "angular2/core";
+import {FormBuilder} from "angular2/common";
 import {DirectoryNodeComponent} from "./directory-node.component";
 import {FileNodeComponent} from "./file-node.component";
 import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
-import {NgZone} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
-import {ViewChild} from "angular2/core";
-import {FormBuilder} from "angular2/common";
 import {RegexValidator} from "../misc/validators/RegexValidator";
 import {WorkspaceService} from "./WorkspaceService";
-import {ElementRef} from "angular2/core";
 import {Project} from "./Project";
 
 @Component({

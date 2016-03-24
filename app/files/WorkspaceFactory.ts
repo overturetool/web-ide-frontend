@@ -1,8 +1,8 @@
+import {Injectable} from "angular2/core";
 import {Directory} from "./Directory";
 import {File} from "./File";
 import {EditorService} from "../editor/EditorService";
 import {ServerService} from "../server/ServerService";
-import {Injectable} from "angular2/core";
 import {Project} from "./Project";
 import {DebuggerFactory} from "../debug/DebuggerFactory";
 

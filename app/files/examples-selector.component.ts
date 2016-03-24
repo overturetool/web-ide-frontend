@@ -1,7 +1,6 @@
 import {ExamplesService} from "./ExamplesService";
 import {Component} from "angular2/core";
 import {Example} from "./Example";
-import {OnInit} from "angular2/core";
 
 @Component({
     selector: "examples-selector",

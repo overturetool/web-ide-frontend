@@ -1,31 +1,21 @@
-import {Component, ElementRef, Input} from "angular2/core"
+import {Component, ElementRef, HostBinding} from "angular2/core"
 import {LintService} from "../lint/LintService"
 import {HintService} from "../hint/HintService";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/observable/fromEventPattern";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
-import {OnDestroy} from "angular2/core";
-import {OutlineService} from "../outline/OutlineService";
-import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";
-import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "./EditorService";
 import {File} from "../files/File";
-import {EditorPosition} from "./EditorPosition";
-import {HostBinding} from "angular2/core";
-import {DbgpConnection} from "../debug/DbgpConnection";
-import {DbgpDebugger} from "../debug/DbgpDebugger";
 import {Breakpoint} from "../debug/Breakpoint";
 import {StackFrame} from "../debug/StackFrame";
 import {Subscription} from "rxjs/Subscription";
-import {NgZone} from "angular2/core";
-import {AfterViewInit} from "angular2/core";
 
 declare var CodeMirror;
 
 @Component({
     selector: 'editor',
-    template: ''
+    template: ``
 })
 export class EditorComponent {
     private codeMirror;
@@ -33,11 +23,12 @@ export class EditorComponent {
     private highlightMarking:any;
     private file:File = null;
 
-    private modeSubscription:Subscription<any>;
-    private breakpointSubscription:Subscription<any>;
-    private stackSubscription:Subscription<any>;
+    private modeSubscription:Subscription;
+    private breakpointSubscription:Subscription;
+    private stackSubscription:Subscription;
 
-    @HostBinding('class.active') get active() {
+    @HostBinding('class.active')
+    get active() {
         return !!this.file
     }
 
@@ -89,7 +80,7 @@ export class EditorComponent {
     }
 
     focus(line:number, char?:number) {
-        var position = {line: line - 1, ch:undefined};
+        var position = {line: line - 1, ch: undefined};
         if (char) position.ch = char - 1;
 
         this.codeMirror.scrollIntoView(position, 500);

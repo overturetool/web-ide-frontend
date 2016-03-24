@@ -1,10 +1,8 @@
-import {Component, Input} from "angular2/core";
+import {Component} from "angular2/core";
 import {TreeComponent} from "../tree/tree.component";
-import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
 import {StackFrame} from "./StackFrame";
 import {CodeViewComponent} from "../code-view/code-view.component";
-import {DbgpDebugger} from "./DbgpDebugger";
 import {Project} from "../files/Project";
 import {File} from "../files/File";
 

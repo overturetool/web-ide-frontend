@@ -1,15 +1,15 @@
-import {Component} from "angular2/core";
+import {Component, AfterViewInit, NgZone} from "angular2/core";
 import {AuthenticationService} from "./AuthService";
-import {AfterViewInit} from "angular2/core";
-import {Router} from "angular2/router";
-import {NgZone} from "angular2/core";
-import {OnInit} from "angular2/core";
 
 declare var gapi;
 
 @Component({
     selector: 'login',
-    templateUrl: "app/auth/login.component.html"
+    template: `
+    <div class="wrapper">
+        <h2>Please sign in:</h2>
+        <div id="google-auth-button"></div>
+    </div>`
 })
 export class LoginComponent implements AfterViewInit {
     constructor(private zone:NgZone,

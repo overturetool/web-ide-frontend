@@ -1,17 +1,19 @@
-import {Component, Directive, Input, QueryList,
-    ViewContainerRef, TemplateRef, ContentChildren} from 'angular2/core';
-import {Output} from "angular2/core";
-import {EventEmitter} from "angular2/core";
-import {EditorComponent} from "./editor.component";
-import {OnInit} from "angular2/core";
-import {WorkspaceService} from "../files/WorkspaceService";
+import {Component} from 'angular2/core';
 import {File} from "../files/File";
 import "rxjs/add/operator/filter";
 import {EditorService} from "./EditorService";
 
 @Component({
     selector: 'editor-tabs',
-    templateUrl: 'app/editor/editor-tabs.component.html'
+    template: `
+<div class="wrapper" *ngIf="files.length > 0">
+    <ul>
+        <li *ngFor="#file of files"
+            [class.active]="file === current">
+            <button (click)="click($event, file)">{{file.name}}</button><button (click)="close(file)" class="glyph close"></button>
+        </li>
+    </ul>
+</div>`
 })
 export class EditorTabsComponent {
     files:Array<File> = [];

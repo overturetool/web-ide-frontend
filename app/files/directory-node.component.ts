@@ -1,13 +1,10 @@
-import {ElementRef, Component} from "angular2/core";
-import {Input} from "angular2/core";
+import {ElementRef, Component, Input, ViewChild} from "angular2/core";
+import {FormBuilder} from "angular2/common";
 import {FileNodeComponent} from "./file-node.component";
 import {DirectoriesPipe} from "./directories.pipe";
 import {FilesPipe} from "./files.pipe";
-import {NgZone} from "angular2/core";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
-import {ViewChild} from "angular2/core";
 import {RegexValidator} from "../misc/validators/RegexValidator";
-import {FormBuilder} from "angular2/common";
 import {WorkspaceService} from "./WorkspaceService";
 import {Directory} from "./Directory";
 
@@ -27,6 +24,7 @@ export class DirectoryNodeComponent {
         if (d.shouldRename)
             this.startRename();
     }
+
     get directory() {
         return this._directory;
     }
@@ -36,7 +34,8 @@ export class DirectoryNodeComponent {
         if (el) el.nativeElement.select();
     }
 
-    @ViewChild(ContextMenuComponent) contextMenu:ContextMenuComponent;
+    @ViewChild(ContextMenuComponent)
+    contextMenu:ContextMenuComponent;
 
     private open:boolean = false;
     private draggedOver:boolean = false;

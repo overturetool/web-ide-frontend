@@ -1,10 +1,8 @@
-import {ElementRef, Component} from "angular2/core";
+import {Component, OnInit, ViewChild} from "angular2/core";
 import {ProjectNodeComponent} from "./project-node.component";
 import {WorkspaceService} from "./WorkspaceService";
-import {OnInit} from "angular2/core";
 import {ExamplesService} from "./ExamplesService";
 import {ContextMenuComponent} from "../contextmenu/context-menu.component";
-import {ViewChild} from "angular2/core";
 
 @Component({
     selector: "workspace",

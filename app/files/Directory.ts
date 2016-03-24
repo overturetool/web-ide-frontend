@@ -1,12 +1,7 @@
-import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
 import {File} from "../files/File";
-import {BaseException} from "angular2/src/facade/exceptions";
-import {BehaviorSubject} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
 
 export class Directory {
     shouldRename:boolean = false;
