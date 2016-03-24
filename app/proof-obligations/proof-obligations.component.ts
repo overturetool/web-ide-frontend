@@ -1,13 +1,20 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
-import {Observable} from "rxjs/Observable";
+import {Component} from "angular2/core";
 import {ProofObligationsService} from "./ProofObligationsService";
 import {EditorService} from "../editor/EditorService";
 import {CodeViewComponent} from "../code-view/code-view.component";
 
 @Component({
     selector: "proof-obligations",
-    templateUrl: "app/proof-obligations/proof-obligations.component.html",
-    directives: [CodeViewComponent]
+    directives: [CodeViewComponent],
+    template: `
+<div *ngFor="#item of items"
+     (click)="onSelect(item)"
+     (mouseenter)="onEnter(item)"
+     (mouseleave)="onLeave()"
+     class="proof-obligation list-item interactable">
+    <div class="description"><code-view [code]="item.name"></code-view><code class="type"> {{item.kind}}</code></div>
+    <code-view [code]="item.valuetree"></code-view>
+</div>`
 })
 export class ProofObligationsComponent {
     items:Array<ProofObligationsItem>;

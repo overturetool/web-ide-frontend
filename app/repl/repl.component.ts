@@ -1,14 +1,28 @@
-import {Component} from "angular2/core";
-import {HostListener} from "angular2/core";
-import {ViewChild} from "angular2/core";
-import {ElementRef} from "angular2/core";
-import {ReplService} from "./ReplService";
+import {Component, ViewChild, ElementRef, HostListener} from "angular2/core";
 import {CodeViewComponent} from "../code-view/code-view.component";
+import {ReplService} from "./ReplService";
 
 @Component({
     selector: "repl",
-    templateUrl: "app/repl/repl.component.html",
-    directives: [CodeViewComponent]
+    directives: [CodeViewComponent],
+    template: `
+<div class="items">
+    <div *ngFor="#item of replService.items" class="item">
+        <div>
+            <code>&gt;&nbsp;</code><code-view [code]="item.expression"></code-view>
+        </div>
+        <code-view *ngIf="item.type == 'code'" [code]="item.result"></code-view>
+        <div *ngIf="item.type == 'error'" class="msg error">{{item.result}}</div>
+    </div>
+    <div class="input">
+        <code>&gt;&nbsp;</code>
+        <input #input
+               [(ngModel)]="expression"
+               (keyup.enter)="evaluate()"
+               (keyup.arrowup)="selectPrev($event)"
+               (keyup.arrowdown)="selectNext($event)">
+    </div>
+</div>`
 })
 export class ReplComponent {
     expression:string = "";

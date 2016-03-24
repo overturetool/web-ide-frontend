@@ -1,6 +1,5 @@
-import {Component, HostBinding, ViewChild, ElementRef} from "angular2/core";
+import {Component, ViewChild, ElementRef} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
-import {Control} from "angular2/common";
 import {File} from "../files/File";
 import {PathPipe} from "../files/path.pipe";
 
@@ -8,8 +7,21 @@ declare var Fuse;
 
 @Component({
     selector: "quick-bar",
-    templateUrl: "app/quick-bar/quick-bar.component.html",
-    pipes: [PathPipe]
+    pipes: [PathPipe],
+    template: `
+<div [class.active]="active" class="wrapper">
+    <input #input
+           [(ngModel)]="expression"
+           (keyup)="onKeyup($event)"
+           (input)="onChange(input.value)">
+
+    <div class="files" *ngIf="files.length > 0">
+        <div *ngFor="#file of files | slice:0:10; #i = index"
+             [class.active]="i === selected"
+             (mouseover)="select(i)"
+             (click)="openFile(file)">{{ file | path }}</div>
+    </div>
+</div>`
 })
 export class QuickBarComponent {
     @ViewChild("input") inputElement:ElementRef;
