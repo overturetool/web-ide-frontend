@@ -4,11 +4,13 @@ import {EditorService} from "../editor/EditorService";
 import {ServerService} from "../server/ServerService";
 import {Injectable} from "angular2/core";
 import {Project} from "./Project";
+import {DebuggerFactory} from "../debug/DebuggerFactory";
 
 @Injectable()
 export class WorkspaceFactory {
     constructor(private editorService:EditorService,
-                private serverService:ServerService) {
+                private serverService:ServerService,
+                private debuggerFactory:DebuggerFactory) {
 
     }
 
@@ -30,7 +32,14 @@ export class WorkspaceFactory {
     }
 
     createProject(workspace:Directory, name:string, path:string, children:Array<File|Directory> = []):Project {
-        var project = new Project(this.serverService, workspace, name, path, children);
+        var project = new Project(
+            this.serverService,
+            this.debuggerFactory.createDebugger(),
+            workspace,
+            name,
+            path,
+            children
+        );
 
         workspace.children.push(project);
 

@@ -21,10 +21,15 @@ export class DbgpDebugger {
     breakpoints$:BehaviorSubject<Array<Breakpoint>> = new BehaviorSubject([]);
     stack$:BehaviorSubject<Array<StackFrame>> = new BehaviorSubject([]);
 
-    constructor(private serverService:ServerService,
-                private project:Project) {
+    private project:Project;
+
+    constructor(private serverService:ServerService) {
         this.connection = new DbgpConnection(serverService);
         this.connection.messages.subscribe(res => this.onMessage(res));
+    }
+
+    registerProject(project:Project) {
+        this.project = project;
     }
 
     connect(entry:string):void {

@@ -4,19 +4,17 @@ import {ServerService} from "../server/ServerService";
 import {File} from "../files/File";
 
 export class Project extends Directory {
-    debug:DbgpDebugger;
     entry:string;
     private configFile:File;
     private config:any = {};
 
     constructor(serverService:ServerService,
+                public debug:DbgpDebugger,
                 public parent:Directory,
                 public name:string,
                 public path:string,
                 public children:Array<File|Directory>) {
         super(serverService, parent, name, path, children);
-
-        this.debug = new DbgpDebugger(serverService, this);
     }
 
     getEntryPoints() {

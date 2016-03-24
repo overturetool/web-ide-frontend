@@ -9,7 +9,8 @@ export class ExamplesService {
     examples$:BehaviorSubject<Array<Example>> = new BehaviorSubject([]);
     active:boolean = false;
 
-    constructor(private serverService:ServerService, private workspaceService:WorkspaceService) {
+    constructor(private serverService:ServerService,
+                private workspaceService:WorkspaceService) {
         this.serverService.get('list')
             .map(res => res.json())
             .subscribe(examples => this.examples$.next(this.mapExamples(examples)));
