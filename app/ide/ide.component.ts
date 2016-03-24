@@ -7,7 +7,6 @@ import {ContextMenuService} from "../contextmenu/ContextMenuService";
 import {LintService} from "../lint/LintService";
 import {HintService} from "../hint/HintService";
 import {OutlineService} from "../outline/OutlineService";
-import {HTTP_PROVIDERS} from "angular2/http";
 import {Component} from "angular2/core";
 import {WorkspaceComponent} from "../files/workspace.component";
 import {ProofObligationsComponent} from "../proof-obligations/proof-obligations.component";
@@ -23,11 +22,10 @@ import {RightResizerComponent} from "../panel/right-resizer.component";
 import {LeftResizerComponent} from "../panel/left-resizer.component";
 import {TopResizerComponent} from "../panel/top-resizer.component";
 import {QuickBarComponent} from "../quick-bar/quick-bar.component";
-import {AuthService} from "../auth/AuthenticationService";
-import {ServerService} from "../server/ServerService";
 import {MenuComponent} from "../menu/menu.component";
 import {ExamplesService} from "../files/ExamplesService";
 import {ExamplesSelectorComponent} from "../files/examples-selector.component";
+import {AuthenticationService} from "../authentication/AuthService";
 
 @Component({
     selector: 'ide',
@@ -36,7 +34,7 @@ import {ExamplesSelectorComponent} from "../files/examples-selector.component";
     providers: [ExamplesService, WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
 })
 export class IdeComponent {
-    constructor(authService:AuthService) {
+    constructor(authService:AuthenticationService) {
         if (!authService.signedIn)
             authService.forceSignIn();
     }
