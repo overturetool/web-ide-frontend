@@ -1,17 +1,11 @@
 import {Injectable} from "angular2/core"
 import {ServerService} from "../server/ServerService";
-import {BaseException} from "angular2/src/facade/exceptions";
 import {BehaviorSubject} from "rxjs/subject/BehaviorSubject";
-import {Subject} from "rxjs/Subject";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import {Observable} from "rxjs/Observable";
 import {Directory} from "./Directory";
-import {File} from "./File";
-import {EditorService} from "../editor/EditorService";
 import {WorkspaceFactory} from "./WorkspaceFactory";
-import {AuthService} from "../auth/AuthService";
-import {OnInit} from "angular2/core";
+import {AuthenticationService} from "../authentication/AuthService";
 
 @Injectable()
 export class WorkspaceService {
@@ -23,7 +17,7 @@ export class WorkspaceService {
     movingNode;
 
     constructor(private serverService:ServerService,
-                private authService:AuthService,
+                private authService:AuthenticationService,
                 private workspaceFactory:WorkspaceFactory) {
 
     }

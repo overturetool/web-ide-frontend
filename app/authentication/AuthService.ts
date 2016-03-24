@@ -1,9 +1,5 @@
-import {ElementRef} from "angular2/core";
-import {NgZone} from "angular2/core";
 import {Injectable} from "angular2/core";
 import {Profile} from "./Profile";
-import {Subject} from "rxjs/Subject";
-import {BehaviorSubject} from "rxjs/Rx";
 import {ServerService} from "../server/ServerService";
 import {Router} from "angular2/router";
 
@@ -32,7 +28,7 @@ declare type AuthResponse = {
 }
 
 @Injectable()
-export class AuthService {
+export class AuthenticationService {
     profile:Profile;
     signedIn:boolean = false;
 

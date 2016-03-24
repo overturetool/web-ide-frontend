@@ -23,7 +23,7 @@ import {RightResizerComponent} from "../panel/right-resizer.component";
 import {LeftResizerComponent} from "../panel/left-resizer.component";
 import {TopResizerComponent} from "../panel/top-resizer.component";
 import {QuickBarComponent} from "../quick-bar/quick-bar.component";
-import {AuthService} from "../auth/AuthService";
+import {AuthService} from "../auth/AuthenticationService";
 import {ServerService} from "../server/ServerService";
 import {MenuComponent} from "../menu/menu.component";
 import {ExamplesService} from "../files/ExamplesService";

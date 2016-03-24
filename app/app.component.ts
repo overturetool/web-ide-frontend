@@ -1,5 +1,5 @@
 import {Component} from "angular2/core";
-import {AuthService} from "./auth/AuthService";
+import {AuthService} from "./auth/AuthenticationService";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {ServerService} from "./server/ServerService";
 import {RouteConfig} from "angular2/router";

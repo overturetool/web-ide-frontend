@@ -1,5 +1,5 @@
 import {Component} from "angular2/core";
-import {AuthService} from "../auth/AuthService";
+import {AuthService} from "../auth/AuthenticationService";
 import {ElementRef} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {ExamplesService} from "../files/ExamplesService";

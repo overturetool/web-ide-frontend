@@ -1,5 +1,5 @@
 import {Component} from "angular2/core";
-import {AuthService} from "./AuthService";
+import {AuthenticationService} from "./AuthService";
 import {AfterViewInit} from "angular2/core";
 import {Router} from "angular2/router";
 import {NgZone} from "angular2/core";
@@ -13,7 +13,7 @@ declare var gapi;
 })
 export class LoginComponent implements AfterViewInit {
     constructor(private zone:NgZone,
-                private authService:AuthService) {
+                private authService:AuthenticationService) {
 
     }
 
