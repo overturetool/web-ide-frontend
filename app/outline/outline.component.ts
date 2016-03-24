@@ -7,7 +7,16 @@ import {CodeViewComponent} from "../code-view/code-view.component";
 @Component({
     selector: "outline",
     templateUrl: "app/outline/outline.component.html",
-    directives: [CodeViewComponent]
+    directives: [CodeViewComponent],
+    template: `
+<div *ngFor="#item of items"
+     (click)="onSelect(item)"
+     (mouseenter)="onEnter(item)"
+     (mouseleave)="onLeave()"
+     class="outline list-item interactable">
+    <div class="description"><code-view [code]="item.name"></code-view></div>
+    <code-view [code]="item.type"></code-view>
+</div>`
 })
 export class OutlineComponent {
     items:Array<OutlineItem>;

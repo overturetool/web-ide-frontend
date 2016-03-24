@@ -1,8 +1,0 @@
-<div *ngFor="#item of items"
-     (click)="onSelect(item)"
-     (mouseenter)="onEnter(item)"
-     (mouseleave)="onLeave()"
-     class="outline list-item interactable">
-    <div class="description"><code-view [code]="item.name"></code-view></div>
-    <code-view [code]="item.type"></code-view>
-</div>
