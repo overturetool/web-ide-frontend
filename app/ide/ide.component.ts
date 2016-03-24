@@ -1,3 +1,4 @@
+import {Component} from "angular2/core";
 import {EditorTabsComponent} from "../editor/editor-tabs.component";
 import {DebugComponent} from "../debug/debug.component";
 import {PanelComponent} from "../panel/panel.component";
@@ -7,7 +8,6 @@ import {ContextMenuService} from "../contextmenu/ContextMenuService";
 import {LintService} from "../lint/LintService";
 import {HintService} from "../hint/HintService";
 import {OutlineService} from "../outline/OutlineService";
-import {Component} from "angular2/core";
 import {WorkspaceComponent} from "../files/workspace.component";
 import {ProofObligationsComponent} from "../proof-obligations/proof-obligations.component";
 import {ProofObligationsService} from "../proof-obligations/ProofObligationsService";

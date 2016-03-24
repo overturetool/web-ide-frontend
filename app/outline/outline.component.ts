@@ -1,7 +1,6 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component} from "angular2/core";
 import {OutlineService} from "./OutlineService";
 import {OutlineItem} from "./OutlineItem";
-import {Observable} from "rxjs/Observable";
 import {EditorService} from "../editor/EditorService";
 import {CodeViewComponent} from "../code-view/code-view.component";
 

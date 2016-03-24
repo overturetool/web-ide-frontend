@@ -1,10 +1,6 @@
-import {Output, Injectable, EventEmitter} from "angular2/core";
+import {Injectable} from "angular2/core";
 import {ServerService} from "../server/ServerService";
-import {Observable} from "rxjs/Observable";
-import {OnInit} from "angular2/core";
 import {Subject} from "rxjs/Subject";
-import {BehaviorSubject} from "rxjs/Rx";
-import {WorkspaceService} from "../files/WorkspaceService";
 import {EditorService} from "../editor/EditorService";
 import {OutlineItem} from "./OutlineItem";
 

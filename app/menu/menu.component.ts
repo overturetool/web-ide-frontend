@@ -1,8 +1,7 @@
 import {Component} from "angular2/core";
-import {AuthService} from "../auth/AuthenticationService";
-import {ElementRef} from "angular2/core";
 import {WorkspaceService} from "../files/WorkspaceService";
 import {ExamplesService} from "../files/ExamplesService";
+import {AuthenticationService} from "../authentication/AuthService";
 
 @Component({
     selector: "menu",
@@ -12,7 +11,7 @@ export class MenuComponent {
     current:string;
     active:boolean = false;
 
-    constructor(private authService:AuthService,
+    constructor(private authService:AuthenticationService,
                 private workspaceService:WorkspaceService,
                 private examplesService:ExamplesService) {
         document.addEventListener('click', event => {

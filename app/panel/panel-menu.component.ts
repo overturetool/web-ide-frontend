@@ -1,11 +1,19 @@
-import {Component, QueryList, ContentChildren} from "angular2/core"
+import {Component, QueryList, ContentChildren, Output, EventEmitter} from "angular2/core"
 import {PanelComponent} from "./panel.component"
-import {Output} from "angular2/core";
-import {EventEmitter} from "angular2/core";
 
 @Component({
     selector: 'panel-menu',
-    templateUrl: "app/panel/panel-menu.component.html"
+    template: `
+<ng-content></ng-content>
+<div class="wrapper">
+    <div class="menu">
+        <button *ngFor="#panel of panels"
+                (click)="select(panel)"
+                [class.active]="panel.active">
+            {{panel.name}}
+        </button>
+    </div>
+</div>`
 })
 export class PanelMenuComponent {
     @Output() change:EventEmitter = new EventEmitter();

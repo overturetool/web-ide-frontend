@@ -1,8 +1,4 @@
-import {Component} from "angular2/core";
-import {HostListener} from "angular2/core";
-import {ElementRef} from "angular2/core";
-import {Output} from "angular2/core";
-import {EventEmitter} from "angular2/core";
+import {EventEmitter, Component, Output, ElementRef, HostListener} from "angular2/core";
 
 @Component({
     selector: "top-resizer",

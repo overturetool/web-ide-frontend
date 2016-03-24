@@ -1,6 +1,4 @@
-import {Component} from "angular2/core";
-import {HostListener} from "angular2/core";
-import {ElementRef} from "angular2/core";
+import {Component, ElementRef, HostListener} from "angular2/core";
 
 @Component({
     selector: "left-resizer",

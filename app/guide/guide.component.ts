@@ -1,6 +1,5 @@
-import {Component, OnDestroy} from "angular2/core";
+import {Component, HostBinding} from "angular2/core";
 import {EditorService} from "../editor/EditorService";
-import {HostBinding} from "angular2/core";
 
 @Component({
     selector: 'guide',

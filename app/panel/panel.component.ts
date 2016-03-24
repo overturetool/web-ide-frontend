@@ -1,9 +1,12 @@
-import {Component, Input} from "angular2/core"
-import {HostBinding} from "angular2/core";
+import {Component, Input, HostBinding} from "angular2/core";
 
 @Component({
     selector: "panel",
-    templateUrl: 'app/panel/panel.component.html'
+    template: `
+<div class="wrapper">
+    <div class="header">{{name}}</div>
+    <ng-content></ng-content>
+</div>`
 })
 export class PanelComponent {
     @HostBinding("class.active") active:boolean = false;
