@@ -26,12 +26,13 @@ import {MenuComponent} from "../menu/menu.component";
 import {ExamplesService} from "../files/ExamplesService";
 import {ExamplesSelectorComponent} from "../files/examples-selector.component";
 import {AuthenticationService} from "../authentication/AuthService";
+import {DebuggerFactory} from "../debug/DebuggerFactory";
 
 @Component({
     selector: 'ide',
     templateUrl: 'app/ide/ide.component.html',
     directives: [ExamplesSelectorComponent, MenuComponent, GuideComponent, RightResizerComponent, LeftResizerComponent, TopResizerComponent, QuickBarComponent, ProofObligationsComponent, ReplComponent, EditorTabsComponent, EditorComponent, DebugComponent, WorkspaceComponent, PanelComponent, PanelMenuComponent, OutlineComponent],
-    providers: [ExamplesService, WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
+    providers: [DebuggerFactory, ExamplesService, WorkspaceService, ProofObligationsService, ReplService, ContextMenuService, LintService, HintService, OutlineService, EditorService, WorkspaceFactory]
 })
 export class IdeComponent {
     constructor(authService:AuthenticationService) {
