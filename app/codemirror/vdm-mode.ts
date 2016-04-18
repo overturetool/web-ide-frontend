@@ -160,7 +160,10 @@ CodeMirror.defineMode("vdm", function() {
     };
 
     function tokenByWord(word) {
-        return words.hasOwnProperty(word) ? words[word] : false;
+        if (words.hasOwnProperty(word) && typeof words[word] === "string")
+            return words[word];
+        
+        return false;
     }
 
     function tokenBase(stream, state) {
