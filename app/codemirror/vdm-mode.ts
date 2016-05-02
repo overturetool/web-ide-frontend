@@ -159,13 +159,6 @@ CodeMirror.defineMode("vdm", function() {
         "RESULT" : "keyword",
     };
 
-    function tokenByWord(word) {
-        if (words.hasOwnProperty(word) && typeof words[word] === "string")
-            return words[word];
-        
-        return false;
-    }
-
     function tokenBase(stream, state) {
         var ch = stream.next();
         if (ch === "(") return "variable";
@@ -200,7 +193,8 @@ CodeMirror.defineMode("vdm", function() {
                 while (!stream.eol()) stream.next();
                 return "comment";
             }
-            return tokenByWord(cur) || "operator";
+
+            return (words.hasOwnProperty(cur) && typeof words[cur] === "string") ? words[cur] : "operator";
         }
         stream.eatWhile(/\w/);
         var cur = stream.current();
@@ -209,7 +203,9 @@ CodeMirror.defineMode("vdm", function() {
         var cur5 = cur.substring(0, 5);
         if (cur3 == "mk_" || cur3 == "is_" || cur4 == "inv_" || cur4 == "pre_" || cur5 == "init_" || cur5 == "post_")
             return "variable-2"
-        return tokenByWord(cur) || "variable";
+
+
+        return (words.hasOwnProperty(cur) && typeof words[cur] === "string") ? words[cur] : "variable";
     }
 
     function tokenString(stream, state) {
